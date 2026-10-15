@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.bootstrap
+.env.*
+!.env.example
+!.env.bootstrap.example
+!.env.password-reset.example
+storage/
+npm-debug.log*

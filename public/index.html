@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Historial Clínico Visual</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section class="auth-screen" id="authScreen" aria-live="polite">
+    <div class="auth-card">
+      <span class="eyebrow">GESTIÓN CLÍNICA LOCAL</span>
+      <h1>Historial Clínico Visual</h1>
+      <p id="authLoading" class="auth-message">Verificando la sesión…</p>
+      <form id="loginForm" hidden>
+        <h2>Iniciar sesión</h2>
+        <label>Usuario<input name="username" autocomplete="username" maxlength="100" required></label>
+        <label>Contraseña<input name="password" type="password" autocomplete="current-password" maxlength="1024" required></label>
+        <p id="loginError" class="auth-error" role="alert" hidden></p>
+        <button class="primary wide" id="loginButton" type="submit">Ingresar</button>
+      </form>
+    </div>
+  </section>
+  <div id="appShell" hidden>
+  <header class="topbar">
+    <div><span class="eyebrow">GESTIÓN CLÍNICA LOCAL</span><h1>Historial Clínico Visual</h1></div>
+    <div class="storage-status"><span id="storageDot"></span><span id="storageLabel">Pacientes y estudios: servidor · Tablas: locales</span><span id="currentUser" class="current-user"></span><button class="secondary small" id="chooseFolder">Vincular carpeta</button><button class="secondary small" id="logoutButton" type="button">Cerrar sesión</button></div>
+  </header>
+  <main>
+    <aside class="sidebar">
+      <button class="primary wide" id="newPatient">+ Nuevo paciente</button>
+      <label class="search"><span>⌕</span><input id="patientSearch" maxlength="120" placeholder="Buscar por nombre o DNI"></label>
+      <div class="list-head"><span>Pacientes</span><span id="patientCount">0</span></div>
+      <div id="patientList" class="patient-list"></div>
+      <div class="data-actions">
+        <button class="secondary" id="exportData">Exportar copia</button>
+        <label class="secondary file-label">Importar copia<input id="importData" type="file" accept="application/json"></label>
+      </div>
+    </aside>
+    <section class="content" id="content">
+      <div class="empty-state" id="emptyState"><div class="empty-icon">✚</div><h2>Seleccione un paciente</h2><p>O cree una nueva ficha para registrar datos, estudios e imágenes.</p></div>
+      <div id="recordView" hidden>
+        <div class="record-title"><div><span class="eyebrow">FICHA DEL PACIENTE</span><h2 id="patientName"></h2><p id="patientMeta"></p></div><div class="actions"><button class="secondary" id="editPatient">Editar datos</button><button class="danger" id="deletePatient" type="button" disabled title="Eliminación pendiente de definir">Eliminar</button></div></div>
+        <nav class="tabs"><button class="tab active" data-tab="summary">Resumen</button><button class="tab" data-tab="studies">Estudios <span id="studyCount">0</span></button><button class="tab" data-tab="tables">Tablas ABM</button></nav>
+        <div id="summaryPanel" class="panel active"></div>
+        <div id="studiesPanel" class="panel">
+          <div class="section-title"><div><h3>Estudios y procedimientos</h3><p>Endoscopías, radiologías y otros registros.</p></div><button class="primary" id="newStudy">+ Agregar estudio</button></div>
+          <div id="studyList" class="study-list"></div>
+        </div>
+        <div id="tablesPanel" class="panel"><div class="section-title"><div><h3>Tablas de datos</h3><p>Registros estructurados asociados al paciente.</p></div><button class="primary" id="newTable">+ Nueva tabla</button></div><div id="tableList" class="table-list"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="patientDialog"><form method="dialog" id="patientForm"><div class="modal-head"><h2 id="patientDialogTitle">Nuevo paciente</h2><button class="icon-close" type="button" data-dialog-cancel>×</button></div><div class="form-grid">
+    <label>Apellido y nombre<input name="fullName" maxlength="240" required></label><label>DNI<input name="dni" inputmode="numeric" maxlength="32"></label><label>Fecha de nacimiento<input name="birthDate" type="date"></label><label>Teléfono<input name="phone" maxlength="80"></label><label class="span-2">Dirección<input name="address" maxlength="500"></label><label class="span-2">Antecedentes y observaciones<textarea name="notes" rows="4" maxlength="10000"></textarea></label>
+  </div><div class="form-footer"><button class="secondary" type="button" data-dialog-cancel>Cancelar</button><button class="primary" type="submit">Guardar paciente</button></div></form></dialog>
+
+  <dialog id="studyDialog"><form method="dialog" id="studyForm"><div class="modal-head"><h2 id="studyDialogTitle">Nuevo estudio</h2><button class="icon-close" type="button" data-dialog-cancel>×</button></div><div class="form-grid">
+    <label>Tipo<select name="type"><option>Endoscopía</option><option>Radiología</option><option>CPRE</option><option>Ecografía</option><option>Tomografía</option><option>Laboratorio</option><option>Otro</option></select></label><label>Fecha<input name="date" type="date" required></label><label>Profesional responsable<input name="professional"></label><label>Diagnóstico<input name="diagnosis"></label><label class="span-2">Procedimiento<input name="procedure"></label><label class="span-2">Descripción<textarea name="description" rows="4"></textarea></label><label class="span-2">Conclusiones<textarea name="conclusions" rows="3"></textarea></label><label class="span-2">Imágenes (radiología, endoscopía)<input name="images" type="file" accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp" multiple><small>Las imágenes se cargarán después de guardar el estudio. Formatos admitidos: JPG, PNG, GIF y WEBP.</small></label>
+  </div><div class="form-footer"><button class="secondary" type="button" data-dialog-cancel>Cancelar</button><button class="primary" id="studySaveButton" type="submit">Guardar estudio</button></div></form></dialog>
+
+  <dialog id="tableDialog"><form method="dialog" id="tableForm"><div class="modal-head"><h2>Nueva tabla</h2><button class="icon-close" type="button" data-dialog-cancel>×</button></div><div class="form-grid"><label class="span-2">Nombre de la tabla<input name="name" required placeholder="Ej.: Controles de laboratorio"></label><label class="span-2">Columnas, separadas por coma<input name="columns" required placeholder="Fecha, Parámetro, Resultado, Unidad"></label></div><div class="form-footer"><button class="secondary" type="button" data-dialog-cancel>Cancelar</button><button class="primary" type="submit">Crear tabla</button></div></form></dialog>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>

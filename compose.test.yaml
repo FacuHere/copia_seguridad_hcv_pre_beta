@@ -1,0 +1,75 @@
+name: hcv-docker-test
+
+services:
+  db:
+    image: mariadb:12.2.2
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?Configure C:\\HCV-Docker-Test\\secrets.env}
+      MARIADB_DATABASE: hcv_docker_test
+      MARIADB_USER: hcv_migrator
+      MARIADB_PASSWORD: ${MARIADB_MIGRATOR_PASSWORD:?Configure C:\\HCV-Docker-Test\\secrets.env}
+    volumes:
+      - database_data:/var/lib/mysql
+      - ./sql:/migrations:ro
+    networks:
+      - hcv_test_network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: "no"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: "3000"
+      HOST: 0.0.0.0
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: hcv_docker_test
+      DB_USER: hcv_app
+      DB_PASSWORD: ${MARIADB_APP_PASSWORD:?Set MARIADB_APP_PASSWORD in the local secrets file}
+      FILE_STORAGE_ROOT: /var/lib/hcv-files
+      MAX_FILE_SIZE_BYTES: "1048576"
+    volumes:
+      - document_files:/var/lib/hcv-files
+    ports:
+      - target: 3000
+        host_ip: 127.0.0.1
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - hcv_test_network
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health/database').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.3-apache
+    environment:
+      PMA_HOST: db
+      PMA_PORT: "3306"
+      PMA_ARBITRARY: "0"
+    ports:
+      - target: 80
+        host_ip: 127.0.0.1
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - hcv_test_network
+    restart: "no"
+
+volumes:
+  database_data:
+  document_files:
+
+networks:
+  hcv_test_network:

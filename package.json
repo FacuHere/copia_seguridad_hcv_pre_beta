@@ -1,0 +1,23 @@
+{
+  "name": "historial-clinico-visual",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aplicación web local para gestión clínica",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "bootstrap:admin": "node src/cli/bootstrap-admin.js",
+    "reset:password": "node src/cli/reset-password.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "mariadb": "^3.5.4"
+  }
+}
