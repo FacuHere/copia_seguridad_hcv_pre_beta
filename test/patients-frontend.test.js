@@ -6,6 +6,7 @@ const path = require('node:path');
 const html = fs.readFileSync(path.join(__dirname, '../public/index.html'), 'utf8');
 const app = fs.readFileSync(path.join(__dirname, '../public/js/app.js'), 'utf8');
 const patientRoute = fs.readFileSync(path.join(__dirname, '../src/routes/patients.js'), 'utf8');
+const patientService = fs.readFileSync(path.join(__dirname, '../src/services/patient-service.js'), 'utf8');
 
 test('patient and study forms keep required fields and separate submit from cancellation', () => {
   const dialogMatches = [...html.matchAll(/<dialog\b[\s\S]*?<\/dialog>/g)];
@@ -58,6 +59,7 @@ test('patient records are loaded and saved through the existing REST routes, not
   const patientSubmitHandler = app.slice(patientSubmitStart, patientSubmitEnd);
   assert.doesNotMatch(patientSubmitHandler, /localStorage|PATIENT_MODULES_KEY|save\(/);
   assert.match(app, /credentials: 'same-origin'/);
-  assert.match(patientRoute, /id: String\(row\.id\)/);
-  assert.match(patientRoute, /id: String\(rows\[0\]\.id\)/);
+  assert.match(patientRoute, /patientsController\.listar/);
+  assert.match(patientService, /id: String\(row\.id\)/);
+  assert.match(patientService, /id: String\(patient\.id\)/);
 });

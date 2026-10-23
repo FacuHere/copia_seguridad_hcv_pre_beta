@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const { createHash } = require('node:crypto');
 const { resolveStoragePath, assertNoLinks, ensurePrivateRoot, moveKey, unlinkKey, mergeDirectoryPrefix } = require('./document-storage');
 const { state: storageReadiness } = require('./storage-readiness');
+const documentOperationRepository = require('../repositories/document-operation-repository');
 
 function affected(result, operation) {
   if (!result || result.affectedRows !== 1) {
@@ -13,13 +14,8 @@ function affected(result, operation) {
 }
 
 async function setFilesystemApplied(pool, operationId) {
-  const result = await pool.query(
-    "UPDATE document_file_operations SET operation_state = 'filesystem_applied' WHERE operation_id = ? AND operation_state = 'prepared'",
-    [operationId],
-  );
-  if (result?.affectedRows === 1) return;
-  const rows = await pool.query('SELECT operation_state FROM document_file_operations WHERE operation_id = ? LIMIT 1', [operationId]);
-  if (rows[0]?.operation_state !== 'filesystem_applied') affected(result, 'journal_filesystem_applied');
+  const updated = await documentOperationRepository.markFilesystemApplied(pool, operationId);
+  if (!updated) affected(null, 'journal_filesystem_applied');
 }
 
 async function fileInfo(root, key) {
@@ -53,12 +49,12 @@ async function finishUpload(pool, root, operation) {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-    affected(await connection.query("UPDATE documents SET file_status = 'active' WHERE id = ? AND file_status = 'pending'", [operation.document_id]), 'activate_upload');
-    await connection.query(
-      'INSERT INTO audit_events (user_id, action_code, entity_type, entity_id, details_json) VALUES (?, ?, ?, ?, ?)',
-      [operation.actor_user_id, 'document.upload', 'document', String(operation.document_id), JSON.stringify({ studyId: String(operation.study_id), patientId: String(operation.patient_id), sizeBytes: Number(operation.size_bytes), sha256: operation.sha256, result: 'success' })],
-    );
-    affected(await connection.query("UPDATE document_file_operations SET operation_state = 'completed' WHERE operation_id = ? AND operation_state IN ('prepared', 'filesystem_applied')", [operation.operation_id]), 'complete_upload');
+    affected(await documentOperationRepository.activatePendingDocument(connection, operation.document_id), 'activate_upload');
+    await documentOperationRepository.insertAudit(connection, {
+      userId: operation.actor_user_id, action: 'document.upload', entityType: 'document', entityId: operation.document_id,
+      details: { studyId: String(operation.study_id), patientId: String(operation.patient_id), sizeBytes: Number(operation.size_bytes), sha256: operation.sha256, result: 'success' },
+    });
+    affected(await documentOperationRepository.completeOperation(connection, operation.operation_id), 'complete_upload');
     await connection.commit();
   } catch (error) {
     await connection.rollback().catch(() => {});
@@ -74,17 +70,12 @@ async function finishReplacement(pool, root, operation) {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-    affected(await connection.query(
-      `UPDATE documents SET storage_key = ?, original_name = ?, mime_type = ?, size_bytes = ?, sha256 = ?,
-                            updated_by = ?, file_status = 'active'
-       WHERE id = ? AND file_status = 'replacing'`,
-      [operation.new_storage_key, operation.original_name, operation.mime_type, operation.size_bytes, operation.sha256, operation.actor_user_id, operation.document_id],
-    ), 'finalize_replacement');
-    await connection.query(
-      'INSERT INTO audit_events (user_id, action_code, entity_type, entity_id, details_json) VALUES (?, ?, ?, ?, ?)',
-      [operation.actor_user_id, 'document.replace', 'document', String(operation.document_id), JSON.stringify({ studyId: String(operation.study_id), patientId: String(operation.patient_id), previousSha256: operation.old_sha256 || null, sha256: operation.sha256, sizeBytes: Number(operation.size_bytes), result: 'success' })],
-    );
-    affected(await connection.query("UPDATE document_file_operations SET operation_state = 'completed' WHERE operation_id = ? AND operation_state IN ('prepared', 'filesystem_applied')", [operation.operation_id]), 'complete_replacement');
+    affected(await documentOperationRepository.updateReplacement(connection, operation), 'finalize_replacement');
+    await documentOperationRepository.insertAudit(connection, {
+      userId: operation.actor_user_id, action: 'document.replace', entityType: 'document', entityId: operation.document_id,
+      details: { studyId: String(operation.study_id), patientId: String(operation.patient_id), previousSha256: operation.old_sha256 || null, sha256: operation.sha256, sizeBytes: Number(operation.size_bytes), result: 'success' },
+    });
+    affected(await documentOperationRepository.completeOperation(connection, operation.operation_id), 'complete_replacement');
     await connection.commit();
   } catch (error) {
     await connection.rollback().catch(() => {});
@@ -122,12 +113,12 @@ async function finishDelete(pool, root, operation) {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-    affected(await connection.query('DELETE FROM documents WHERE id = ? AND file_status = \'deleting\'', [documentId]), 'delete_document');
-    await connection.query(
-      'INSERT INTO audit_events (user_id, action_code, entity_type, entity_id, details_json) VALUES (?, ?, ?, ?, ?)',
-      [actorId, 'document.delete', 'document', String(documentId), JSON.stringify({ studyId: String(studyId), patientId: String(patientId), sha256: expectedHash, result: 'success' })],
-    );
-    affected(await connection.query("UPDATE document_file_operations SET operation_state = 'completed' WHERE operation_id = ? AND operation_state = 'filesystem_applied'", [operationId]), 'complete_delete');
+    affected(await documentOperationRepository.deleteDeletingDocument(connection, documentId), 'delete_document');
+    await documentOperationRepository.insertAudit(connection, {
+      userId: actorId, action: 'document.delete', entityType: 'document', entityId: documentId,
+      details: { studyId: String(studyId), patientId: String(patientId), sha256: expectedHash, result: 'success' },
+    });
+    affected(await documentOperationRepository.completeOperation(connection, operationId, ['filesystem_applied']), 'complete_delete');
     await connection.commit();
   } catch (error) {
     await connection.rollback().catch(() => {});
@@ -139,12 +130,12 @@ async function failUpload(pool, operation, reasonCode) {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-    await connection.query("DELETE FROM documents WHERE id = ? AND file_status = 'pending'", [operation.document_id]);
-    await connection.query("UPDATE document_file_operations SET operation_state = 'failed', failure_code = ? WHERE operation_id = ?", [reasonCode, operation.operation_id]);
-    await connection.query(
-      'INSERT INTO audit_events (user_id, action_code, entity_type, entity_id, details_json) VALUES (?, ?, ?, ?, ?)',
-      [operation.actor_user_id, 'document.upload_failed', 'document', String(operation.document_id), JSON.stringify({ studyId: String(operation.study_id), patientId: String(operation.patient_id), result: 'failed', reasonCode })],
-    );
+    await documentOperationRepository.deletePendingDocument(connection, operation.document_id);
+    await documentOperationRepository.markOperationFailed(connection, operation.operation_id, reasonCode);
+    await documentOperationRepository.insertAudit(connection, {
+      userId: operation.actor_user_id, action: 'document.upload_failed', entityType: 'document', entityId: operation.document_id,
+      details: { studyId: String(operation.study_id), patientId: String(operation.patient_id), result: 'failed', reasonCode },
+    });
     await connection.commit();
   } catch (error) { await connection.rollback().catch(() => {}); throw error; }
   finally { connection.release(); }
@@ -155,9 +146,8 @@ async function completeRename(pool, root, operation) {
   let movingRows = [];
   try {
     await connection.beginTransaction();
-    const scopeColumn = operation.operation_type === 'rename_patient' ? 'patient_id' : 'study_id';
     const scopeId = operation.operation_type === 'rename_patient' ? operation.patient_id : operation.study_id;
-    const rows = await connection.query(`SELECT id, storage_key, file_status FROM documents WHERE ${scopeColumn} = ? FOR UPDATE`, [scopeId]);
+    const rows = await documentOperationRepository.findDocumentsForLabelMove(connection, operation.operation_type, scopeId);
     if (rows.some(row => !['active', 'moving'].includes(row.file_status))) {
       const error = new Error('DOCUMENT_OPERATION_IN_PROGRESS'); error.code = 'DOCUMENT_OPERATION_IN_PROGRESS'; throw error;
     }
@@ -167,7 +157,7 @@ async function completeRename(pool, root, operation) {
         movingRows.push(row.id);
       } else if (row.storage_key.startsWith(`${operation.old_prefix}/`)) {
         const nextKey = `${operation.new_prefix}${row.storage_key.slice(operation.old_prefix.length)}`;
-        await connection.query("UPDATE documents SET storage_key = ?, file_status = 'moving' WHERE id = ? AND file_status = 'active'", [nextKey, row.id]);
+        await documentOperationRepository.moveDocumentKey(connection, nextKey, row.id);
         movingRows.push(row.id);
       }
     }
@@ -179,8 +169,7 @@ async function completeRename(pool, root, operation) {
   for (const id of movingRows) {
     const connection = await pool.getConnection();
     try {
-      const rows = await connection.query('SELECT storage_key, size_bytes, sha256 FROM documents WHERE id = ? AND file_status = \'moving\' LIMIT 1', [id]);
-      const row = rows[0];
+      const row = await documentOperationRepository.findDocumentInProgress(connection, id);
       if (!row || !row.storage_key.startsWith(`${operation.new_prefix}/`)) throw new Error('DOCUMENT_RENAME_KEY_MISMATCH');
       const info = await fileInfo(root, row.storage_key);
       if (!info || info.size !== Number(row.size_bytes) || info.sha256 !== row.sha256) throw new Error('DOCUMENT_RENAME_FILE_MISMATCH');
@@ -190,12 +179,14 @@ async function completeRename(pool, root, operation) {
   const finalize = await pool.getConnection();
   try {
     await finalize.beginTransaction();
-    for (const id of movingRows) affected(await finalize.query("UPDATE documents SET file_status = 'active' WHERE id = ? AND file_status = 'moving'", [id]), 'activate_moved_document');
-    affected(await finalize.query("UPDATE document_file_operations SET operation_state = 'completed' WHERE operation_id = ? AND operation_state IN ('prepared', 'filesystem_applied')", [operation.operation_id]), 'complete_rename');
-    await finalize.query(
-      'INSERT INTO audit_events (user_id, action_code, entity_type, entity_id, details_json) VALUES (?, ?, ?, ?, ?)',
-      [operation.actor_user_id, 'document.folder_rename', operation.operation_type === 'rename_patient' ? 'patient' : 'study', String(operation.operation_type === 'rename_patient' ? operation.patient_id : operation.study_id), JSON.stringify({ patientId: String(operation.patient_id), studyId: operation.study_id ? String(operation.study_id) : null, result: 'success' })],
-    );
+    for (const id of movingRows) affected(await documentOperationRepository.activateMovingDocument(finalize, id), 'activate_moved_document');
+    affected(await documentOperationRepository.completeOperation(finalize, operation.operation_id), 'complete_rename');
+    await documentOperationRepository.insertAudit(finalize, {
+      userId: operation.actor_user_id, action: 'document.folder_rename',
+      entityType: operation.operation_type === 'rename_patient' ? 'patient' : 'study',
+      entityId: operation.operation_type === 'rename_patient' ? operation.patient_id : operation.study_id,
+      details: { patientId: String(operation.patient_id), studyId: operation.study_id ? String(operation.study_id) : null, result: 'success' },
+    });
     await finalize.commit();
   } catch (error) { await finalize.rollback().catch(() => {}); throw error; }
   finally { finalize.release(); }
@@ -208,8 +199,7 @@ function operationError(code) {
 }
 
 async function assertRenameDoesNotAffectDocuments(connection, { type, scopeId }) {
-  const scopeColumn = type === 'rename_patient' ? 'patient_id' : 'study_id';
-  const rows = await connection.query(`SELECT id FROM documents WHERE ${scopeColumn} = ? LIMIT 1`, [scopeId]);
+  const rows = await documentOperationRepository.findScopedDocumentIds(connection, type, scopeId);
   if (rows.length) throw operationError('FILE_STORAGE_NOT_CONFIGURED_FOR_RENAME');
 }
 
@@ -219,9 +209,8 @@ async function assertRenameDoesNotAffectDocuments(connection, { type, scopeId })
 async function prepareRenameInTransaction(connection, { type, patientId, studyId = null, oldPrefix, newPrefix, actorUserId }) {
   if (!['rename_patient', 'rename_study'].includes(type)) throw operationError('INVALID_RENAME_OPERATION');
   if (oldPrefix === newPrefix) return null;
-  const scopeColumn = type === 'rename_patient' ? 'patient_id' : 'study_id';
   const scopeId = type === 'rename_patient' ? patientId : studyId;
-  const rows = await connection.query(`SELECT id, storage_key, file_status FROM documents WHERE ${scopeColumn} = ? FOR UPDATE`, [scopeId]);
+  const rows = await documentOperationRepository.findDocumentsForLabelMove(connection, type, scopeId);
   if (!rows.length) return null;
   if (['blocked', 'recovering'].includes(storageReadiness.status)) throw operationError('STORAGE_RECOVERY_REQUIRED');
   if (rows.some(row => row.file_status !== 'active')) throw operationError('DOCUMENT_RENAME_IN_PROGRESS');
@@ -233,18 +222,10 @@ async function prepareRenameInTransaction(connection, { type, patientId, studyId
     patient_id: patientId, study_id: studyId, actor_user_id: actorUserId,
     old_prefix: oldPrefix, new_prefix: newPrefix,
   };
-  await connection.query(
-    `INSERT INTO document_file_operations
-     (operation_id, operation_type, operation_state, patient_id, study_id, old_prefix, new_prefix, actor_user_id)
-     VALUES (?, ?, 'prepared', ?, ?, ?, ?, ?)`,
-    [operation.operation_id, type, patientId, studyId, oldPrefix, newPrefix, actorUserId],
-  );
+  await documentOperationRepository.createRenameOperation(connection, operation);
   for (const row of rows) {
     const nextKey = `${newPrefix}${row.storage_key.slice(oldPrefix.length)}`;
-    affected(await connection.query(
-      "UPDATE documents SET storage_key = ?, file_status = 'moving' WHERE id = ? AND file_status = 'active'",
-      [nextKey, row.id],
-    ), 'prepare_rename_document');
+    affected(await documentOperationRepository.moveDocumentKey(connection, nextKey, row.id), 'prepare_rename_document');
   }
   return operation;
 }
@@ -256,24 +237,19 @@ async function renameStoragePrefix(pool, root, { type, patientId, studyId = null
   let operation;
   try {
     await connection.beginTransaction();
-    const scopeColumn = type === 'rename_patient' ? 'patient_id' : 'study_id';
     const scopeId = type === 'rename_patient' ? patientId : studyId;
-    const rows = await connection.query(`SELECT id, storage_key, file_status FROM documents WHERE ${scopeColumn} = ? FOR UPDATE`, [scopeId]);
+    const rows = await documentOperationRepository.findDocumentsForLabelMove(connection, type, scopeId);
     const pendingOperation = rows.some(row => row.file_status !== 'active');
     const movingRows = rows.filter(row => row.storage_key.startsWith(`${oldPrefix}/`));
     if (!movingRows.length && !pendingOperation) { await connection.rollback(); return { moved: false }; }
     const { randomUUID } = require('node:crypto');
     const operationId = randomUUID();
     operation = { operation_id: operationId, operation_type: type, patient_id: patientId, study_id: studyId, actor_user_id: actorUserId, old_prefix: oldPrefix, new_prefix: newPrefix };
-    await connection.query(
-      `INSERT INTO document_file_operations (operation_id, operation_type, operation_state, patient_id, study_id, old_prefix, new_prefix, actor_user_id)
-       VALUES (?, ?, 'prepared', ?, ?, ?, ?, ?)`,
-      [operationId, type, patientId, studyId, oldPrefix, newPrefix, actorUserId],
-    );
+    await documentOperationRepository.createRenameOperation(connection, operation);
     if (!pendingOperation) {
       for (const row of movingRows) {
         const nextKey = `${newPrefix}${row.storage_key.slice(oldPrefix.length)}`;
-        await connection.query("UPDATE documents SET storage_key = ?, file_status = 'moving' WHERE id = ? AND file_status = 'active'", [nextKey, row.id]);
+        await documentOperationRepository.moveDocumentKey(connection, nextKey, row.id);
       }
     }
     await connection.commit();
@@ -285,7 +261,7 @@ async function renameStoragePrefix(pool, root, { type, patientId, studyId = null
 }
 
 async function recoverOperations(pool, root) {
-  const operations = await pool.query("SELECT * FROM document_file_operations WHERE operation_state IN ('prepared', 'filesystem_applied') OR (operation_state = 'completed' AND backup_key IS NOT NULL) ORDER BY CASE WHEN operation_type IN ('rename_patient', 'rename_study') THEN 1 ELSE 0 END, created_at, operation_id");
+  const operations = await documentOperationRepository.findOperationsToRecover(pool);
   const outcomes = [];
   for (const operation of operations) {
     try {
@@ -340,8 +316,7 @@ async function recoverOperations(pool, root) {
           await unlinkKey(root, operation.staging_key);
           const connection = await pool.getConnection();
           try {
-            await connection.query("UPDATE documents SET file_status = 'active' WHERE id = ? AND file_status = 'replacing'", [operation.document_id]);
-            await connection.query("UPDATE document_file_operations SET operation_state = 'failed', failure_code = 'RECOVERY_REPLACEMENT_ROLLED_BACK' WHERE operation_id = ?", [operation.operation_id]);
+            await documentOperationRepository.markReplacementRestored(connection, operation.operation_id, operation.document_id);
           } finally { connection.release(); }
           outcomes.push({ operationId: operation.operation_id, outcome: 'rolled_back' });
         }
@@ -363,9 +338,7 @@ async function cleanupOrphanStaging(pool, root, { log = () => {} } = {}) {
   await ensurePrivateRoot(root);
   const stagingRoot = resolveStoragePath(root, '.staging');
   await assertNoLinks(root, stagingRoot, true);
-  const active = await pool.query(
-    "SELECT staging_key, backup_key FROM document_file_operations WHERE operation_state IN ('prepared', 'filesystem_applied')",
-  );
+  const active = await documentOperationRepository.findActiveStagingKeys(pool);
   const activeKeys = new Set(active.flatMap(row => [row.staging_key, row.backup_key]).filter(Boolean));
   const entries = await fs.promises.readdir(stagingRoot, { withFileTypes: true });
   const outcomes = [];

@@ -2,10 +2,12 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const studiesRoute = require('../src/routes/studies');
+const { serializeStudy } = require('../src/services/study-service');
 
 const app = fs.readFileSync(path.join(__dirname, '../public/js/app.js'), 'utf8');
 const route = fs.readFileSync(path.join(__dirname, '../src/routes/studies.js'), 'utf8');
+const service = fs.readFileSync(path.join(__dirname, '../src/services/study-service.js'), 'utf8');
+const repository = fs.readFileSync(path.join(__dirname, '../src/repositories/study-repository.js'), 'utf8');
 const migration = fs.readFileSync(path.join(__dirname, '../sql/005_seed_general_service.sql'), 'utf8');
 
 test('study frontend reads and writes studies through the API without persisting them in localStorage', () => {
@@ -18,14 +20,15 @@ test('study frontend reads and writes studies through the API without persisting
 });
 
 test('study API resolves the provisional service on the server and stringifies exposed IDs', () => {
-  assert.match(route, /WHERE code = \? AND is_active = TRUE LIMIT 1/);
-  assert.match(route, /\['GENERAL'\]/);
-  assert.match(route, /id: String\(row\.id\)/);
-  assert.match(route, /patientId: String\(row\.patientId\)/);
-  assert.match(route, /serviceId: String\(row\.serviceId\)/);
+  assert.match(route, /studiesController\.listarPorPaciente/);
+  assert.match(service, /id: String\(row\.id\)/);
+  assert.match(service, /patientId: String\(row\.patientId\)/);
+  assert.match(service, /serviceId: String\(row\.serviceId\)/);
+  assert.match(repository, /WHERE code = \? AND is_active = TRUE LIMIT 1/);
+  assert.match(repository, /\['GENERAL'\]/);
 
   const row = { id: 1n, patientId: 2n, serviceId: 3n, version: 4 };
-  const serialized = studiesRoute.serializeStudy(row);
+  const serialized = serializeStudy(row);
   assert.deepEqual(serialized, { id: '1', patientId: '2', serviceId: '3', version: 4 });
   assert.doesNotThrow(() => JSON.stringify(serialized));
 });
