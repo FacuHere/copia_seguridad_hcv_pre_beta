@@ -1,0 +1,86 @@
+name: "Historia de Usuario"
+description: "Historia de usuario con criterios de aceptación y DoD"
+title: "HU-XX — "
+labels: ["feature"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Completar este formulario para mantener trazabilidad completa entre Issue, rama, commits y PR.
+
+  - type: dropdown
+    id: sprint
+    attributes:
+      label: Sprint
+      options:
+        - Sprint 0
+        - Sprint 1
+        - Sprint 2
+        - Sprint 3
+        - Sprint 4
+    validations:
+      required: true
+
+  - type: input
+    id: epic
+    attributes:
+      label: Épica padre (número de issue)
+      description: "Ejemplo: #12"
+      placeholder: "#12"
+    validations:
+      required: false
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: Historia de Usuario
+      value: |
+        Como [cliente / empleado de alquiler / administrador del sistema]
+        quiero [funcionalidad concreta]
+        para [beneficio o valor real].
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Criterios de Aceptación
+      description: "Redactar en formato Dado/Cuando/Entonces"
+      value: |
+        - [ ] Dado que..., cuando..., entonces...
+        - [ ] Dado que..., cuando..., entonces...
+    validations:
+      required: true
+
+  - type: input
+    id: branch
+    attributes:
+      label: Rama sugerida
+      description: "Formato recomendado: feature/US-XX-descripcion-corta"
+      placeholder: "feature/US-01-busqueda-por-fechas"
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-notes
+    attributes:
+      label: Notas técnicas
+      description: "Dependencias, endpoints, restricciones o decisiones"
+      placeholder: "Ej: depende de endpoint POST /api/auth/register"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: definition-of-done
+    attributes:
+      label: Definition of Done
+      options:
+        - label: "Código revisado (mínimo 1 aprobación en el PR)"
+          required: true
+        - label: "Tests o pruebas manuales documentadas"
+          required: true
+        - label: "PR mergeado con referencia Closes #N"
+          required: true
+        - label: "Issue cerrado automáticamente"
+          required: true
