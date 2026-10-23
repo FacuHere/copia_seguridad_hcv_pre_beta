@@ -13,7 +13,6 @@ const authScreen = $('#authScreen');
 const appShell = $('#appShell');
 const loginForm = $('#loginForm');
 const loginError = $('#loginError');
-const uid = () => crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
 const safe = value => String(value || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function showLogin(message = '') {
