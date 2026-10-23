@@ -7,3 +7,11 @@ node_modules/
 !.env.password-reset.example
 storage/
 npm-debug.log*
+
+# Instrucciones locales de agentes, no compartidas como parte del proyecto
+/AGENTS.md
+**/AGENTS.md
+
+# Skills locales de desarrollo instaladas dentro del repositorio
+**/.agents/skills/
+**/.codex/skills/

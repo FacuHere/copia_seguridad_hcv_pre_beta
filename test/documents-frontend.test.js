@@ -13,7 +13,7 @@ test('study form uploads the selected synthetic images after saving study metada
   assert.match(html, /JPG, PNG, GIF y WEBP/);
   assert.doesNotMatch(html, /por ahora no se guardan|disponible en una etapa posterior/i);
   const start = app.indexOf("$('#studyForm').addEventListener('submit'");
-  const end = app.indexOf("$('#newTable').onclick", start);
+  const end = app.indexOf("document.querySelectorAll('.tab')", start);
   assert.ok(start >= 0 && end > start);
   const submit = app.slice(start, end);
   assert.match(submit, /Array\.from\(form\.elements\.images\.files/);

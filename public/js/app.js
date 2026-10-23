@@ -1,8 +1,5 @@
-const KEY = 'historial-clinico-visual-v1';
-const PATIENT_MODULES_KEY = 'historial-clinico-visual-modules-v1';
-let patientModules = JSON.parse(localStorage.getItem(PATIENT_MODULES_KEY) || '{}');
 let patients = [];
-let activeId = null, folderHandle = null, editingPatient = null;
+let activeId = null, editingPatient = null;
 let editingStudy = null;
 let studiesLoading = false;
 let studyLoadError = '';
@@ -205,12 +202,10 @@ async function loadPatient(id) {
     if (activeId !== requestedId) return;
     const data = result?.data;
     if (!data || String(data.id) !== requestedId) throw new Error('INVALID_API_RESPONSE');
-    const modules = patientModules[requestedId] || {};
     selectedPatient = {
       ...data,
       id: requestedId,
       studies: [],
-      tables: Array.isArray(modules.tables) ? modules.tables : [],
     };
     await loadStudies(requestedId);
   } catch (error) {
@@ -249,28 +244,6 @@ async function loadStudies(patientId) {
   }
 }
 
-function save() {
-  if (!selectedPatient) return;
-  const id = String(selectedPatient.id);
-  patientModules[id] = {
-    ...(patientModules[id] && typeof patientModules[id] === 'object' ? patientModules[id] : {}),
-    tables: selectedPatient.tables || [],
-  };
-  localStorage.setItem(PATIENT_MODULES_KEY, JSON.stringify(patientModules));
-  if (folderHandle) saveToFolder();
-}
-function createLocalBackup() {
-  let legacyData = { patients: [] };
-  try {
-    const stored = JSON.parse(localStorage.getItem(KEY) || '{"patients":[]}');
-    if (stored && Array.isArray(stored.patients)) legacyData = stored;
-  } catch {}
-  return { ...legacyData, patientModules };
-}
-async function saveToFolder() {
-  try { const file = await folderHandle.getFileHandle('historial-clinico.json', { create:true }); const out = await file.createWritable(); await out.write(JSON.stringify(createLocalBackup(), null, 2)); await out.close(); $('#storageLabel').textContent = 'Copia local · guardada'; }
-  catch { $('#storageLabel').textContent = 'No se pudo guardar en carpeta'; }
-}
 function patient() { return selectedPatient; }
 function age(birthDate) { if (!birthDate) return ''; const d = new Date(birthDate), n = new Date(); let a=n.getFullYear()-d.getFullYear(); if (n < new Date(n.getFullYear(),d.getMonth(),d.getDate())) a--; return `${a} años`; }
 function renderPatients() {
@@ -302,7 +275,6 @@ function render() {
       : p.studies.length
         ? p.studies.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(s => `<article class="study-card"><div class="study-top"><span class="badge">${safe(s.type)}</span><small>${safe(s.date)}</small></div><h4>${safe(s.diagnosis || s.procedure || 'Estudio sin título')}</h4><p><b>Profesional:</b> ${safe(s.professional || '—')}<br><b>Procedimiento:</b> ${safe(s.procedure || '—')}</p>${s.description ? `<p><b>Descripción:</b> ${safe(s.description)}</p>`:''}${s.conclusions ? `<p><b>Conclusiones:</b> ${safe(s.conclusions)}</p>`:''}<div class="study-actions"><button class="secondary mini" data-edit-study="${safe(s.id)}">Abrir / editar</button></div><section class="document-panel"><div class="document-heading"><b>Archivos</b>${currentUserRoles.includes('administrador') ? `<button type="button" class="secondary mini" data-upload-document="${safe(s.id)}">Cargar archivo</button><input hidden type="file" data-document-input="${safe(s.id)}" accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.dcm,application/pdf,image/jpeg,image/png,image/gif,image/webp,application/dicom">` : ''}</div><div data-document-list="${safe(s.id)}" class="document-list">Cargando archivos…</div></section></article>`).join('')
         : '<div class="empty-small">No hay estudios registrados.</div>';
-  $('#tableList').innerHTML = p.tables.length ? p.tables.map(t => `<article class="data-table-card"><h4>${safe(t.name)}</h4><table><thead><tr>${t.columns.map(c=>`<th>${safe(c)}</th>`).join('')}<th>Acciones</th></tr></thead><tbody>${t.rows.map((r,i)=>`<tr>${t.columns.map(c=>`<td>${safe(r[c])}</td>`).join('')}<td><button class="danger mini" data-table="${t.id}" data-row="${i}">Quitar</button></td></tr>`).join('')}</tbody></table><div class="row-actions"><button class="secondary mini" data-add-row="${t.id}">+ Agregar fila</button><button class="danger mini" data-delete-table="${t.id}">Eliminar tabla</button></div></article>`).join('') : '<div class="empty-small">No hay tablas creadas.</div>';
   bindDynamic();
 }
 function bindDynamic() {
@@ -346,26 +318,6 @@ function bindDynamic() {
       modal.innerHTML = '<img src="' + image.src + '" alt="Imagen clínica">';
       modal.onclick = () => modal.remove();
       document.body.append(modal);
-    };
-  });
-  document.querySelectorAll('[data-add-row]').forEach(button => {
-    button.onclick = () => addRow(button.dataset.addRow);
-  });
-  document.querySelectorAll('[data-delete-table]').forEach(button => {
-    button.onclick = () => {
-      if (confirm('¿Eliminar esta tabla y todas sus filas?')) {
-        patient().tables = patient().tables.filter(table => table.id !== button.dataset.deleteTable);
-        save();
-        render();
-      }
-    };
-  });
-  document.querySelectorAll('[data-table][data-row]').forEach(button => {
-    button.onclick = () => {
-      const table = patient().tables.find(item => item.id === button.dataset.table);
-      table.rows.splice(Number(button.dataset.row), 1);
-      save();
-      render();
     };
   });
 }
@@ -494,8 +446,6 @@ async function openStudyEditor(id) {
     window.alert(studyApiMessage(error, 'No se pudo abrir el estudio.'));
   }
 }
-function addRow(id){const t=patient().tables.find(x=>x.id===id), row={}; for(const col of t.columns){const value=prompt(col);if(value===null)return;row[col]=value}t.rows.push(row);save();render();}
-
 $('#newPatient').onclick=()=>showPatient(); $('#editPatient').onclick=()=>showPatient(true);
 document.querySelectorAll('[data-dialog-cancel]').forEach(button=>button.addEventListener('click',()=>{
   const dialog=button.closest('dialog');
@@ -522,12 +472,10 @@ $('#patientForm').addEventListener('submit', async event => {
     const saved = result?.data;
     if (!saved || saved.id === undefined) throw new Error('INVALID_API_RESPONSE');
     const id = String(saved.id);
-    const modules = patientModules[id] || {};
     selectedPatient = {
       ...saved,
       id,
       studies: [],
-      tables: Array.isArray(modules.tables) ? modules.tables : [],
     };
     activeId = id;
     editingPatient = null;
@@ -616,14 +564,10 @@ $('#studyForm').addEventListener('submit', async event => {
   } finally {
     saveButton.disabled = false;
   }
-});$('#newTable').onclick=()=>{$('#tableForm').reset();$('#tableDialog').showModal()};
-$('#tableForm').addEventListener('submit',e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.currentTarget));patient().tables.push({id:uid(),name:d.name,columns:d.columns.split(',').map(x=>x.trim()).filter(Boolean),rows:[]});save();$('#tableDialog').close();render()});
+});
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(`#${b.dataset.tab}Panel`).classList.add('active')});
 $('#patientSearch').addEventListener('input', () => {
   clearTimeout(patientSearchTimer);
   patientSearchTimer = setTimeout(() => loadPatients($('#patientSearch').value.trim()), 250);
 });
-$('#exportData').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(createLocalBackup(),null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='historial-clinico.json';a.click();URL.revokeObjectURL(url)};
-$('#importData').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const incoming=JSON.parse(await file.text());if(!Array.isArray(incoming.patients))throw Error();if(confirm('Importar reemplazará los datos locales archivados y los módulos locales incluidos en la copia. No modificará los pacientes del servidor. ¿Continuar?')){const {patientModules:importedModules,...legacyData}=incoming;localStorage.setItem(KEY,JSON.stringify(legacyData));if(importedModules&&typeof importedModules==='object'&&!Array.isArray(importedModules)){patientModules=importedModules;localStorage.setItem(PATIENT_MODULES_KEY,JSON.stringify(patientModules));if(activeId){const modules=patientModules[activeId]||{};if(selectedPatient)selectedPatient.tables=Array.isArray(modules.tables)?modules.tables:[];await loadStudies(activeId)}}render()}}catch{alert('El archivo no corresponde a una copia válida de la aplicación.')}e.target.value=''};
-$('#chooseFolder').onclick=async()=>{if(!window.showDirectoryPicker){alert('Use Chrome o Edge y abra la aplicación desde localhost para vincular una carpeta. Puede usar Exportar e Importar como alternativa.');return}try{folderHandle=await window.showDirectoryPicker({mode:'readwrite'});$('#storageLabel').textContent=`Carpeta vinculada: ${folderHandle.name}`;await saveToFolder()}catch{}};
 initializeAuthentication();

@@ -7,9 +7,9 @@ const html = fs.readFileSync(path.join(__dirname, '../public/index.html'), 'utf8
 const app = fs.readFileSync(path.join(__dirname, '../public/js/app.js'), 'utf8');
 const patientRoute = fs.readFileSync(path.join(__dirname, '../src/routes/patients.js'), 'utf8');
 
-test('patient, study and table forms keep required fields and separate submit from cancellation', () => {
+test('patient and study forms keep required fields and separate submit from cancellation', () => {
   const dialogMatches = [...html.matchAll(/<dialog\b[\s\S]*?<\/dialog>/g)];
-  assert.equal(dialogMatches.length, 3);
+  assert.equal(dialogMatches.length, 2);
 
   for (const match of dialogMatches) {
     const dialog = match[0];
@@ -20,7 +20,7 @@ test('patient, study and table forms keep required fields and separate submit fr
     assert.equal(submitButtons.length, 1);
   }
 
-  for (const field of ['fullName', 'date', 'name', 'columns']) {
+  for (const field of ['fullName', 'date']) {
     const input = new RegExp(`<input\\b(?=[^>]*\\bname="${field}")(?=[^>]*\\brequired)[^>]*>`);
     assert.match(html, input);
   }
@@ -30,6 +30,20 @@ test('patient, study and table forms keep required fields and separate submit fr
   assert.match(cancelHandler, /\.reset\(\)/);
   assert.match(cancelHandler, /\.close\(\)/);
   assert.doesNotMatch(cancelHandler, /apiRequest|FormData|save\(|requestSubmit|dispatchEvent|\.submit\(/);
+  assert.doesNotMatch(html, /tablesPanel|tableDialog|tableForm|tableList|newTable|data-tab="tables"/);
+  assert.doesNotMatch(app, /PATIENT_MODULES_KEY|patientModules|\.tables|addRow\(|localStorage|showDirectoryPicker|createLocalBackup|saveToFolder/);
+});
+
+test('future backup, user management, and report buttons remain inert controls', () => {
+  for (const [id, label] of [['chooseFolder', 'BACKUP'], ['importData', 'Gestión de usuarios'], ['exportData', 'Reportes']]) {
+    const button = new RegExp(`<button\\b(?=[^>]*\\bid="${id}")(?=[^>]*\\btype="button")[^>]*>${label}<\\/button>`);
+    assert.match(html, button);
+  }
+  assert.doesNotMatch(html, /id="importData"[^>]*type="file"|id="exportData"[^>]*type="submit"|id="chooseFolder"[^>]*type="submit"/);
+  assert.doesNotMatch(app, /\$\('#(?:chooseFolder|importData|exportData)'\)/);
+  assert.match(html, /reservado para futuras funciones de copia de seguridad/i);
+  assert.match(html, /reservado para futuras funciones de administración de usuarios/i);
+  assert.match(html, /reservado para futuras funciones de generación y consulta de informes/i);
 });
 
 test('patient records are loaded and saved through the existing REST routes, not localStorage', () => {
