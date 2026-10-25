@@ -1,0 +1,610 @@
+openapi: 3.0.3
+info:
+  title: Historial Clínico Visual API
+  version: 1.0.0
+  description: >-
+    Especificación basada en las rutas Express y los contratos encontrados en el código.
+    Los errores enumerados son los observados; el requestId del cuerpo no se incluye en
+    todas las respuestas actuales.
+servers:
+  - url: http://127.0.0.1:3000
+    description: Servidor local de desarrollo; ajuste el host y puerto al entorno autorizado.
+tags:
+  - name: Salud
+  - name: Autenticación
+  - name: Pacientes
+  - name: Estudios
+  - name: Documentos
+paths:
+  /api/health/database:
+    get:
+      tags: [Salud]
+      summary: Comprueba que se puede obtener una conexión a MariaDB
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Conexión disponible
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+                  database: { type: string, example: connected }
+        '503':
+          description: No se pudo obtener una conexión a MariaDB
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: unavailable }
+                  database: { type: string, example: disconnected }
+  /api/health/storage:
+    get:
+      tags: [Salud]
+      summary: Consulta el estado de preparación del almacenamiento
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Almacenamiento listo
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/StorageHealth' }
+        '503':
+          description: Almacenamiento no configurado, recuperándose o bloqueado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/StorageHealth' }
+  /api/auth/login:
+    post:
+      tags: [Autenticación]
+      summary: Inicia sesión y establece la cookie HttpOnly
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Sesión creada; el token se entrega solo en la cookie Set-Cookie
+          headers:
+            Set-Cookie:
+              description: Cookie hcv_session; HttpOnly, SameSite=Strict, Path=/api. Secure depende de COOKIE_SECURE.
+              schema: { type: string }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [user]
+                properties:
+                  user: { $ref: '#/components/schemas/AuthenticatedUser' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '429':
+          description: Se alcanzó el límite temporal de intentos
+          headers:
+            Retry-After:
+              schema: { type: string }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiErrorBody' }
+        '503': { $ref: '#/components/responses/DatabaseUnavailable' }
+  /api/auth/me:
+    get:
+      tags: [Autenticación]
+      summary: Devuelve el usuario de la sesión actual
+      security: [{ SessionCookie: [] }]
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Usuario y roles de la sesión
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user: { $ref: '#/components/schemas/AuthenticatedUser' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/DatabaseUnavailable' }
+  /api/auth/logout:
+    post:
+      tags: [Autenticación]
+      summary: Invalida la sesión actual y borra la cookie
+      security: [{}, { SessionCookie: [] }]
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '204': { description: Sesión cerrada; no hay cuerpo de respuesta }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/pacientes:
+    get:
+      tags: [Pacientes]
+      summary: Lista pacientes paginados
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - { name: search, in: query, required: false, schema: { type: string, maxLength: 120 } }
+        - { name: page, in: query, required: false, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: pageSize, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 100, default: 50 } }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Página de pacientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/PatientListItem' } }
+                  pagination: { $ref: '#/components/schemas/Pagination' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+    post:
+      tags: [Pacientes]
+      summary: Crea un paciente
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PatientWrite' }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '201':
+          description: Paciente creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Patient' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+  /api/pacientes/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Pacientes]
+      summary: Consulta un paciente
+      security: [{ SessionCookie: [] }]
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Paciente encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Patient' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+    put:
+      tags: [Pacientes]
+      summary: Actualiza un paciente usando control de versión
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { allOf: [{ $ref: '#/components/schemas/PatientWrite' }, { type: object, required: [version], properties: { version: { type: integer, minimum: 1 } } }] }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Paciente actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Patient' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/pacientes/{patientId}/estudios:
+    get:
+      tags: [Estudios]
+      summary: Lista los estudios de un paciente
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - { name: patientId, in: path, required: true, schema: { type: string, pattern: '^[1-9][0-9]*$' } }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Estudios encontrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/Study' } }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+  /api/estudios:
+    post:
+      tags: [Estudios]
+      summary: Crea un estudio
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/StudyWrite' }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '201':
+          description: Estudio creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Study' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/estudios/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Estudios]
+      summary: Consulta un estudio
+      security: [{ SessionCookie: [] }]
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Estudio encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Study' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+    put:
+      tags: [Estudios]
+      summary: Actualiza datos del estudio, sin cambiar paciente ni fecha
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { allOf: [{ $ref: '#/components/schemas/StudyWrite' }, { type: object, required: [version], properties: { version: { type: integer, minimum: 1 } } }] }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Estudio actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Study' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '422': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/estudios/{studyId}/documentos:
+    get:
+      tags: [Documentos]
+      summary: Lista metadatos de documentos activos del estudio
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - { name: studyId, in: path, required: true, schema: { type: string, pattern: '^[1-9][0-9]*$' } }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Lista de documentos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/DocumentMetadata' } }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+    post:
+      tags: [Documentos]
+      summary: Carga un archivo individual asociado al estudio
+      description: El servidor obtiene patientId del estudio; los campos adicionales no están habilitados en el parser multipart.
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - { name: studyId, in: path, required: true, schema: { type: string, pattern: '^[1-9][0-9]*$' } }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary, description: 'Un archivo PDF, DOC, DOCX, JPG/JPEG, PNG, GIF, WEBP o DICOM .dcm según la validación actual.' }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '201':
+          description: Archivo cargado y verificado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/DocumentUploadResult' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '413': { $ref: '#/components/responses/ApiError' }
+        '415': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/documentos/{id}/content:
+    get:
+      tags: [Documentos]
+      summary: Transmite PDF o imagen para visualización inline
+      description: Las imágenes requieren documents.read e images.read; DICOM y otros tipos no se sirven inline.
+      security: [{ SessionCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Contenido binario
+          headers:
+            Content-Disposition: { schema: { type: string } }
+            X-Content-Type-Options: { schema: { type: string, example: nosniff } }
+          content:
+            application/pdf: { schema: { type: string, format: binary } }
+            image/jpeg: { schema: { type: string, format: binary } }
+            image/png: { schema: { type: string, format: binary } }
+            image/gif: { schema: { type: string, format: binary } }
+            image/webp: { schema: { type: string, format: binary } }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '415': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/documentos/{id}/download:
+    get:
+      tags: [Documentos]
+      summary: Descarga un documento
+      security: [{ SessionCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Contenido binario como adjunto
+          headers:
+            Content-Disposition: { schema: { type: string } }
+            X-Content-Type-Options: { schema: { type: string, example: nosniff } }
+          content:
+            application/octet-stream: { schema: { type: string, format: binary } }
+            application/pdf: { schema: { type: string, format: binary } }
+            application/msword: { schema: { type: string, format: binary } }
+            application/vnd.openxmlformats-officedocument.wordprocessingml.document: { schema: { type: string, format: binary } }
+            application/dicom: { schema: { type: string, format: binary } }
+            image/jpeg: { schema: { type: string, format: binary } }
+            image/png: { schema: { type: string, format: binary } }
+            image/gif: { schema: { type: string, format: binary } }
+            image/webp: { schema: { type: string, format: binary } }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/documentos/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    put:
+      tags: [Documentos]
+      summary: Reemplaza el contenido manteniendo el ID del documento
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '200':
+          description: Metadatos actualizados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/DocumentReplaceResult' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '413': { $ref: '#/components/responses/ApiError' }
+        '415': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+    delete:
+      tags: [Documentos]
+      summary: Elimina físicamente el archivo y su registro
+      security: [{ SessionCookie: [] }]
+      responses:
+        default:
+          $ref: '#/components/responses/ApiError'
+        '204': { description: Documento eliminado; no hay cuerpo de respuesta }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+components:
+  securitySchemes:
+    SessionCookie:
+      type: apiKey
+      in: cookie
+      name: hcv_session
+      description: Cookie de sesión emitida por POST /api/auth/login; HttpOnly y SameSite=Strict.
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, pattern: '^[1-9][0-9]*$' }
+  responses:
+    ApiError:
+      description: Error de aplicación. El requestId del cuerpo depende del handler.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiErrorBody' }
+    DatabaseUnavailable:
+      description: Base de datos no disponible
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiErrorBody' }
+  schemas:
+    ApiErrorBody:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string }
+            message: { type: string }
+            requestId: { type: string, format: uuid, description: 'Opcional; no todos los handlers lo incluyen en el cuerpo.' }
+    AuthenticatedUser:
+      type: object
+      required: [id, username, displayName, roles]
+      properties:
+        id: { type: integer, format: int64 }
+        username: { type: string }
+        displayName: { type: string }
+        roles: { type: array, items: { type: string } }
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username: { type: string, maxLength: 100 }
+        password: { type: string, format: password, maxLength: 1024 }
+    Pagination:
+      type: object
+      properties:
+        page: { type: integer }
+        pageSize: { type: integer }
+    PatientListItem:
+      type: object
+      properties:
+        id: { type: string }
+        fullName: { type: string }
+        dni: { type: string, nullable: true }
+    PatientWrite:
+      type: object
+      required: [fullName]
+      properties:
+        fullName: { type: string, maxLength: 240 }
+        dni: { type: string, nullable: true, maxLength: 32 }
+        birthDate: { type: string, format: date, nullable: true }
+        phone: { type: string, nullable: true, maxLength: 80 }
+        address: { type: string, nullable: true, maxLength: 500 }
+        notes: { type: string, nullable: true, maxLength: 10000 }
+    Patient:
+      allOf:
+        - $ref: '#/components/schemas/PatientWrite'
+        - type: object
+          properties:
+            id: { type: string }
+            version: { type: integer }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+    StudyWrite:
+      type: object
+      required: [patientId, type, date]
+      properties:
+        patientId: { type: string, pattern: '^[1-9][0-9]*$' }
+        type: { type: string, maxLength: 160 }
+        date: { type: string, format: date }
+        professional: { type: string, nullable: true, maxLength: 200 }
+        diagnosis: { type: string, nullable: true, maxLength: 10000 }
+        procedure: { type: string, nullable: true, maxLength: 10000 }
+        description: { type: string, nullable: true, maxLength: 10000 }
+        conclusions: { type: string, nullable: true, maxLength: 10000 }
+    Study:
+      allOf:
+        - $ref: '#/components/schemas/StudyWrite'
+        - type: object
+          properties:
+            id: { type: string }
+            serviceId: { type: string }
+            version: { type: integer }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+    DocumentMetadata:
+      type: object
+      properties:
+        id: { type: string }
+        studyId: { type: string }
+        originalName: { type: string }
+        mimeType: { type: string }
+        sizeBytes:
+          oneOf:
+            - { type: string }
+            - { type: integer, format: int64 }
+        sha256: { type: string, pattern: '^[a-f0-9]{64}$' }
+        uploadedBy: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time, nullable: true }
+        updatedBy: { type: string, nullable: true }
+    DocumentUploadResult:
+      allOf:
+        - $ref: '#/components/schemas/DocumentMetadata'
+        - type: object
+          properties:
+            patientId: { type: string }
+    DocumentReplaceResult:
+      allOf:
+        - $ref: '#/components/schemas/DocumentUploadResult'
+        - type: object
+          properties:
+            updatedBy: { type: string }
+    StorageHealth:
+      type: object
+      properties:
+        status: { type: string, enum: [ready, not_configured, recovering, blocked] }
+        message: { type: string }
+        operations: { type: array, items: { type: object, additionalProperties: true } }

@@ -1,5 +1,5 @@
 const { createHash } = require('node:crypto');
-const database = require('../config/database');
+const authRepository = require('../repositories/auth-repository');
 const { logInternalError } = require('../utils/errors');
 
 const COOKIE_NAME = 'hcv_session';
@@ -24,18 +24,11 @@ async function optionalAuth(req, res, next) {
   if (!token) return next();
 
   try {
-    const rows = await database.getPool().query(
-      `SELECT s.id AS session_id, u.id, u.username, u.display_name
-       FROM app_sessions s
-       JOIN app_users u ON u.id = s.user_id
-       WHERE s.token_hash = ? AND s.expires_at > UTC_TIMESTAMP() AND u.is_active = TRUE
-       LIMIT 1`,
-      [tokenHash(token)],
-    );
-    if (rows.length) {
+    const session = await authRepository.findSession(tokenHash(token));
+    if (session) {
       req.auth = {
-        sessionId: rows[0].session_id,
-        user: { id: rows[0].id, username: rows[0].username, displayName: rows[0].display_name },
+        sessionId: session.session_id,
+        user: { id: session.id, username: session.username, displayName: session.display_name },
       };
     }
     next();

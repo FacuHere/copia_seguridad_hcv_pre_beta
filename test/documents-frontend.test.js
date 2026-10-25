@@ -35,5 +35,5 @@ test('Cargar archivo and replacement accept the supported document formats and r
 test('images are previewed through the authenticated document endpoint after listing', () => {
   assert.match(app, /class="document-preview"/);
   assert.match(app, /\/api\/documentos\/' \+ id \+ '\/content/);
-  assert.match(styles, /\.document-preview\{/);
+  assert.match(styles, /\.document-preview\s*\{/);
 });
