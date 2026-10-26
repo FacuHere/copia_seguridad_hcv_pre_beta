@@ -9,7 +9,7 @@ const patientRoute = fs.readFileSync(path.join(__dirname, '../src/routes/patient
 const patientService = fs.readFileSync(path.join(__dirname, '../src/services/patient-service.js'), 'utf8');
 
 test('patient and study forms keep required fields and separate submit from cancellation', () => {
-  const dialogMatches = [...html.matchAll(/<dialog\b[\s\S]*?<\/dialog>/g)];
+  const dialogMatches = [...html.matchAll(/<dialog\b[^>]*id="(?:patientDialog|studyDialog)"[\s\S]*?<\/dialog>/g)];
   assert.equal(dialogMatches.length, 2);
 
   for (const match of dialogMatches) {
@@ -35,15 +35,14 @@ test('patient and study forms keep required fields and separate submit from canc
   assert.doesNotMatch(app, /PATIENT_MODULES_KEY|patientModules|\.tables|addRow\(|localStorage|showDirectoryPicker|createLocalBackup|saveToFolder/);
 });
 
-test('future backup, user management, and report buttons remain inert controls', () => {
-  for (const [id, label] of [['chooseFolder', 'BACKUP'], ['importData', 'Gestión de usuarios'], ['exportData', 'Reportes']]) {
+test('future backup and report buttons remain inert controls', () => {
+  for (const [id, label] of [['chooseFolder', 'BACKUP'], ['exportData', 'Reportes']]) {
     const button = new RegExp(`<button\\b(?=[^>]*\\bid="${id}")(?=[^>]*\\btype="button")[^>]*>${label}<\\/button>`);
     assert.match(html, button);
   }
   assert.doesNotMatch(html, /id="importData"[^>]*type="file"|id="exportData"[^>]*type="submit"|id="chooseFolder"[^>]*type="submit"/);
-  assert.doesNotMatch(app, /\$\('#(?:chooseFolder|importData|exportData)'\)/);
+  assert.doesNotMatch(app, /\$\('#(?:chooseFolder|exportData)'\)/);
   assert.match(html, /reservado para futuras funciones de copia de seguridad/i);
-  assert.match(html, /reservado para futuras funciones de administración de usuarios/i);
   assert.match(html, /reservado para futuras funciones de generación y consulta de informes/i);
 });
 

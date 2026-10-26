@@ -15,7 +15,139 @@ tags:
   - name: Pacientes
   - name: Estudios
   - name: Documentos
+  - name: Usuarios
 paths:
+  /api/auth/permisos:
+    get:
+      tags: [Autenticación]
+      summary: Permisos efectivos del usuario activo
+      security: [{ SessionCookie: [] }]
+      responses:
+        '200':
+          description: Permisos RBAC actuales, sin alcance por servicio
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [permissions]
+                properties:
+                  permissions: { type: array, items: { type: string } }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+        default: { $ref: '#/components/responses/ApiError' }
+  /api/usuarios:
+    get:
+      tags: [Usuarios]
+      summary: Buscar cuentas activas e inactivas
+      description: Requiere users.manage. No devuelve contraseñas ni hashes. Orden por username e id.
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - name: search
+          in: query
+          schema: { type: string, maxLength: 200 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 1000000, default: 1 }
+      responses:
+        '200':
+          description: Página de hasta 50 cuentas (puede estar vacía)
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, page, pageSize]
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/ManagedUser' } }
+                  page: { type: integer }
+                  pageSize: { type: integer, enum: [50] }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+        default: { $ref: '#/components/responses/ApiError' }
+    post:
+      tags: [Usuarios]
+      summary: Crear una cuenta activa con un perfil general
+      description: Requiere users.manage y roles.manage. Creación, rol y auditoría en una transacción.
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UserCreate' }
+      responses:
+        '201':
+          description: Cuenta creada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ManagedUserResponse' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '409':
+          description: CONFLICT por username duplicado o ROLE_NOT_CONFIGURED
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiErrorBody' }
+        '422': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+        default: { $ref: '#/components/responses/ApiError' }
+  /api/usuarios/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    put:
+      tags: [Usuarios]
+      summary: Editar nombre, estado o perfil de una cuenta
+      description: >-
+        Requiere users.manage y además roles.manage si se envía role.
+        No cambia username. Protege la cuenta propia y al último administrador activo.
+        Conserva asignaciones técnicas o múltiples. Desactivar o cambiar perfil invalida sesiones.
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UserUpdate' }
+      responses:
+        '200':
+          description: Cuenta actualizada y auditada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ManagedUserResponse' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409':
+          description: SELF_ADMIN_PROTECTION, LAST_ADMIN_PROTECTION, ROLE_ASSIGNMENT_UNSUPPORTED o ROLE_NOT_CONFIGURED
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiErrorBody' }
+        '422': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+        default: { $ref: '#/components/responses/ApiError' }
+  /api/usuarios/{id}/password:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    put:
+      tags: [Usuarios]
+      summary: Cambiar contraseña e invalidar todas las sesiones de esa cuenta
+      description: Requiere users.manage. Reutiliza scrypt; actualización, invalidación y auditoría son transaccionales.
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UserPassword' }
+      responses:
+        '204': { description: 'Contraseña cambiada y sesiones cerradas, sin cuerpo' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '422': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+        default: { $ref: '#/components/responses/ApiError' }
   /api/health/database:
     get:
       tags: [Salud]
@@ -497,6 +629,55 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/ApiErrorBody' }
   schemas:
+    GeneralRole:
+      type: string
+      enum: [administrador, medico, secretario, visualizador]
+    ManagedUser:
+      type: object
+      required: [id, username, displayName, isActive, roles]
+      properties:
+        id: { type: string, pattern: '^[1-9][0-9]*$' }
+        username: { type: string }
+        displayName: { type: string }
+        isActive: { type: boolean }
+        roles: { type: array, items: { type: string }, description: Puede incluir roles técnicos o múltiples preexistentes que la pantalla no reemplaza. }
+    ManagedUserResponse:
+      type: object
+      required: [data]
+      properties:
+        data: { $ref: '#/components/schemas/ManagedUser' }
+    UserCreate:
+      type: object
+      additionalProperties: false
+      required: [username, displayName, role, password, passwordConfirmation]
+      properties:
+        username: { type: string, minLength: 3, maxLength: 100, pattern: '^[A-Za-z0-9][A-Za-z0-9._-]{2,99}$', description: Se recortan espacios exteriores antes de validar. }
+        displayName: { type: string, maxLength: 200, description: No vacío después de recortar espacios. }
+        role: { $ref: '#/components/schemas/GeneralRole' }
+        password: { $ref: '#/components/schemas/AdministrativePassword' }
+        passwordConfirmation: { type: string, format: password, writeOnly: true, description: Debe coincidir exactamente con password. }
+    UserUpdate:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        displayName: { type: string, maxLength: 200, description: No vacío después de recortar espacios. }
+        isActive: { type: boolean }
+        role: { $ref: '#/components/schemas/GeneralRole' }
+    UserPassword:
+      type: object
+      additionalProperties: false
+      required: [password, passwordConfirmation]
+      properties:
+        password: { $ref: '#/components/schemas/AdministrativePassword' }
+        passwordConfirmation: { type: string, format: password, writeOnly: true, description: Debe coincidir exactamente con password. }
+    AdministrativePassword:
+      type: string
+      format: password
+      writeOnly: true
+      minLength: 12
+      maxLength: 1024
+      description: No se recortan espacios. Mínimo 12 puntos Unicode; el máximo del backend es 1024 unidades UTF-16.
     ApiErrorBody:
       type: object
       required: [error]

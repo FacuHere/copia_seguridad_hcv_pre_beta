@@ -59,7 +59,8 @@ async function resetLoginAttemptWindow(connection, clientIp) {
 
 async function findUserByUsername(connection, username) {
   const rows = await connection.query(
-    'SELECT id, username, display_name, password_hash, is_active FROM app_users WHERE username = ? LIMIT 1',
+    // Coordinar el login con cambios de contraseña/estado: no crear una sesión con credenciales revocadas.
+    'SELECT id, username, display_name, password_hash, is_active FROM app_users WHERE username = ? LIMIT 1 FOR UPDATE',
     [username],
   );
   return rows[0] || null;

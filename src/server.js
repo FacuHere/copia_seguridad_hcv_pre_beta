@@ -10,6 +10,7 @@ const patientRoutes = require('./routes/patients');
 const studyRoutes = require('./routes/studies');
 const documentRoutes = require('./routes/documents');
 const healthRoutes = require('./routes/health');
+const userRoutes = require('./routes/users');
 const { prepareStorageRecovery, startExpiredSessionCleanup } = require('./services/application-lifecycle');
 const { state: storageReadiness } = require('./services/storage-readiness');
 const { logInternalError } = require('./utils/errors');
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '256kb' }));
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/usuarios', userRoutes);
 app.use('/api/pacientes', patientRoutes);
 app.use('/api', studyRoutes);
 app.use('/api', documentRoutes);
