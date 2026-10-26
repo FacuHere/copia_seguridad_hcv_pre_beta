@@ -75,13 +75,14 @@ async function findUserRoles(connection, userId) {
 }
 
 async function recordFailedLogin(connection, maxFailures, blockMinutes, clientIp) {
+  // Evaluar el umbral antes del incremento evita contar dos veces el mismo fallo en MariaDB.
   return connection.query(
     `UPDATE auth_login_attempts
-     SET failure_count = failure_count + 1,
-         blocked_until = CASE
+     SET blocked_until = CASE
            WHEN failure_count + 1 >= ? THEN DATE_ADD(UTC_TIMESTAMP(), INTERVAL ${blockMinutes} MINUTE)
            ELSE blocked_until
-         END
+         END,
+         failure_count = failure_count + 1
      WHERE client_ip = ?`,
     [maxFailures, clientIp],
   );
@@ -100,6 +101,10 @@ async function createSession(connection, userId, hashedToken, sessionSeconds) {
 
 async function deleteSession(connection, sessionId) {
   return connection.query('DELETE FROM app_sessions WHERE id = ?', [sessionId]);
+}
+
+async function deleteSessionsForUser(connection, userId) {
+  return connection.query('DELETE FROM app_sessions WHERE user_id = ?', [userId]);
 }
 
 async function recordAudit(connection, userId, action, clientIp) {
@@ -122,5 +127,6 @@ module.exports = {
   clearLoginAttempts,
   createSession,
   deleteSession,
+  deleteSessionsForUser,
   recordAudit,
 };

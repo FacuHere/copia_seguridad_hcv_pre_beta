@@ -40,16 +40,18 @@ async function cargar(req, res) {
   }
 }
 
-async function transmitir(req, res, disposition) {
+async function transmitir(req, res, disposition, opciones = {}) {
+  const { incluirHashSha256 = false, ...opcionesServicio } = opciones;
   let resultado;
   try {
-    resultado = await documentService.prepareStream(req.params.id, disposition, contexto(req));
+    resultado = await documentService.prepareStream(req.params.id, disposition, contexto(req), opcionesServicio);
   } catch (error) {
     return respondWithApplicationError(res, req, error, 'documents.stream', 'No se pudo acceder al documento.');
   }
 
   const { document, fileHandle } = resultado;
   sendFileHeaders(res, document, disposition);
+  if (incluirHashSha256) res.setHeader('X-Document-SHA256', document.sha256);
   const stream = fileHandle.createReadStream({ autoClose: true });
   res.on('close', () => { if (!res.writableFinished) stream.destroy(); });
   stream.on('error', error => {
@@ -61,6 +63,13 @@ async function transmitir(req, res, disposition) {
 
 function descargar(req, res) { return transmitir(req, res, 'attachment'); }
 function visualizar(req, res) { return transmitir(req, res, 'inline'); }
+function descargarParaRespaldo(req, res) {
+  return transmitir(req, res, 'attachment', {
+    blockOnIntegrityMismatch: false,
+    auditAction: 'backup.document.export',
+    incluirHashSha256: true,
+  });
+}
 
 async function reemplazar(req, res) {
   try {
@@ -81,4 +90,4 @@ async function eliminar(req, res) {
   }
 }
 
-module.exports = { listarPorEstudio, cargar, descargar, visualizar, reemplazar, eliminar };
+module.exports = { listarPorEstudio, cargar, descargar, descargarParaRespaldo, visualizar, reemplazar, eliminar };

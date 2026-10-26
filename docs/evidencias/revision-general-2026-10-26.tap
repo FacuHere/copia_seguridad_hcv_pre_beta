@@ -1,0 +1,511 @@
+
+> historial-clinico-visual@1.0.0 test
+> node --test --test-reporter=tap
+
+TAP version 13
+# Subtest: age calcula la edad cuando el cumpleaños ya ocurrió este año
+ok 1 - age calcula la edad cuando el cumpleaños ya ocurrió este año
+  ---
+  duration_ms: 1.4841
+  type: 'test'
+  ...
+# Subtest: age resta un año cuando el cumpleaños todavía no ocurrió
+ok 2 - age resta un año cuando el cumpleaños todavía no ocurrió
+  ---
+  duration_ms: 0.6047
+  type: 'test'
+  ...
+# Subtest: age considera cumplidos los años en el día del cumpleaños
+ok 3 - age considera cumplidos los años en el día del cumpleaños
+  ---
+  duration_ms: 0.7
+  type: 'test'
+  ...
+# Subtest: age refleja el cambio de año alrededor del cumpleaños
+ok 4 - age refleja el cambio de año alrededor del cumpleaños
+  ---
+  duration_ms: 1.1763
+  type: 'test'
+  ...
+# Subtest: age trata el cumpleaños del 29 de febrero según la normalización de Date
+ok 5 - age trata el cumpleaños del 29 de febrero según la normalización de Date
+  ---
+  duration_ms: 1.0835
+  type: 'test'
+  ...
+# Subtest: age devuelve una cadena vacía para fechas vacías o ausentes
+ok 6 - age devuelve una cadena vacía para fechas vacías o ausentes
+  ---
+  duration_ms: 2.9347
+  type: 'test'
+  ...
+# Subtest: recupera una limpieza postcommit histórica sin borrar el archivo restaurado ni reclasificarla como fallida
+ok 7 - recupera una limpieza postcommit histórica sin borrar el archivo restaurado ni reclasificarla como fallida
+  ---
+  duration_ms: 117.0146
+  type: 'test'
+  ...
+# {"level":"error","event":"backup_restore_recovery_required","operationId":"33eb089c-c46a-4c73-8499-649d82748cf1","outcome":"needs_attention","errorCode":"BACKUP_STAGING_UNRECOGNIZED_ENTRY"}
+# {"level":"error","event":"backup_restore_recovery_required","operationId":"33eb089c-c46a-4c73-8499-649d82748cf1","outcome":"needs_attention","errorCode":"BACKUP_STAGING_UNRECOGNIZED_ENTRY"}
+# Subtest: varios fallos de limpieza conservan el COMMIT confirmado incluso cuando la restauración no tiene documentos
+ok 8 - varios fallos de limpieza conservan el COMMIT confirmado incluso cuando la restauración no tiene documentos
+  ---
+  duration_ms: 28.9403
+  type: 'test'
+  ...
+# Subtest: recupera una cancelación histórica fallida que todavía conserva archivos y registros
+ok 9 - recupera una cancelación histórica fallida que todavía conserva archivos y registros
+  ---
+  duration_ms: 25.0645
+  type: 'test'
+  ...
+# Subtest: una cancelación con limpieza interrumpida sigue recuperable y se audita al completarse
+ok 10 - una cancelación con limpieza interrumpida sigue recuperable y se audita al completarse
+  ---
+  duration_ms: 27.7074
+  type: 'test'
+  ...
+# Subtest: acepta rutas de documentos relativas y rechaza traversal o rutas fuera de la carpeta
+ok 11 - acepta rutas de documentos relativas y rechaza traversal o rutas fuera de la carpeta
+  ---
+  duration_ms: 1.0212
+  type: 'test'
+  ...
+# Subtest: valida relaciones paciente-estudio-documento antes de restaurar
+ok 12 - valida relaciones paciente-estudio-documento antes de restaurar
+  ---
+  duration_ms: 2.9795
+  type: 'test'
+  ...
+# Subtest: permite Agregar pacientes con DNI repetido y conserva sus identidades de origen distintas
+ok 13 - permite Agregar pacientes con DNI repetido y conserva sus identidades de origen distintas
+  ---
+  duration_ms: 0.2349
+  type: 'test'
+  ...
+# Subtest: rechaza IDs de origen duplicados para evitar sobrescribir registros del mismo respaldo
+ok 14 - rechaza IDs de origen duplicados para evitar sobrescribir registros del mismo respaldo
+  ---
+  duration_ms: 0.2008
+  type: 'test'
+  ...
+# Subtest: la interfaz valida una carpeta completa leyendo los dos metadatos de la raíz
+ok 15 - la interfaz valida una carpeta completa leyendo los dos metadatos de la raíz
+  ---
+  duration_ms: 47.1504
+  type: 'test'
+  ...
+# Subtest: el lector permite documentos relativos y rechaza traversal y archivos raíz ajenos al formato
+ok 16 - el lector permite documentos relativos y rechaza traversal y archivos raíz ajenos al formato
+  ---
+  duration_ms: 2.0014
+  type: 'test'
+  ...
+# Subtest: los lotes conservan todos los registros sin superar el límite HTTP en bytes UTF-8
+ok 17 - los lotes conservan todos los registros sin superar el límite HTTP en bytes UTF-8
+  ---
+  duration_ms: 4.9873
+  type: 'test'
+  ...
+# Subtest: un registro que supera por sí solo el límite JSON muestra un error antes de enviarse
+ok 18 - un registro que supera por sí solo el límite JSON muestra un error antes de enviarse
+  ---
+  duration_ms: 3.2082
+  type: 'test'
+  ...
+# Subtest: reabrir el diálogo no permite duplicar una operación ni cambiar sus carpetas
+ok 19 - reabrir el diálogo no permite duplicar una operación ni cambiar sus carpetas
+  ---
+  duration_ms: 1.8508
+  type: 'test'
+  ...
+# Subtest: un selector iniciado por una sesión anterior no vuelve a publicar su carpeta después del cierre
+ok 20 - un selector iniciado por una sesión anterior no vuelve a publicar su carpeta después del cierre
+  ---
+  duration_ms: 1.207
+  type: 'test'
+  ...
+# Subtest: una exportación pendiente de una sesión anterior no escribe carpetas ni cancela con la sesión nueva
+ok 21 - una exportación pendiente de una sesión anterior no escribe carpetas ni cancela con la sesión nueva
+  ---
+  duration_ms: 1.1617
+  type: 'test'
+  ...
+# Subtest: una cancelación ya iniciada no publica el error anterior después de cambiar la sesión
+ok 22 - una cancelación ya iniciada no publica el error anterior después de cambiar la sesión
+  ---
+  duration_ms: 4.598
+  type: 'test'
+  ...
+# Subtest: la restauración confirmada actualiza la vista clínica y distingue un fallo posterior de actualización
+ok 23 - la restauración confirmada actualiza la vista clínica y distingue un fallo posterior de actualización
+  ---
+  duration_ms: 4.7617
+  type: 'test'
+  ...
+# Subtest: HTTP upload, download, replacement and physical delete preserve bytes and audit using a disposable in-memory DB adapter
+ok 24 - HTTP upload, download, replacement and physical delete preserve bytes and audit using a disposable in-memory DB adapter
+  ---
+  duration_ms: 279.0127
+  type: 'test'
+  ...
+# Subtest: HTTP upload and authenticated download preserve a synthetic DOCX and its database metadata
+ok 25 - HTTP upload and authenticated download preserve a synthetic DOCX and its database metadata
+  ---
+  duration_ms: 42.4372
+  type: 'test'
+  ...
+# Subtest: visualizer is denied file upload by the actual HTTP permission middleware
+ok 26 - visualizer is denied file upload by the actual HTTP permission middleware
+  ---
+  duration_ms: 5.7545
+  type: 'test'
+  ...
+# Subtest: visualizer can list, view and download permitted files but cannot replace or delete them
+ok 27 - visualizer can list, view and download permitted files but cannot replace or delete them
+  ---
+  duration_ms: 44.932
+  type: 'test'
+  ...
+# Subtest: user without document permissions is denied every document operation without changing files or rows
+ok 28 - user without document permissions is denied every document operation without changing files or rows
+  ---
+  duration_ms: 13.3295
+  type: 'test'
+  ...
+# Subtest: upload rejects a nonexistent study and rejects a client-supplied patient association
+ok 29 - upload rejects a nonexistent study and rejects a client-supplied patient association
+  ---
+  duration_ms: 17.6268
+  type: 'test'
+  ...
+# Subtest: upload locks and uses the current patient and study labels after the file has streamed
+ok 30 - upload locks and uses the current patient and study labels after the file has streamed
+  ---
+  duration_ms: 24.0446
+  type: 'test'
+  ...
+# {"level":"error","event":"document_integrity_mismatch","documentId":"90"}
+# Subtest: HTTP serving detects a same-size file alteration before sending any bytes and blocks clinical API
+ok 31 - HTTP serving detects a same-size file alteration before sending any bytes and blocks clinical API
+  ---
+  duration_ms: 13.2314
+  type: 'test'
+  ...
+# Subtest: DICOM upload and download preserve bytes with and without the Part 10 DICM prefix
+ok 32 - DICOM upload and download preserve bytes with and without the Part 10 DICM prefix
+  ---
+  duration_ms: 3060.0165
+  type: 'test'
+  ...
+# Subtest: orphan staging cleanup preserves journaled files and removes known untracked temporary files
+ok 33 - orphan staging cleanup preserves journaled files and removes known untracked temporary files
+  ---
+  duration_ms: 112.4848
+  type: 'test'
+  ...
+# Subtest: unknown staging entries require attention and remain untouched
+ok 34 - unknown staging entries require attention and remain untouched
+  ---
+  duration_ms: 11.2175
+  type: 'test'
+  ...
+# Subtest: label changes with documents stop while document recovery is blocked
+ok 35 - label changes with documents stop while document recovery is blocked
+  ---
+  duration_ms: 0.5065
+  type: 'test'
+  ...
+# Subtest: delete recovery physically removes a journaled file before deleting its database row
+ok 36 - delete recovery physically removes a journaled file before deleting its database row
+  ---
+  duration_ms: 24.1778
+  type: 'test'
+  ...
+# Subtest: delete recovery refuses to erase metadata when both physical locations are unexpectedly missing
+ok 37 - delete recovery refuses to erase metadata when both physical locations are unexpectedly missing
+  ---
+  duration_ms: 14.2226
+  type: 'test'
+  ...
+# Subtest: replacement recovery keeps the original document id and validates final bytes before finalizing
+ok 38 - replacement recovery keeps the original document id and validates final bytes before finalizing
+  ---
+  duration_ms: 86.1997
+  type: 'test'
+  ...
+# Subtest: la eliminación normal con claves camelCase borra el archivo antes de eliminar los metadatos
+ok 39 - la eliminación normal con claves camelCase borra el archivo antes de eliminar los metadatos
+  ---
+  duration_ms: 21.3278
+  type: 'test'
+  ...
+# Subtest: la recuperación limpia referencias completed históricas con o sin una copia física residual
+ok 40 - la recuperación limpia referencias completed históricas con o sin una copia física residual
+  ---
+  duration_ms: 13.4408
+  type: 'test'
+  ...
+# Subtest: un fallo de eliminación física conserva la referencia completed para reintentar su limpieza
+ok 41 - un fallo de eliminación física conserva la referencia completed para reintentar su limpieza
+  ---
+  duration_ms: 8.3752
+  type: 'test'
+  ...
+# Subtest: replacement does not discard its old physical copy when MariaDB refuses the metadata update
+ok 42 - replacement does not discard its old physical copy when MariaDB refuses the metadata update
+  ---
+  duration_ms: 18.6148
+  type: 'test'
+  ...
+# Subtest: upload recovery verifies staged bytes, installs them, then activates the database row
+ok 43 - upload recovery verifies staged bytes, installs them, then activates the database row
+  ---
+  duration_ms: 54.9634
+  type: 'test'
+  ...
+# Subtest: label change journal and document moving keys are prepared inside the caller transaction before its metadata update
+ok 44 - label change journal and document moving keys are prepared inside the caller transaction before its metadata update
+  ---
+  duration_ms: 0.9145
+  type: 'test'
+  ...
+# Subtest: label changes without a configured repository are refused when the scope has documents
+ok 45 - label changes without a configured repository are refused when the scope has documents
+  ---
+  duration_ms: 0.3196
+  type: 'test'
+  ...
+# Subtest: recovery completes a prepared folder move after restart without replacing conflicting files
+ok 46 - recovery completes a prepared folder move after restart without replacing conflicting files
+  ---
+  duration_ms: 38.7765
+  type: 'test'
+  ...
+# Subtest: document API applies the expected RBAC permissions and study-derived patient association
+ok 47 - document API applies the expected RBAC permissions and study-derived patient association
+  ---
+  duration_ms: 1.283
+  type: 'test'
+  ...
+# Subtest: documents stay behind the API and storage recovery runs before the server listens
+ok 48 - documents stay behind the API and storage recovery runs before the server listens
+  ---
+  duration_ms: 0.674
+  type: 'test'
+  ...
+# Subtest: study_date is rejected if changed and omitted from the study UPDATE statement
+ok 49 - study_date is rejected if changed and omitted from the study UPDATE statement
+  ---
+  duration_ms: 0.2179
+  type: 'test'
+  ...
+# Subtest: patient and study label changes invoke recoverable directory moves by stable IDs
+ok 50 - patient and study label changes invoke recoverable directory moves by stable IDs
+  ---
+  duration_ms: 0.1687
+  type: 'test'
+  ...
+# Subtest: private storage config requires absolute root and positive explicit upload limit
+ok 51 - private storage config requires absolute root and positive explicit upload limit
+  ---
+  duration_ms: 1.7611
+  type: 'test'
+  ...
+# Subtest: storage key uses stable numeric identities and rejects traversal
+ok 52 - storage key uses stable numeric identities and rejects traversal
+  ---
+  duration_ms: 1.0586
+  type: 'test'
+  ...
+# Subtest: directory label moves merge safely and keep files under the repository
+ok 53 - directory label moves merge safely and keep files under the repository
+  ---
+  duration_ms: 122.0842
+  type: 'test'
+  ...
+# Subtest: single PDF and DICOM uploads are byte preserving and receive SHA-256 metadata in private staging
+ok 54 - single PDF and DICOM uploads are byte preserving and receive SHA-256 metadata in private staging
+  ---
+  duration_ms: 69.8974
+  type: 'test'
+  ...
+# Subtest: synthetic DOC and DOCX uploads preserve bytes, MIME metadata, and SHA-256
+ok 55 - synthetic DOC and DOCX uploads preserve bytes, MIME metadata, and SHA-256
+  ---
+  duration_ms: 40.5741
+  type: 'test'
+  ...
+# Subtest: la carga DOCX reconoce el documento principal aunque otros metadatos aparezcan antes
+ok 56 - la carga DOCX reconoce el documento principal aunque otros metadatos aparezcan antes
+  ---
+  duration_ms: 29.9713
+  type: 'test'
+  ...
+# Subtest: unsupported extensions, content mismatch, and oversized files are rejected
+ok 57 - unsupported extensions, content mismatch, and oversized files are rejected
+  ---
+  duration_ms: 22.6034
+  type: 'test'
+  ...
+# Subtest: opened storage files are regular, contained files and reject a symlink when the platform permits creating one
+ok 58 - opened storage files are regular, contained files and reject a symlink when the platform permits creating one # SKIP El sistema no permite crear enlaces simbólicos en este entorno.
+  ---
+  duration_ms: 28.35
+  type: 'test'
+  ...
+# Subtest: interrupted multipart request rejects and removes its partial staging file
+ok 59 - interrupted multipart request rejects and removes its partial staging file
+  ---
+  duration_ms: 20.5877
+  type: 'test'
+  ...
+# Subtest: study form uploads the selected synthetic images after saving study metadata
+ok 60 - study form uploads the selected synthetic images after saving study metadata
+  ---
+  duration_ms: 0.9836
+  type: 'test'
+  ...
+# Subtest: Cargar archivo and replacement accept the supported document formats and report server errors
+ok 61 - Cargar archivo and replacement accept the supported document formats and report server errors
+  ---
+  duration_ms: 0.2749
+  type: 'test'
+  ...
+# Subtest: images are previewed through the authenticated document endpoint after listing
+ok 62 - images are previewed through the authenticated document endpoint after listing
+  ---
+  duration_ms: 0.1587
+  type: 'test'
+  ...
+# Subtest: readPort accepts a complete valid port and rejects partial or out-of-range values
+ok 63 - readPort accepts a complete valid port and rejects partial or out-of-range values
+  ---
+  duration_ms: 1.805
+  type: 'test'
+  ...
+# Subtest: readHost accepts loopback and LAN bind addresses and rejects malformed values
+ok 64 - readHost accepts loopback and LAN bind addresses and rejects malformed values
+  ---
+  duration_ms: 5.1194
+  type: 'test'
+  ...
+# Subtest: application database pool refuses the MariaDB root account
+ok 65 - application database pool refuses the MariaDB root account
+  ---
+  duration_ms: 0.3451
+  type: 'test'
+  ...
+# Subtest: test\\helpers\\docx-fixture.js
+ok 11 - test\\helpers\\docx-fixture.js
+  ---
+  duration_ms: 113.0149
+  type: 'test'
+  ...
+# Subtest: flujos HTTP de pacientes, estudios y documentos usan MariaDB real y revierten sus datos sintéticos
+ok 67 - flujos HTTP de pacientes, estudios y documentos usan MariaDB real y revierten sus datos sintéticos # SKIP Defina HCV_MARIADB_INTEGRATION=1 para habilitar la prueba contra MariaDB configurada.
+  ---
+  duration_ms: 0.8245
+  type: 'test'
+  ...
+# Subtest: patient name/DNI change without storage is rejected before metadata update when documents exist
+ok 68 - patient name/DNI change without storage is rejected before metadata update when documents exist
+  ---
+  duration_ms: 93.5286
+  type: 'test'
+  ...
+# Subtest: patient name/DNI change remains available without storage when no documents are affected
+ok 69 - patient name/DNI change remains available without storage when no documents are affected
+  ---
+  duration_ms: 14.0355
+  type: 'test'
+  ...
+# Subtest: patient and study forms keep required fields and separate submit from cancellation
+ok 70 - patient and study forms keep required fields and separate submit from cancellation
+  ---
+  duration_ms: 1.8238
+  type: 'test'
+  ...
+# Subtest: backup control opens the implemented dialog while future user and report buttons remain inert
+ok 71 - backup control opens the implemented dialog while future user and report buttons remain inert
+  ---
+  duration_ms: 0.9208
+  type: 'test'
+  ...
+# Subtest: patient records are loaded and saved through the existing REST routes, not localStorage
+ok 72 - patient records are loaded and saved through the existing REST routes, not localStorage
+  ---
+  duration_ms: 0.3165
+  type: 'test'
+  ...
+# Subtest: scrypt hashes verify the correct password and reject an incorrect password
+ok 73 - scrypt hashes verify the correct password and reject an incorrect password
+  ---
+  duration_ms: 252.8382
+  type: 'test'
+  ...
+# Subtest: role permissions authorize explicitly granted operations without service scope
+ok 74 - role permissions authorize explicitly granted operations without service scope
+  ---
+  duration_ms: 3.1099
+  type: 'test'
+  ...
+# {"level":"error","event":"backup_restore_recovery_skipped","errorCode":"RECOVERY_FAILED"}
+# Historial Clínico Visual disponible en http://127.0.0.1:56254
+# Subtest: API startup ignores a residual .service.lock and recovers a pending journaled upload
+ok 75 - API startup ignores a residual .service.lock and recovers a pending journaled upload
+  ---
+  duration_ms: 138.9425
+  type: 'test'
+  ...
+# Subtest: degraded storage keeps diagnostics and storage-independent APIs available over HTTP
+ok 76 - degraded storage keeps diagnostics and storage-independent APIs available over HTTP
+  ---
+  duration_ms: 78.3049
+  type: 'test'
+  ...
+# Subtest: storage health reports not_configured as unavailable without mislabeling it ready
+ok 77 - storage health reports not_configured as unavailable without mislabeling it ready
+  ---
+  duration_ms: 12.0158
+  type: 'test'
+  ...
+# Subtest: storage-dependent routes return 503 while recovery is blocked and resume when ready
+ok 78 - storage-dependent routes return 503 while recovery is blocked and resume when ready
+  ---
+  duration_ms: 10.0004
+  type: 'test'
+  ...
+# Subtest: study frontend reads and writes studies through the API without persisting them in localStorage
+ok 79 - study frontend reads and writes studies through the API without persisting them in localStorage
+  ---
+  duration_ms: 1.1502
+  type: 'test'
+  ...
+# Subtest: study API resolves the provisional service on the server and stringifies exposed IDs
+ok 80 - study API resolves the provisional service on the server and stringifies exposed IDs
+  ---
+  duration_ms: 1.0171
+  type: 'test'
+  ...
+# Subtest: GENERAL service seed is idempotent by its unique code
+ok 81 - GENERAL service seed is idempotent by its unique code
+  ---
+  duration_ms: 0.2596
+  type: 'test'
+  ...
+# Subtest: direct HTTP PUT cannot change an existing study date
+ok 82 - direct HTTP PUT cannot change an existing study date
+  ---
+  duration_ms: 90.3158
+  type: 'test'
+  ...
+1..82
+# tests 82
+# suites 0
+# pass 80
+# fail 0
+# cancelled 0
+# skipped 2
+# todo 0
+# duration_ms 3862.3427

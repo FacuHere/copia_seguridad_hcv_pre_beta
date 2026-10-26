@@ -10,7 +10,9 @@ const patientRoutes = require('./routes/patients');
 const studyRoutes = require('./routes/studies');
 const documentRoutes = require('./routes/documents');
 const healthRoutes = require('./routes/health');
+const backupRoutes = require('./routes/backups');
 const { prepareStorageRecovery, startExpiredSessionCleanup } = require('./services/application-lifecycle');
+const backupService = require('./services/backup-service');
 const { state: storageReadiness } = require('./services/storage-readiness');
 const { logInternalError } = require('./utils/errors');
 
@@ -27,6 +29,7 @@ app.use((req, res, next) => {
 });
 app.use(express.json({ limit: '256kb' }));
 app.use('/api/health', healthRoutes);
+app.use('/api/respaldos', backupRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/pacientes', patientRoutes);
 app.use('/api', studyRoutes);
@@ -54,6 +57,7 @@ let sessionCleanupTimer;
 async function start({ pool: configuredPool, storageConfig: configuredStorageConfig, listenPort = port, listenHost = host } = {}) {
   const getPool = () => configuredPool || database.getPool();
   await prepareStorageRecovery(getPool(), configuredStorageConfig);
+  await backupService.recuperarOperaciones(getPool(), configuredStorageConfig?.root);
   server = app.listen(listenPort, listenHost, () => {
     const address = server.address();
     const actualPort = typeof address === 'object' && address ? address.port : listenPort;

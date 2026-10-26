@@ -1,0 +1,217 @@
+{
+  "fecha": "2026-10-26",
+  "alcance": "Pruebas sintéticas en hcv_test",
+  "suite": {
+    "tests": 82,
+    "pass": 80,
+    "fail": 0,
+    "skipped": 2
+  },
+  "navegadorFinal": {
+    "results": [
+      {
+        "prueba": "Login incorrecto rechaza credenciales y limpia campo",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Login real correcto, cookie HttpOnly y /me",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Paciente: required, Cancelar y X no crean registros",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Paciente: crear desde formulario persiste",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Paciente: editar, cancelar y recargar conservan lo esperado",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Estudio: required, Cancelar/X, crear con imagen y visualizar",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Estudio: edición conserva fecha; HTTP directo rechaza cambiarla",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Archivos PDF/PNG/DICOM/DOCX: carga, bytes, hash y descarga desde enlace",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Reemplazar conserva ID; eliminar y luego respaldar no queda bloqueado",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Respaldo: carpeta real, manifiesto, hashes y bloqueo de reentrada",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Restaurar Agregar desde navegador: DNI repetido y listado actualizado",
+        "resultado": "PASS",
+        "counts": {
+          "pacientes": 8,
+          "estudios": 8,
+          "documentos": 10
+        }
+      },
+      {
+        "prueba": "Restaurar Reemplazar desde navegador: sin IDs ni ficha obsoletos",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Restauracion: lotes UTF-8 grandes atraviesan HTTP sin 413",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Sesion: descarta respuesta antigua, logout limpia fichas y revoca cookie",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Navegador: sin errores JavaScript no controlados",
+        "resultado": "PASS"
+      }
+    ],
+    "pageErrors": [],
+    "nativeFolderPicker": false,
+    "realHttpBackend": true
+  },
+  "navegadorPrimerIntento": {
+    "results": [
+      {
+        "prueba": "Login incorrecto rechaza credenciales y limpia campo",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Login real correcto, cookie HttpOnly y /me",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Paciente: required, Cancelar y X no crean registros",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Paciente: crear desde formulario persiste",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Paciente: editar, cancelar y recargar conservan lo esperado",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Estudio: required, Cancelar/X, crear con imagen y visualizar",
+        "resultado": "PASS"
+      },
+      {
+        "prueba": "Recorrido navegador",
+        "resultado": "FAIL",
+        "error": ""
+      }
+    ],
+    "pageErrors": [],
+    "nativeFolderPicker": false,
+    "realHttpBackend": true
+  },
+  "colaAntes": {
+    "prueba": "Cola de imágenes no continúa con una nueva sesión",
+    "uploadsIntentados": 2,
+    "resultado": "FAIL"
+  },
+  "colaDespues": {
+    "prueba": "Cola de imágenes no continúa con una nueva sesión",
+    "uploadsIntentados": 1,
+    "resultado": "PASS"
+  },
+  "apiEjecuciones": [
+    {
+      "date": "2026-10-26",
+      "results": [
+        {
+          "prueba": "MariaDB: bloqueo exacto al fallo 10 y revocacion de sesiones con rollback",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "HTTP: pacientes, estudios, archivos y control de version",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "Playwright: recorrido general",
+          "resultado": "FAIL",
+          "cases": 7
+        },
+        {
+          "prueba": "HTTP: exportacion, descarga completa y SHA-256",
+          "resultado": "PASS",
+          "counts": {
+            "pacientes": 3,
+            "estudios": 3,
+            "documentos": 3
+          }
+        },
+        {
+          "prueba": "HTTP/MariaDB: restaurar Agregar sin fusionar DNI",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "HTTP/MariaDB: Reemplazar, bytes y limpieza fisica",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "MariaDB: FK real, rollback clinico y archivos previos conservados",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "Recuperacion: commit preservado tras fallo de limpieza y reintento",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "Recuperacion: cancelacion historica limpia temporales y audita una vez",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "Documentos: reemplazar/eliminar limpian journal y permiten nuevos respaldos",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "Documentos: limpieza de journal completed historico",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "API saludable despues de pruebas de fallo",
+          "resultado": "PASS"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "results": [
+        {
+          "prueba": "MariaDB: bloqueo exacto al fallo 10 y revocacion de sesiones con rollback",
+          "resultado": "PASS"
+        },
+        {
+          "prueba": "Playwright: recorrido general",
+          "resultado": "PASS",
+          "cases": 15
+        }
+      ]
+    }
+  ],
+  "entornoRestaurado": {
+    "base": "hcv_test",
+    "puerto": 3317,
+    "dumpsIdenticos": true,
+    "bytes": 23509,
+    "mariadbDetenida": true,
+    "objetos007": 0
+  },
+  "limitaciones": [
+    "Selector de carpetas adaptado a archivos temporales reales, sin diálogo nativo",
+    "Conexión SQL administrativa aislada; grants de hcv_test_app pendientes",
+    "Recuperación probada mediante estados y fallos controlados, sin corte físico",
+    "CLI de contraseña no ejecutado; helper de revocación verificado dentro de rollback"
+  ]
+}

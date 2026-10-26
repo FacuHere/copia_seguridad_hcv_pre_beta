@@ -14,6 +14,7 @@ Aplicación web en transición desde un template local hacia una arquitectura cl
 - Almacenamiento privado de documentos en `FILE_STORAGE_ROOT`, separado del código y de `public/`; carga individual de PDF, JPG/JPEG, PNG, GIF, WEBP y DICOM `.dcm`, con SHA-256, visualización PDF/imágenes y descarga autorizada.
 - Las cargas permanecen deshabilitadas hasta configurar `FILE_STORAGE_ROOT` y `MAX_FILE_SIZE_BYTES`. No se establece un límite de tamaño predeterminado.
 - Reemplazo conservando el ID del documento, eliminación física confirmada y registro de operaciones pendientes para recuperación tras interrupciones.
+- Módulo de respaldos clínicos en carpeta elegida por un administrador: incluye pacientes, estudios y documentos activos; permite restaurar agregando registros nuevos o reemplazando el conjunto clínico. La función requiere aplicar manualmente la migración 008, configuración de almacenamiento para documentos y un navegador compatible en origen seguro. Las pruebas aisladas de MariaDB y Chrome del 26/10/2026 y sus límites están registradas en [la revisión general](docs/revision-general-hcv-2026-10-26.md); no acreditan el despliegue ni los grants de otra instalación.
 - Fecha de estudio inmutable después de su creación.
 - Las rutas no reconocidas bajo `/api` responden JSON. Los errores internos se registran con identificador de solicitud y tipo/código de error, sin registrar contraseña, token, mensaje SQL ni parámetros.
 - La autorización clínica falla cerrada mientras el alcance por servicio esté pendiente. El rol técnico inicial no tiene permisos clínicos.
@@ -23,7 +24,7 @@ Aplicación web en transición desde un template local hacia una arquitectura cl
 
 - Pacientes y estudios se consumen desde la API; el almacenamiento local que queda pertenece a tablas dinámicas y datos auxiliares del frontend.
 - `role_service_permissions` prepara asignaciones de permisos por servicio; el middleware clínico aún no utiliza esta tabla, porque falta definir el modelo de acceso.
-- Migración nueva `006_documents_storage_lifecycle.sql` pendiente de revisión y aplicación manual. No ejecutar automáticamente desde Node.js.
+- Migraciones nuevas `006_documents_storage_lifecycle.sql` y `008_backup_restore.sql` requieren revisión y aplicación manual en orden. Node.js no las ejecuta automáticamente.
 - El esquema contempla servicios extensibles y campos generales actuales del template como propuesta transitoria.
 - La paginación simple existe en el listado de pacientes. La lista de estudios no está paginada; revisar límites cuando se conozcan volúmenes reales.
 
@@ -40,17 +41,23 @@ Aplicación web en transición desde un template local hacia una arquitectura cl
 
 ## Pendiente para producción
 
-- Aplicar las migraciones revisadas `001` a `006` en orden sobre una base de desarrollo. El proyecto nunca las ejecuta automáticamente.
+- Aplicar las migraciones revisadas `001` a `008` en orden sobre una base de desarrollo. El proyecto nunca las ejecuta automáticamente. La migración 008 prepara el permiso `backups.manage` y las tablas de journal de respaldo/restauración.
 - Usar una cuenta MariaDB de aplicación distinta de `root`, sin privilegios DDL ni permisos de administración de MariaDB. El README técnico SQL detalla los privilegios previstos; no se creó ninguna cuenta.
 - Definir `FILE_STORAGE_ROOT` en el `.env` local con una ruta absoluta fuera del proyecto y de `public/`; asegurar que la cuenta del servicio Node pueda leer/escribir y que los usuarios no autorizados del servidor no tengan acceso.
 - Definir `MAX_FILE_SIZE_BYTES` tras relevar capacidad de disco, tamaños DICOM/PDF/imágenes y estrategia de respaldo. Sin ambos valores, la API rechaza carga/reemplazo.
 - Revisar y aplicar manualmente `sql/006_documents_storage_lifecycle.sql` después de las migraciones anteriores. Verificar primero que `documents.patient_id`, `study_id` y `sha256` no tengan NULL; la migración se detiene si no cumple la precondición. Ajustar los privilegios de `historial_app` para SELECT/INSERT/UPDATE/DELETE en `documents`, SELECT en `studies` y `patients`, INSERT en `audit_events`, y acceso de lectura/escritura a `document_file_operations`; no requiere DDL desde la aplicación.
-- Los DICOM se conservan byte a byte. El marcador Part 10 `DICM` se reconoce cuando existe, pero su ausencia no rechaza un `.dcm`; solo se comprueban extensión/MIME permitidos y que el archivo no esté vacío. No es una validación estructural completa ni un visor.
+- Los DICOM se conservan byte a byte. Para `.dcm` se comprueban extensión/MIME permitidos y contenido no vacío; no se exige ni se interpreta el marcador `DICM`. Estos controles no validan la estructura ni la semántica DICOM.
 - Una copia funcional debe incluir conjuntamente MariaDB y el contenido completo de `FILE_STORAGE_ROOT`. Una copia de solo uno de ambos componentes no constituye un backup restaurable.
+- Para crear o restaurar una carpeta de respaldo, la interfaz requiere Chrome o Edge con File System Access API y un origen seguro. `localhost` es válido para desarrollo; en la LAN se debe publicar mediante HTTPS. La carpeta elegida reside en el equipo del navegador. No se configura TLS automáticamente.
+- El modo **Agregar** crea pacientes, estudios y documentos con IDs nuevos y permite pacientes con DNI repetido sin fusionarlos. **Reemplazar** cambia el conjunto clínico tras validar la carpeta y confirmar; conserva cuentas, roles, permisos y auditoría histórica. No importa contraseñas, sesiones ni eventos de auditoría del respaldo. Realizar restauraciones en períodos de poco uso: el servidor no detiene globalmente la API, aunque la transacción de reemplazo puede mantener bloqueos en MariaDB.
 
 ### Almacenamiento de documentos
 
 Los archivos nunca se sirven con `express.static` y nunca se guardan en `public/`. La jerarquía usa IDs estables (`P-<id>`, `E-<id>`, `D-<id>`) y etiquetas humanas sanitizadas; `storage_key` es una clave relativa privada, nunca una ruta absoluta. El nombre original completo se conserva en MariaDB.
+
+El soporte actual de DICOM permite cargar individualmente varios `.dcm` en un mismo estudio, conservar sus bytes originales, calcular SHA-256 y descargarlos con autorización. No interpreta tags o series ni incorpora visor DICOM, PACS, DICOMweb o integración con equipos médicos; tampoco convierte los archivos a JPG/PNG. No se presupone que un `.dcm` represente una serie completa.
+
+Las [pruebas documentadas](docs/prueba-carga-respaldo-3306-2026-10-26.md) utilizaron archivos DICOM sintéticos. Queda pendiente comprobar compatibilidad con DICOM reales representativos y sus tamaños; la preservación de bytes y el hash no acreditan conformidad completa ni compatibilidad con todos los archivos o equipos.
 
 Al iniciar, el servidor recupera las operaciones documentales registradas antes de aceptar solicitudes. No utiliza un lease global ni crea, lee o requiere `.staging/.service.lock`; si ese marcador existe de una versión anterior, se ignora y se conserva. Se espera una sola instancia de API por raíz de almacenamiento; la aplicación no coordina varias instancias compartiendo la misma raíz. La concurrencia normal de solicitudes se controla por operación y documento mediante transacciones y estados del journal. Si una recuperación queda sin resolver o staging contiene entradas desconocidas, las operaciones que acceden o modifican archivos quedan temporalmente bloqueadas; login y funciones independientes de los documentos siguen disponibles. `GET /api/health/database` y `GET /api/health/storage` permanecen disponibles para diagnóstico. Tras recuperar el journal, el servidor elimina únicamente temporales con nombre aleatorio reconocido y sin referencia a una operación activa. Los nombres desconocidos en staging requieren inspección manual. La limpieza se limita a `FILE_STORAGE_ROOT`.
 
@@ -73,7 +80,7 @@ Si se modifica el DNI/nombre del paciente o el tipo del estudio, el backend actu
 ## Inicio del servidor
 
 1. Copie `.env.example` a `.env` y configure la conexión MariaDB con una cuenta de aplicación no administrativa.
-2. Aplique las migraciones solo en una base de desarrollo revisada y con una cuenta de esquema autorizada; consulte las precondiciones de `006` en `sql/README.md`.
+2. Aplique las migraciones solo en una base de desarrollo revisada y con una cuenta de esquema autorizada; consulte las precondiciones de `006` y `008` en `sql/README.md`.
 3. Ejecute `npm install` y `npm start`.
 4. Abra `http://localhost:3000`.
 
@@ -94,3 +101,13 @@ El comando adquiere un bloqueo MariaDB, vuelve a comprobar que no existan usuari
 ## Migraciones
 
 `CREATE TABLE IF NOT EXISTS` evita el error cuando una tabla ya existe, pero **no compara ni corrige su estructura**. Consulte [sql/README.md](sql/README.md) antes de aplicar scripts; allí se describe la estrategia de versionado propuesta. No aplique scripts contra una base con datos reales sin revisar el plan y respaldo.
+
+## Restablecimiento local de contraseña
+
+`npm run reset:password` solicita usuario y contraseña desde una terminal interactiva; no acepta la contraseña como argumento. Configure una cuenta local de recuperación mediante `.env.password-reset`, usando `.env.password-reset.example` como plantilla. Este archivo es independiente del `.env` de la API y no debe compartirse ni versionarse.
+
+La cuenta de recuperación requiere `SELECT` y `UPDATE` en `app_users`, `DELETE` en `app_sessions` e `INSERT` en `audit_events` de la base elegida. No necesita DDL ni privilegios globales. La actualización del hash, la revocación de todas las sesiones de ese usuario y la auditoría forman una sola transacción: si falla algún paso, se revierte. Quien tenía una sesión anterior debe iniciar sesión nuevamente.
+
+## Registro de revisión y pruebas
+
+[Revisión general del 26/10/2026](docs/revision-general-hcv-2026-10-26.md): fallos encontrados, archivos corregidos, regresiones, pruebas HTTP/MariaDB y navegador, y limitaciones pendientes. Los cambios de funcionamiento deben mantener también actualizados los contratos en `docs/api-rest-hcv.md` y `docs/openapi-hcv.yaml`.

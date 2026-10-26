@@ -1,0 +1,74 @@
+{
+  "pruebas": [
+    {
+      "prueba": "Login admin con cookie y sesión reales",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Paciente: required, Cancelar y X sin guardar",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Crear dos pacientes desde formularios",
+      "resultado": "PASS",
+      "ids": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "prueba": "Editar y cancelar paciente; persistencia después de recargar",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Buscar paciente por DNI y recuperar listado",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Estudio: required, Cancelar y X sin guardar",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Crear dos estudios con paciente correcto",
+      "resultado": "PASS",
+      "ids": [
+        "5",
+        "6"
+      ]
+    },
+    {
+      "prueba": "Edición de estudio e inmutabilidad de fecha desde HTTP directo",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Dos estudios y contador conservados después de recargar",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Sin excepciones JavaScript no controladas",
+      "resultado": "PASS"
+    }
+  ],
+  "pacientesCreados": [
+    {
+      "id": "6",
+      "nombre": "PACIENTE DE PRUEBA RESPALDO e65e2b01 - 1"
+    },
+    {
+      "id": "7",
+      "nombre": "PACIENTE DE PRUEBA RESPALDO e65e2b01 - 2"
+    }
+  ],
+  "estudiosCreados": [
+    {
+      "id": "5",
+      "patientId": "6"
+    },
+    {
+      "id": "6",
+      "patientId": "6"
+    }
+  ],
+  "resultado": "PASS",
+  "logoutStatus": 204
+}

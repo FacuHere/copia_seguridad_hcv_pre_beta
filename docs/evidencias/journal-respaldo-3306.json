@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "tablas": [
+    {
+      "cabeceras": [
+        "operation_id",
+        "operation_state",
+        "actor_user_id",
+        "expected_patients",
+        "expected_studies",
+        "expected_documents",
+        "auditorias"
+      ],
+      "filas": [
+        [
+          "09b497fd-e9c1-4f6a-b5e1-de89998505e0",
+          "completado",
+          "1",
+          "4",
+          "5",
+          "7",
+          "1"
+        ]
+      ]
+    }
+  ]
+}

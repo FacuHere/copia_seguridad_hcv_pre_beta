@@ -65,6 +65,8 @@ Las rutas indicadas son rutas completas, después del prefijo instalado en `serv
 
 El login puede responder `400 INVALID_CREDENTIALS_FORMAT`, `401 INVALID_LOGIN`, `429 LOGIN_RATE_LIMITED` (incluye `Retry-After`) o `503` si la base no está disponible.
 
+El contador por IP activa el bloqueo al registrar el décimo fallo dentro de la ventana de 15 minutos; las solicitudes durante los siguientes 15 minutos responden `429`. Un login correcto limpia ese contador. Al cerrar o perder la sesión, el frontend borra fichas, formularios y referencias de respaldo; las respuestas y colas de carga de una sesión anterior no actualizan la vista ni continúan bajo otra sesión.
+
 ### Pacientes
 
 | Método y ruta | Permiso | Parámetros / cuerpo | Respuesta principal |
@@ -74,7 +76,7 @@ El login puede responder `400 INVALID_CREDENTIALS_FORMAT`, `401 INVALID_LOGIN`, 
 | `GET /api/pacientes/{id}` | `patients.read` | `id` positivo. | `200 {"data":{...}}`; `404 PATIENT_NOT_FOUND` si no existe. |
 | `PUT /api/pacientes/{id}` | `patients.update` | JSON de creación más `version` positiva requerida. | `200 {"data":{...}}`; conflicto de versión `409 VERSION_CONFLICT`. |
 
-La búsqueda admite hasta 120 caracteres. `400` se usa para identificadores, paginación, búsqueda o datos inválidos; el DNI duplicado se transforma en `409 CONFLICT`. La actualización incrementa `version`. Si cambia el nombre o DNI y existen documentos, puede requerir almacenamiento configurado y completar un movimiento recuperable de carpeta.
+La búsqueda admite hasta 120 caracteres. `400` se usa para identificadores, paginación, búsqueda o datos inválidos. El esquema actual indexa el DNI sin imponer unicidad; no se documenta un rechazo de DNI repetido que el código no realiza. La actualización incrementa `version` y devuelve `409 VERSION_CONFLICT` si la versión enviada está desactualizada. Si cambia el nombre o DNI y existen documentos, puede requerir almacenamiento configurado y completar un movimiento recuperable de carpeta.
 
 ### Estudios
 
@@ -98,9 +100,37 @@ El backend asigna el servicio activo `GENERAL`; el cliente no envía `serviceId`
 | `PUT /api/documentos/{id}` | `documents.replace` | `multipart/form-data`, campo de archivo `file`; mantiene `documents.id`. `200 {"data":{id,patientId,studyId,originalName,mimeType,sizeBytes,sha256,updatedBy}}`. |
 | `DELETE /api/documentos/{id}` | `documents.delete` | Elimina físicamente el archivo y su registro tras completar el journal. Respuesta `204` sin cuerpo. |
 
-El código acepta PDF, DOC, DOCX, JPG/JPEG, PNG, GIF, WEBP y `.dcm`. DOC/DOCX están incluidos porque así lo valida actualmente `document-storage.js`, aunque los formatos originalmente previstos deben revisarse si se cambia esa política. DICOM conserva sus bytes; la validación actual solo exige contenido no vacío y no interpreta el formato. No existe visor DICOM. El inline solo se admite para PDF e imágenes.
+El código acepta PDF, DOC, DOCX, JPG/JPEG, PNG, GIF, WEBP y `.dcm`. DOC/DOCX están incluidos porque así lo valida actualmente `document-storage.js`, aunque los formatos originalmente previstos deben revisarse si se cambia esa política.
+
+El soporte DICOM se limita al almacenamiento privado y la descarga autorizada de archivos originales, con SHA-256. Cada carga recibe un archivo; un estudio puede contener varios `.dcm`. Además de los controles generales de extensión/MIME, tamaño, nombre y ruta, la comprobación de contenido DICOM solo exige que no esté vacío: no interpreta `DICM`, tags o series ni valida completamente el formato. No hay visor, PACS, DICOMweb o integración con equipos, ni conversión a imágenes comunes. El inline solo se admite para PDF e imágenes; DICOM se descarga por `/download`.
+
+Las pruebas registradas usaron DICOM sintéticos y comprobaron asociación, persistencia, bytes y hash. La compatibilidad con archivos DICOM reales representativos y sus tamaños sigue pendiente; no debe inferirse de esas pruebas.
 
 Carga, reemplazo, descarga y eliminación dependen de que el almacenamiento esté configurado y listo; si no, pueden devolver `503`. Un tamaño superior a `MAX_FILE_SIZE_BYTES` produce `413 FILE_TOO_LARGE`. Extensión, MIME y firma de contenido incompatibles producen `415`; multipart o metadatos inválidos producen `400`. Documento o contenido ausente produce `404`; integridad SHA-256 inconsistente produce `409` y bloquea el almacenamiento para revisión.
+
+### Respaldos y restauración
+
+El router está montado en `/api/respaldos`. Todos sus endpoints requieren sesión y el permiso RBAC `backups.manage`; `sql/008_backup_restore.sql` prepara ese permiso para `administrador` y crea el journal del módulo. La migración es manual y su presencia en el repositorio no confirma que esté aplicada en una instalación.
+
+La interfaz usa el selector de carpetas del navegador y requiere Chrome o Edge en un origen seguro. En la LAN se necesita HTTPS. El servidor no expone la ruta elegida por el usuario y transmite cada documento por una ruta protegida. La carpeta se considera completa solo después de escribir `manifest.json`.
+
+| Método y ruta | Cuerpo / respuesta | Comportamiento |
+| --- | --- | --- |
+| `POST /api/respaldos/exportar` | JSON opcional `{ "incluirReferenciasUsuarios": false }`; `201 { "data": { operationId, formato, version, creadoEn, conteos, datos } }`. | Exporta pacientes, estudios y documentos activos; crea una operación que el navegador cierra al terminar de guardar. Las referencias de usuarios/roles son opcionales e informativas, sin contraseñas ni sesiones. |
+| `GET /api/respaldos/resumen-clinico` | `200 { "data": { pacientes, estudios, documentos, muestraPacientes, hayMasPacientes } }`. | Devuelve conteos y una muestra limitada para advertir qué datos hay actualmente. |
+| `GET /api/respaldos/documentos/{id}` | Respuesta binaria, con `Content-Disposition`, `Content-Length` y `X-Document-SHA256`. | Envía el documento por streaming después de comparar tamaño/hash. Usa auditoría `backup.document.export`; una discrepancia se registra sin bloquear globalmente el almacenamiento. |
+| `POST /api/respaldos/exportar/{operationId}/completar` | `200 { "data": { operationId, completado: true } }`. | Registra el respaldo completado y audita la operación. El navegador lo solicita después de guardar manifiesto y archivos. |
+| `POST /api/respaldos/restauraciones` | JSON `{ formato, version, modo, conteos }`; `201 { "data": { operationId, modo, estado: "recibiendo" } }`. | Inicia una preparación en modo `agregar` o `reemplazar`. |
+| `POST /api/respaldos/restauraciones/{operationId}/registros` | JSON `{ tipo, registros }`; `201 { "data": { recibidos } }`. | Recibe lotes de 1 a 10 pacientes, estudios o documentos. Los IDs de origen deben ser positivos y únicos por tipo. |
+| `POST /api/respaldos/restauraciones/{operationId}/documentos/{documentId}` | `multipart/form-data`, campo `file`; `201 { "data": { documentoId, recibido: true } }`. | Recibe cada archivo individual y comprueba nombre, MIME, tamaño y SHA-256 contra los metadatos recibidos. Requiere `FILE_STORAGE_ROOT` y `MAX_FILE_SIZE_BYTES`. |
+| `POST /api/respaldos/restauraciones/{operationId}/confirmar` | `200 { "data": { operationId, modo, conteos, completado: true, limpiezaPendiente } }`. | Valida el conjunto completo antes de escribir. `agregar` crea IDs nuevos y permite DNI repetidos sin fusionar; `reemplazar` sustituye pacientes, estudios y documentos. Ambos conservan usuarios, roles, permisos y auditoría histórica y agregan un evento de auditoría de restauración. |
+| `POST /api/respaldos/operaciones/{operationId}/cancelar` | `200 { "data": { operationId, cancelada: true } }`. | Cancela una operación propia aún en preparación. El journal se conserva si falla una limpieza necesaria. |
+
+Los errores posibles incluyen `400` por opciones, lotes o rutas inválidos, `401` por falta de sesión, `403` por permiso u operación perteneciente a otra cuenta, `404` por operación/documento inexistente, `409` por estado o autores/servicios no disponibles, `422` por estructura, relaciones, conteos o integridad del archivo recibido incompatibles, `413` por límite de archivo o JSON y `503` por configuración ausente o MariaDB no disponible. El cuerpo sigue el formato común de error; `requestId` aparece según el handler. La interfaz divide los lotes por bytes UTF-8 y cantidad para respetar el límite JSON de 256 KiB.
+
+La restauración reemplazante conserva la auditoría actual y no importa eventos históricos. El servidor no detiene globalmente la API; una transacción de reemplazo sí puede mantener bloqueos MariaDB sobre tablas clínicas durante su ejecución. Realizarla cuando haya pocos usuarios reduce interferencias. Si la respuesta informa `limpiezaPendiente`, los datos ya se confirmaron y queda trabajo físico registrado para revisión; no se afirma que una limpieza haya terminado hasta verificarla.
+
+La recuperación conserva esa evidencia de commit mientras reintenta la limpieza y no la reclasifica como rollback. La cancelación sigue recuperable hasta limpiar y auditar; incluye filas históricas fallidas con detalles pendientes. Tras un resultado confirmado, la interfaz recarga la vista clínica. Los resultados y límites de las pruebas están en [la revisión del 26/10/2026](revision-general-hcv-2026-10-26.md).
 
 ## Errores y formato
 

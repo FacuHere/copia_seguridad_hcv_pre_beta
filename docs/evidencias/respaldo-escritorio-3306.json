@@ -1,0 +1,123 @@
+{
+  "restauracionEjecutada": false,
+  "selectorNativoProbado": false,
+  "pruebas": [
+    {
+      "prueba": "Permiso efectivo de respaldos y lectura de resumen mediante la cuenta real de la API",
+      "resultado": "PASS",
+      "conteos": {
+        "pacientes": 4,
+        "estudios": 5,
+        "documentos": 7
+      }
+    },
+    {
+      "prueba": "Creación UI completa: exportación201, siete descargas y confirmación200",
+      "resultado": "PASS",
+      "carpeta": "C:\\Users\\Hered\\OneDrive\\Escritorio\\Respaldo-HCV-20261026-122931-5098a2d8"
+    },
+    {
+      "prueba": "Manifiesto, conteos, relaciones y SHA-256 de los siete archivos comprobados externamente",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "PDF aportado incluido byte por byte; copia clínica sin contraseñas ni sesiones; no se ejecutó restauración",
+      "resultado": "PASS"
+    }
+  ],
+  "operationId": "09b497fd-e9c1-4f6a-b5e1-de89998505e0",
+  "backupPath": "C:\\Users\\Hered\\OneDrive\\Escritorio\\Respaldo-HCV-20261026-122931-5098a2d8",
+  "resultado": "PASS",
+  "conteos": {
+    "pacientes": 4,
+    "estudios": 5,
+    "documentos": 7
+  },
+  "archivosVerificados": [
+    {
+      "documentoId": "1",
+      "ruta": "documentos/D-1 - hcv-synthetic-diagnostic.pdf",
+      "bytes": 91,
+      "sha256": "2b1a6ac5c24302895da52b8f68185abfebd1d596b486c3aabf4d730deb9c4524"
+    },
+    {
+      "documentoId": "2",
+      "ruta": "documentos/D-2 - hcv-synthetic-browser.pdf",
+      "bytes": 91,
+      "sha256": "9a67d3a7d008a3688a4a6438805cf467973893ab98d3f3ea0b8e951ded41a8f6"
+    },
+    {
+      "documentoId": "3",
+      "ruta": "documentos/D-3 - hcv-synthetic-browser.pdf",
+      "bytes": 91,
+      "sha256": "9a67d3a7d008a3688a4a6438805cf467973893ab98d3f3ea0b8e951ded41a8f6"
+    },
+    {
+      "documentoId": "4",
+      "ruta": "documentos/D-4 - hcv-synthetic-word.docx",
+      "bytes": 958,
+      "sha256": "346a8ce8aeea75e4b7e37372c3a57ce8f534801f42a49665f676757a483ad4e4"
+    },
+    {
+      "documentoId": "7",
+      "ruta": "documentos/D-7 - anexoe-plantilla-ejemplo-de-presupuesto_compress.pdf",
+      "bytes": 114914,
+      "sha256": "a4acc27f6f517362c4bce84549c559952df4e80d777d2cff6a7f90c8452ea6aa"
+    },
+    {
+      "documentoId": "8",
+      "ruta": "documentos/D-8 - imagen-sintetica.png",
+      "bytes": 69,
+      "sha256": "b1ff9c8ea3a780bad09b346c423d2d0e46815926879b18e841d928376a946640"
+    },
+    {
+      "documentoId": "9",
+      "ruta": "documentos/D-9 - objeto-sintetico.dcm",
+      "bytes": 15,
+      "sha256": "f78f96230146cdee2ced0b073d6a3bd17f9d6318d3d96d1a6f28913e236a4447"
+    }
+  ],
+  "sha256Datos": "1b7e21f8646372bec083328d4fe07ac50a3d3252493082334903d2588f51150c",
+  "bytesTotales": 125086,
+  "estadoUI": "Respaldo completo guardado en «Respaldo-HCV-20261026-122931-5098a2d8». Contiene 4 pacientes, 5 estudios y 7 archivos.",
+  "respuestasHTTP": [
+    {
+      "ruta": "/api/respaldos/exportar",
+      "status": 201
+    },
+    {
+      "ruta": "/api/respaldos/documentos/1",
+      "status": 200
+    },
+    {
+      "ruta": "/api/respaldos/documentos/2",
+      "status": 200
+    },
+    {
+      "ruta": "/api/respaldos/documentos/3",
+      "status": 200
+    },
+    {
+      "ruta": "/api/respaldos/documentos/4",
+      "status": 200
+    },
+    {
+      "ruta": "/api/respaldos/documentos/7",
+      "status": 200
+    },
+    {
+      "ruta": "/api/respaldos/documentos/8",
+      "status": 200
+    },
+    {
+      "ruta": "/api/respaldos/documentos/9",
+      "status": 200
+    },
+    {
+      "ruta": "/api/respaldos/exportar/09b497fd-e9c1-4f6a-b5e1-de89998505e0/completar",
+      "status": 200
+    }
+  ],
+  "erroresNavegador": [],
+  "logoutStatus": 204
+}

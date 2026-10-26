@@ -125,6 +125,24 @@ test('synthetic DOC and DOCX uploads preserve bytes, MIME metadata, and SHA-256'
     assert.deepEqual(await fs.readdir(path.join(root, '.staging')), []);
   });
 });
+test('la carga DOCX reconoce el documento principal aunque otros metadatos aparezcan antes', async () => {
+  await withRoot(async root => {
+    const contenido = makeDocxFixture({ otrasPartesPrimero: true });
+    const mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const recibido = await receiveSingleFile(multipartRequest(contenido, 'informe-sintetico.docx', mime), root, 8192);
+    assert.equal(recibido.sha256, createHash('sha256').update(contenido).digest('hex'), 'El hash debe corresponder al paquete original completo.');
+    assert.deepEqual(await fs.readFile(path.join(root, recibido.stagingKey)), contenido, 'La validación no debe modificar el paquete DOCX.');
+    await unlinkKey(root, recibido.stagingKey);
+
+    const relacionIncorrecta = makeDocxFixture({ otrasPartesPrimero: true, destinoDocumento: 'docProps/core.xml' });
+    await assert.rejects(
+      receiveSingleFile(multipartRequest(relacionIncorrecta, 'relacion-incorrecta.docx', mime), root, 8192),
+      error => error.code === 'INVALID_FILE_CONTENT',
+      'Debe seguir rechazándose una relación officeDocument que no apunta al documento principal.',
+    );
+    assert.deepEqual(await fs.readdir(path.join(root, '.staging')), [], 'No deben quedar temporales de la carga rechazada.');
+  });
+});
 test('unsupported extensions, content mismatch, and oversized files are rejected', async () => {
   await withRoot(async root => {
     await assert.rejects(receiveSingleFile(multipartRequest(Buffer.from('x'), 'test.exe'), root, 20), error => error.code === 'UNSUPPORTED_FILE_TYPE');

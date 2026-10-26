@@ -24,7 +24,7 @@
   <div id="appShell" hidden>
   <header class="topbar">
     <div><span class="eyebrow">GESTIÓN CLÍNICA LOCAL</span><h1>Historial Clínico Visual</h1></div>
-    <div class="storage-status"><span id="storageDot"></span><span id="storageLabel">Pacientes y estudios: servidor</span><span id="currentUser" class="current-user"></span><!-- Botón reservado para futuras funciones de copia de seguridad. Actualmente no tiene funcionalidad asociada. --><button class="secondary small" id="chooseFolder" type="button">BACKUP</button><button class="secondary small" id="logoutButton" type="button">Cerrar sesión</button></div>
+    <div class="storage-status"><span id="storageDot"></span><span id="storageLabel">Pacientes y estudios: servidor</span><span id="currentUser" class="current-user"></span><button class="secondary small" id="chooseFolder" type="button" hidden>Respaldos</button><button class="secondary small" id="logoutButton" type="button">Cerrar sesión</button></div>
   </header>
   <main>
     <aside class="sidebar">
@@ -61,7 +61,39 @@
     <label>Tipo<select name="type"><option>Endoscopía</option><option>Radiología</option><option>CPRE</option><option>Ecografía</option><option>Tomografía</option><option>Laboratorio</option><option>Otro</option></select></label><label>Fecha<input name="date" type="date" required></label><label>Profesional responsable<input name="professional"></label><label>Diagnóstico<input name="diagnosis"></label><label class="span-2">Procedimiento<input name="procedure"></label><label class="span-2">Descripción<textarea name="description" rows="4"></textarea></label><label class="span-2">Conclusiones<textarea name="conclusions" rows="3"></textarea></label><label class="span-2">Imágenes (radiología, endoscopía)<input name="images" type="file" accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp" multiple><small>Las imágenes se cargarán después de guardar el estudio. Formatos admitidos: JPG, PNG, GIF y WEBP.</small></label>
   </div><div class="form-footer"><button class="secondary" type="button" data-dialog-cancel>Cancelar</button><button class="primary" id="studySaveButton" type="submit">Guardar estudio</button></div></form></dialog>
 
+  <dialog id="backupDialog" class="backup-dialog" aria-labelledby="backupDialogTitle">
+    <div class="modal-head"><h2 id="backupDialogTitle">Respaldos clínicos</h2><button class="icon-close" id="backupClose" type="button" aria-label="Cerrar">×</button></div>
+    <div class="backup-content">
+      <nav class="backup-tabs" aria-label="Operaciones de respaldo">
+        <button class="backup-tab active" type="button" data-backup-tab="create">Crear respaldo</button>
+        <button class="backup-tab" type="button" data-backup-tab="restore">Restaurar</button>
+      </nav>
+      <section class="backup-panel active" id="backupCreatePanel">
+        <p>Guarde en una carpeta elegida por usted los datos clínicos y los archivos vinculados.</p>
+        <div class="backup-folder-row"><button class="secondary" id="backupChooseDestination" type="button">Elegir carpeta de destino</button><span id="backupDestinationLabel">No se eligió una carpeta.</span></div>
+        <label class="backup-option"><input id="backupIncludeUsers" type="checkbox"> Incluir referencias de usuarios y roles, sin contraseñas ni sesiones</label>
+        <p class="backup-note">Estas referencias son informativas. La restauración conserva las cuentas y permisos actuales.</p>
+        <div class="backup-notice">Realice el respaldo cuando el sistema tenga poco uso. La copia se considera completa solo cuando termina la verificación.</div>
+        <div class="backup-footer"><button class="primary" id="backupCreateButton" type="button" disabled>Crear respaldo en esta carpeta</button></div>
+      </section>
+      <section class="backup-panel" id="backupRestorePanel" hidden>
+        <p>Seleccione una carpeta de respaldo creada por Historial Clínico Visual.</p>
+        <div class="backup-folder-row"><button class="secondary" id="backupChooseSource" type="button">Elegir carpeta de respaldo</button><span id="backupSourceLabel">No se eligió una carpeta.</span></div>
+        <fieldset class="backup-modes"><legend>Cómo restaurar</legend>
+          <label><input type="radio" name="backupMode" value="agregar" checked> <span><strong>Agregar</strong><small>Crea pacientes nuevos. Si un DNI coincide, los registros se mantienen separados.</small></span></label>
+          <label><input type="radio" name="backupMode" value="reemplazar"> <span><strong>Reemplazar</strong><small>Sustituye pacientes, estudios y documentos actuales por los de esta carpeta. Conserva usuarios y auditoría.</small></span></label>
+        </fieldset>
+        <div class="backup-preview" id="backupPreview" hidden></div>
+        <div class="backup-notice backup-warning" id="backupReplaceWarning" hidden>Reemplazar eliminará los datos clínicos actuales una vez que el respaldo completo haya sido validado. Los usuarios, permisos y auditoría se conservarán.</div>
+        <div class="backup-footer"><button class="primary" id="backupRestoreButton" type="button" disabled>Validar carpeta</button></div>
+      </section>
+      <p class="backup-status" id="backupStatus" role="status" aria-live="polite"></p>
+      <p class="backup-security-note" id="backupSecurityNote" hidden>La selección segura de carpetas requiere Chrome o Edge en un origen seguro. En equipos de la red local, el sitio debe abrirse mediante HTTPS.</p>
+    </div>
+  </dialog>
+
   </div>
   <script src="js/app.js"></script>
+  <script src="js/backups.js"></script>
 </body>
 </html>

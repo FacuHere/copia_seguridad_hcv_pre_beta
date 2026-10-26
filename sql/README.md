@@ -1,6 +1,6 @@
 # Esquema inicial de base de datos
 
-`001_initial_schema.sql` define una propuesta relacional inicial para MariaDB/InnoDB. No crea la base ni inserta usuarios o servicios. `002_auth_sessions.sql` agrega sesiones persistentes. `003_security_scope_and_bootstrap.sql` prepara asignaciones de permisos por servicio, límites de login, integridad entre documentos y estudios, y el rol técnico inicial. `004_functional_roles_permissions.sql` agrega el catálogo de permisos funcionales y los roles `visualizador` y `administrador`, sin asignarlos a usuarios. `005_seed_general_service.sql` asegura el servicio técnico `GENERAL` requerido por `studies.service_id`; no lo utiliza para autorizar operaciones. Las migraciones deben revisarse y ejecutarse en orden, explícitamente, sobre una base de desarrollo; este proyecto no las ejecuta automáticamente.
+`001_initial_schema.sql` define una propuesta relacional inicial para MariaDB/InnoDB. No crea la base ni inserta usuarios o servicios. `002_auth_sessions.sql` agrega sesiones persistentes. `003_security_scope_and_bootstrap.sql` prepara asignaciones de permisos por servicio, límites de login, integridad entre documentos y estudios, y el rol técnico inicial. `004_functional_roles_permissions.sql` agrega el catálogo de permisos funcionales y los roles `visualizador` y `administrador`, sin asignarlos a usuarios. `005_seed_general_service.sql` asegura el servicio técnico `GENERAL` requerido por `studies.service_id`; no lo utiliza para autorizar operaciones. `006_documents_storage_lifecycle.sql` implementa nulabilidad, metadata y journal documental. `008_backup_restore.sql` prepara el permiso de respaldo y tres tablas de operaciones/staging. Las migraciones deben revisarse y ejecutarse en orden, explícitamente, sobre una base de desarrollo; este proyecto no las ejecuta automáticamente.
 
 ## Entidades
 
@@ -14,6 +14,7 @@
 - `audit_events`: eventos mínimos sin guardar el contenido de la historia clínica.
 - `documents`: desde la migración 006 requiere paciente, estudio y SHA-256 no nulos.
 - `document_file_operations`: journal técnico de cargas, reemplazos, eliminaciones y estados que deban recuperarse.
+- `backup_restore_operations`, `backup_restore_records`, `backup_restore_files`: journal temporal para operaciones de respaldo/restauración, registros recibidos y movimientos de archivos. No son una papelera ni almacenan de forma permanente los bytes clínicos.
 - `app_sessions`: sesiones con token aleatorio guardado únicamente como hash.
 - `auth_login_attempts`: contador temporal de intentos fallidos por IP; no guarda nombres de usuario ni contraseñas.
 - `role_service_permissions`: estructura heredada para vincular permisos de un rol a un servicio concreto. No participa en la autorización de esta instalación de servicio único.
@@ -76,3 +77,22 @@ Los tres resultados deben ser cero. Antes de aplicar, revisar también `SHOW CRE
 La sentencia `ALTER TABLE` cambia la nulabilidad de tres columnas, agrega estado y metadata de actualización/derivación, un índice y dos FKs. Luego crea `document_file_operations`; finalmente siembra tres permisos y asignaciones al rol `administrador`. Un fallo posterior al `ALTER` puede dejar una aplicación parcial; no volver a ejecutar el archivo completo a ciegas. Inspeccionar cada objeto en `information_schema`/`SHOW CREATE TABLE`, identificar la última sentencia efectivamente aplicada y continuar con una reparación revisada que omita únicamente los pasos ya confirmados. Si hay datos NULL, detenerse antes de DDL y definir una migración de datos explícita; no inventar asociación ni SHA-256.
 
 Después de aplicar 006, revisar los GRANT de la cuenta de aplicación: SELECT/INSERT/UPDATE/DELETE sobre `documents`, SELECT sobre `studies` y `patients`, INSERT sobre `audit_events`, y SELECT/INSERT/UPDATE sobre `document_file_operations`. Los GRANT de cuentas MariaDB no pueden ser otorgados por esta migración de esquema.
+
+### Migración 008: respaldos y restauración
+
+`008_backup_restore.sql` está destinada a aplicarse manualmente después de 006. Inserta de forma idempotente el permiso `backups.manage`, lo asigna únicamente al rol funcional `administrador` y crea `backup_restore_operations`, `backup_restore_records` y `backup_restore_files` con `CREATE TABLE IF NOT EXISTS`. No crea ni modifica usuarios, datos clínicos, documentos, servicios o archivos físicos. No concede GRANT MariaDB.
+
+Antes de aplicarla, confirmar que `001`–`006` están aplicadas y que las tres tablas aún no existen parcialmente. Revisar en `SHOW CREATE TABLE` cualquier objeto homónimo ya existente: `IF NOT EXISTS` no compara ni repara estructuras. Confirmar que existan `permissions`, `role_permissions`, `roles.code`, `app_users` y el rol `administrador`. Respaldar la base según el procedimiento aprobado para ese entorno. Si una sentencia falla, detenerse, registrar la última sentencia confirmada e inspeccionar `SHOW CREATE TABLE`, `information_schema` y las filas del permiso/asignación; continuar con un plan revisado que no vuelva a ejecutar ciegamente el archivo completo.
+
+Privilegios adicionales mínimos de la cuenta de aplicación para 008:
+
+| Tabla | Privilegios |
+| --- | --- |
+| `backup_restore_operations` | `SELECT`, `INSERT`, `UPDATE` |
+| `backup_restore_records` | `SELECT`, `INSERT`, `DELETE` |
+| `backup_restore_files` | `SELECT`, `INSERT`, `UPDATE`, `DELETE` |
+| `patients`, `studies` | `DELETE` para el modo Reemplazar, además de sus accesos clínicos habituales |
+
+También se mantienen los accesos existentes a `documents`, referencias clínicas y auditoría. No necesita `CREATE`, `ALTER`, `DROP`, `GRANT OPTION` ni privilegios globales. Inspeccionar los grants vigentes y conceder únicamente lo que falte mediante un procedimiento autorizado; estas pruebas no los modificaron. La migración solo prepara RBAC de aplicación (`backups.manage`); el usuario MariaDB no determina ese permiso.
+
+Orden canónico acordado para nuevas instalaciones: 007_user_management_roles.sql (usuarios), seguido de 008_backup_restore.sql (respaldos). El script de respaldos se probó y aplicó anteriormente bajo el nombre 007_backup_restore.sql; el cambio de nombre conserva exactamente su contenido. Los informes históricos mantienen ese nombre como evidencia. En una base donde ya se aplicó, comprobar sus objetos y checksum: no ejecutarlo de nuevo por el mero cambio de número. Esta renumeración no altera bases de datos ni aplica la migración de usuarios pendiente.
