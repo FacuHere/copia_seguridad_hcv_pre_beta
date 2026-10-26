@@ -78,9 +78,15 @@ La sentencia `ALTER TABLE` cambia la nulabilidad de tres columnas, agrega estado
 
 Después de aplicar 006, revisar los GRANT de la cuenta de aplicación: SELECT/INSERT/UPDATE/DELETE sobre `documents`, SELECT sobre `studies` y `patients`, INSERT sobre `audit_events`, y SELECT/INSERT/UPDATE sobre `document_file_operations`. Los GRANT de cuentas MariaDB no pueden ser otorgados por esta migración de esquema.
 
+## 007 — Perfiles de Gestión de usuarios
+
+Aplicación manual después de 001–006; no ejecutar desde Node. Requiere comprobar que existen todos los permisos de la matriz descrita en `docs/api-rest-hcv.md`, los roles administrador/visualizador/system_admin y sus concesiones esperadas. Si médico o secretario ya existen con permisos adicionales, detenerse para revisar; `INSERT IGNORE` no elimina concesiones previas. No crea usuarios ni asignaciones user_roles, no modifica tablas y no altera system_admin, administrador ni visualizador.
+
+Contiene DML InnoDB en una transacción; si una sentencia falla, detener el cliente y hacer rollback, no continuar ciegamente hasta COMMIT. Revisar warnings porque INSERT IGNORE puede omitir conflictos. Después, comparar la matriz de role_permissions con la documentada. La repetición de 007 no duplica claves existentes. No se aplica automáticamente ni se incluyen GRANT: revisar la cuenta de aplicación según README antes de habilitar escrituras de usuarios.
+
 ### Migración 008: respaldos y restauración
 
-`008_backup_restore.sql` está destinada a aplicarse manualmente después de 006. Inserta de forma idempotente el permiso `backups.manage`, lo asigna únicamente al rol funcional `administrador` y crea `backup_restore_operations`, `backup_restore_records` y `backup_restore_files` con `CREATE TABLE IF NOT EXISTS`. No crea ni modifica usuarios, datos clínicos, documentos, servicios o archivos físicos. No concede GRANT MariaDB.
+`008_backup_restore.sql` está destinada a aplicarse manualmente después de 007. Inserta de forma idempotente el permiso `backups.manage`, lo asigna únicamente al rol funcional `administrador` y crea `backup_restore_operations`, `backup_restore_records` y `backup_restore_files` con `CREATE TABLE IF NOT EXISTS`. No crea ni modifica usuarios, datos clínicos, documentos, servicios o archivos físicos. No concede GRANT MariaDB.
 
 Antes de aplicarla, confirmar que `001`–`006` están aplicadas y que las tres tablas aún no existen parcialmente. Revisar en `SHOW CREATE TABLE` cualquier objeto homónimo ya existente: `IF NOT EXISTS` no compara ni repara estructuras. Confirmar que existan `permissions`, `role_permissions`, `roles.code`, `app_users` y el rol `administrador`. Respaldar la base según el procedimiento aprobado para ese entorno. Si una sentencia falla, detenerse, registrar la última sentencia confirmada e inspeccionar `SHOW CREATE TABLE`, `information_schema` y las filas del permiso/asignación; continuar con un plan revisado que no vuelva a ejecutar ciegamente el archivo completo.
 

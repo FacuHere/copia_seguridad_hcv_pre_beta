@@ -9,6 +9,30 @@
   --bg: #f4f7f9
 }
 
+.users-dialog {
+  width: min(1040px, 95vw);
+  max-width: 95vw;
+}
+
+.users-toolbar {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  margin: 20px 24px 16px;
+  flex-wrap: wrap;
+}
+
+.users-toolbar label { flex: 1; min-width: 200px; display: grid; gap: 6px; }
+.users-toolbar input { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; }
+.users-table-scroll { overflow-x: auto; margin: 0 24px; }
+#usersMessage { margin: 16px 24px; }
+#userPasswordDialog > form > p { margin: 16px 24px; }
+.users-table { width: 100%; border-collapse: collapse; text-align: left; }
+.users-table th, .users-table td { padding: 12px 8px; border-bottom: 1px solid var(--line); }
+.users-table th { color: var(--muted); font-weight: 600; }
+.users-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.users-dialog :focus-visible, #userDialog :focus-visible, #userPasswordDialog :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
 * {
   box-sizing: border-box
 }

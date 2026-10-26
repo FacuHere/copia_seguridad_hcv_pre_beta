@@ -9,7 +9,8 @@ const patientRoute = fs.readFileSync(path.join(__dirname, '../src/routes/patient
 const patientService = fs.readFileSync(path.join(__dirname, '../src/services/patient-service.js'), 'utf8');
 
 test('patient and study forms keep required fields and separate submit from cancellation', () => {
-  assert.equal([...html.matchAll(/<dialog\b[\s\S]*?<\/dialog>/g)].length, 3);
+  const dialogMatches = [...html.matchAll(/<dialog\b[^>]*id="(?:patientDialog|studyDialog)"[\s\S]*?<\/dialog>/g)];
+  assert.equal(dialogMatches.length, 2);
 
   for (const id of ['patientDialog', 'studyDialog']) {
     const dialog = html.match(new RegExp(`<dialog\\b(?=[^>]*\\bid="${id}")[\\s\\S]*?<\\/dialog>`))?.[0];
@@ -35,7 +36,7 @@ test('patient and study forms keep required fields and separate submit from canc
   assert.doesNotMatch(app, /PATIENT_MODULES_KEY|patientModules|\.tables|addRow\(|localStorage|showDirectoryPicker|createLocalBackup|saveToFolder/);
 });
 
-test('backup control opens the implemented dialog while future user and report buttons remain inert', () => {
+test('backup control opens the implemented dialog while the future report button remains inert', () => {
   const backups = fs.readFileSync(path.join(__dirname, '../public/js/backups.js'), 'utf8');
   const backupButton = /<button\b(?=[^>]*\bid="chooseFolder")(?=[^>]*\btype="button")[^>]*>Respaldos<\/button>/;
   assert.match(html, backupButton);
@@ -45,13 +46,12 @@ test('backup control opens the implemented dialog while future user and report b
   assert.match(backups, /\/api\/respaldos\/exportar/);
   assert.match(backups, /\/api\/respaldos\/restauraciones/);
 
-  for (const [id, label] of [['importData', 'Gestión de usuarios'], ['exportData', 'Reportes']]) {
+  for (const [id, label] of [['exportData', 'Reportes']]) {
     const button = new RegExp(`<button\\b(?=[^>]*\\bid="${id}")(?=[^>]*\\btype="button")[^>]*>${label}<\\/button>`);
     assert.match(html, button);
   }
   assert.doesNotMatch(html, /id="importData"[^>]*type="file"|id="exportData"[^>]*type="submit"/);
-  assert.doesNotMatch(app + backups, /\$\('#(?:importData|exportData)'\)/);
-  assert.match(html, /reservado para futuras funciones de administración de usuarios/i);
+  assert.doesNotMatch(app + backups, /\$\('#exportData'\)/);
   assert.match(html, /reservado para futuras funciones de generación y consulta de informes/i);
 });
 

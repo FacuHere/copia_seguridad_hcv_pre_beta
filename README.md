@@ -111,3 +111,15 @@ La cuenta de recuperación requiere `SELECT` y `UPDATE` en `app_users`, `DELETE`
 ## Registro de revisión y pruebas
 
 [Revisión general del 26/10/2026](docs/revision-general-hcv-2026-10-26.md): fallos encontrados, archivos corregidos, regresiones, pruebas HTTP/MariaDB y navegador, y limitaciones pendientes. Los cambios de funcionamiento deben mantener también actualizados los contratos en `docs/api-rest-hcv.md` y `docs/openapi-hcv.yaml`.
+
+## Gestión de usuarios y perfiles generales
+
+La pantalla Gestión de usuarios permite buscar/listar cuentas, crear cuentas, editar el nombre, asignar un perfil general, activar/desactivar y cambiar contraseñas. Requiere `users.manage`; crear/asignar perfiles requiere además `roles.manage`. Se conservan las cuentas desactivadas y su historial. No hay eliminación de usuarios ni recuperación autoservicio.
+
+Antes de habilitar los nuevos perfiles, revisar y aplicar **manualmente y con autorización** `sql/007_user_management_roles.sql` después de 001–006. No fue aplicada por esta implementación. No cambia tablas ni usuarios; agrega `medico` y `secretario`. Si ya existen, verificar sus concesiones previamente: la migración es aditiva, no corrige permisos personalizados. Administrador y visualizador conservan sus permisos; system_admin no se sustituye ni se ofrece como perfil asignable.
+
+La cuenta MariaDB de la aplicación necesita, además de sus permisos actuales: `INSERT` y `UPDATE` sobre `app_users`, `INSERT` y `DELETE` sobre `user_roles`, y `DELETE` sobre `app_sessions`; conserva `SELECT` sobre cuentas/RBAC e `INSERT` sobre auditoría. No necesita DDL, `GRANT OPTION` ni privilegios globales. Revisar los grants efectivos antes de conceder algo; no se concedieron privilegios ni se modificó `.env` en esta tarea.
+
+El cambio de contraseña administrativo invalida sesiones y audita dentro de la misma transacción. También se cierran sesiones al desactivar o cambiar el perfil. No puede desactivarse ni quitarse administrador la cuenta propia; debe quedar al menos un administrador activo. Reportes sigue siendo un botón reservado; Respaldos tiene su módulo implementado con los requisitos indicados arriba.
+
+Contratos y matriz de perfiles: [API REST](docs/api-rest-hcv.md#gestión-de-usuarios), [OpenAPI](docs/openapi-hcv.yaml). Prueba visual opcional, con Playwright/Chromium ya instalados: `python test/browser/users-ui.py`. Usa datos/respuestas sintéticos y no necesita iniciar la aplicación ni MariaDB. Las comprobaciones SQL, concurrencia real y permisos efectivos de la cuenta MariaDB siguen pendientes hasta autorizar su ejecución.

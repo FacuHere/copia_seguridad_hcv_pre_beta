@@ -2,7 +2,7 @@
 
 ## Alcance
 
-La API implementa autenticación, permisos RBAC, consultas y modificaciones de pacientes y estudios, y el ciclo de vida de documentos clínicos. El almacenamiento de documentos se mantiene fuera de `public/` y se sirve únicamente mediante endpoints protegidos. Este documento describe los contratos que se encuentran en el código; no supone que un endpoint, permiso o funcionalidad futura exista.
+La API implementa autenticación, permisos RBAC, administración de cuentas y perfiles generales, consultas y modificaciones de pacientes y estudios, y el ciclo de vida de documentos clínicos. El almacenamiento de documentos se mantiene fuera de `public/` y se sirve únicamente mediante endpoints protegidos. Este documento describe los contratos que se encuentran en el código; no supone que un endpoint, permiso o funcionalidad futura exista.
 
 La especificación OpenAPI complementaria está en [`openapi-hcv.yaml`](openapi-hcv.yaml). Puede importarse en [Swagger Editor](https://editor.swagger.io/) o en Postman. Swagger UI no está integrado en la aplicación.
 
@@ -219,3 +219,48 @@ Para agregar una operación existente al diseño por capas:
 6. Ejecutar las verificaciones seguras existentes y revisar el diff.
 
 El repositorio no tiene un generador OpenAPI. Mantener ambas documentaciones actualizadas es parte del cambio del endpoint; Swagger UI tampoco está instalado.
+
+## Gestión de usuarios
+
+Implementación: `routes/users.js` → `controllers/users-controller.js` → `services/user-service.js` → `repositories/user-repository.js`. La pantalla usa `public/js/user-management.js`, integrada con `app.js` mediante `gestionUsuarios.configurar`. No contiene SQL ni administra cuentas de MariaDB.
+
+| Método y ruta | Permiso | Entrada y respuesta |
+| --- | --- | --- |
+| `GET /api/auth/permisos` | Sesión activa | `200 {"permissions":["patients.read", "..."]}`; consulta los permisos efectivos, sin autorización por servicio. |
+| `GET /api/usuarios` | `users.manage` | `search` opcional (máx. 200), `page` opcional (1–1000000). `200 {"data":[usuario],"page":1,"pageSize":50}`. Busca literalmente por usuario/nombre, incluye activos e inactivos, ordena por usuario e ID. |
+| `POST /api/usuarios` | `users.manage` y `roles.manage` | `username`, `displayName`, `role`, `password`, `passwordConfirmation`. `201 {"data":usuario}`. Cuenta inicialmente activa, exactamente un perfil general. |
+| `PUT /api/usuarios/:id` | `users.manage`; además `roles.manage` si se envía `role` | Uno o más de `displayName`, `isActive` (booleano), `role`. `200 {"data":usuario}`. No cambia username ni elimina cuentas. |
+| `PUT /api/usuarios/:id/password` | `users.manage` | `password`, `passwordConfirmation`. `204` sin cuerpo; cambia contraseña, invalida todas las sesiones de esa cuenta y audita en una transacción. |
+
+`usuario` contiene únicamente `id` (string), `username`, `displayName`, `isActive` (booleano) y `roles` (array de códigos). Nunca devuelve hashes, contraseñas ni tokens. La selección de roles está cerrada a `administrador`, `medico`, `secretario`, `visualizador`. Las cuentas técnicas o con varios roles se listan y permiten cambiar nombre/estado/contraseña, pero sus asignaciones de roles se conservan (`409` si se intenta reemplazarlas). No se ofrece `system_admin` como perfil asignable.
+
+Validación: username de 3 a 100 caracteres ASCII (primero alfanumérico; después también punto, guion y guion bajo); nombre no vacío, recortado, máximo 200 caracteres; contraseña sin recortar, al menos 12 puntos Unicode y máximo 1024 unidades UTF-16, confirmación idéntica. Se reutiliza `hashPassword` con scrypt. No se envía confirmación de contraseña a auditoría. La recuperación por el propio usuario y el cambio forzado al primer acceso quedan pendientes.
+
+Errores propios: `400 INVALID_ID/INVALID_QUERY`; `422 INVALID_USER/INVALID_PASSWORD/PASSWORD_MISMATCH/INVALID_ROLE`; `404 USER_NOT_FOUND`; `409 ROLE_NOT_CONFIGURED/ROLE_ASSIGNMENT_UNSUPPORTED/SELF_ADMIN_PROTECTION/LAST_ADMIN_PROTECTION`. Un username duplicado produce `409 CONFLICT`. Se conservan los errores transversales `401`, `403`, `503` y `500`; no se exponen detalles SQL. Todas las escrituras rechazan campos no previstos. Los errores de negocio incorporan requestId cuando está disponible.
+
+Protecciones: no se puede desactivar la cuenta propia ni quitarse administrador; no se puede desactivar/demover al último administrador activo. Las escrituras toman primero un bloqueo transaccional sobre el rol administrador y revalidan los permisos del actor; así se serializan las decisiones del último administrador entre solicitudes de este módulo. La contraseña, baja y cambio de perfil revocan las sesiones de la cuenta afectada. El login bloquea la fila del usuario antes de verificar la contraseña y crear la sesión, coordinándose con esas operaciones. Una solicitud ya iniciada antes de la revocación puede terminar; la siguiente validación de sesión será rechazada. No existe administración de permisos individuales ni edición de roles técnicos desde esta UI.
+
+Auditoría transaccional: `users.create`, `users.update`, `users.password_reset`; actor, entidad `user`, ID de cuenta, IP y timestamp. Un fallo de auditoría revierte la operación. No se registran passwords/hashes. La cuenta no se elimina físicamente: se preservan sus relaciones con datos clínicos. Si el administrador cambia su propia contraseña, la pantalla vuelve al login.
+
+### Perfiles generales acordados
+
+| Operación | Administrador | Médico | Secretario | Visualizador |
+| --- | --- | --- | --- | --- |
+| Consultar pacientes/estudios/documentos/imágenes y descargar | Sí | Sí | Sí | Sí |
+| Crear/modificar pacientes | Sí | Sí | Sí | No |
+| Crear estudios | Sí | Sí | Sí | No |
+| Modificar estudios | Sí | Sí | No | No |
+| Cargar/reemplazar archivos | Sí | Sí | No | No |
+| Eliminar archivos | Sí | No | No | No |
+| Administrar usuarios y asignar perfiles | Sí | No | No | No |
+| Crear/restaurar respaldos clínicos (`backups.manage`, migración 008) | Sí | No | No | No |
+
+La migración manual `007_user_management_roles.sql` agrega médico y secretario usando los permisos existentes. Administrador y visualizador conservan 004/006; system_admin conserva 003. No altera usuarios, servicios ni tablas. La autorización depende siempre de permisos efectivos, no del nombre visual del perfil. El frontend consulta `/api/auth/permisos` y oculta acciones no concedidas; el backend sigue verificando cada operación.
+
+### Verificación de esta funcionalidad
+
+`node --test test/users.test.js` comprueba validaciones, coordinación transaccional, cierre selectivo, errores y protecciones con dobles de repositorios; comprueba middlewares vía HTTP local. No valida SQL ni concurrencia de InnoDB. La suite general conserva las pruebas clínicas existentes. La prueba de navegador opcional está en `test/browser/users-ui.py` y usa respuestas HTTP sintéticas, sin MariaDB. No reemplaza una prueba de extremo a extremo.
+
+Antes de habilitarlo: revisar y aplicar 007 bajo autorización, revisar los privilegios de la cuenta MariaDB y probar en la base autorizada altas, duplicados, cada perfil, desactivación/reactivación, sesiones desde dos clientes, contraseña y rollback de auditoría. Probar dos bajas/cambios de administrador concurrentes y un login concurrente con cambio de contraseña. No se ejecutaron estas comprobaciones con MariaDB durante la implementación.
+
+La prueba optativa `test/users-mariadb.integration.test.js` requiere `HCV_MARIADB_USERS_INTEGRATION=1`, las variables DB_* del proceso (no lee `.env`) y confirmación mediante `HCV_MARIADB_TEST_DATABASE`, `HCV_MARIADB_TEST_PORT`, `HCV_MARIADB_TEST_USER` (cuenta con host) y `HCV_MARIADB_TEST_DATADIR`. Compara la identidad antes de escribir; no crea bases, roles ni tablas. Usa datos sintéticos dentro de un rollback exterior y savepoints para las transacciones del servicio. Verifica alta HTTP, UNIQUE, scrypt, revocación selectiva, 403 médico y rollback ante error SQL de auditoría. Los savepoints no validan commits durables ni concurrencia entre conexiones; esas pruebas requieren un paso posterior autorizado. No fue ejecutada en esta etapa.

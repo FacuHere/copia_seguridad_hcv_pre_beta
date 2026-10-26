@@ -35,8 +35,7 @@
       <div class="data-actions">
         <!-- Botón reservado para futuras funciones de generación y consulta de informes. Actualmente no tiene funcionalidad asociada. -->
         <button class="secondary" id="exportData" type="button">Reportes</button>
-        <!-- Botón reservado para futuras funciones de administración de usuarios. Actualmente no tiene funcionalidad asociada. -->
-        <button class="secondary" id="importData" type="button">Gestión de usuarios</button>
+        <button class="secondary" id="importData" type="button" hidden>Gestión de usuarios</button>
       </div>
     </aside>
     <section class="content" id="content">
@@ -92,7 +91,37 @@
     </div>
   </dialog>
 
+  <dialog id="usersDialog" class="users-dialog" aria-labelledby="usersTitle">
+    <div class="modal-head"><div><h2 id="usersTitle">Gestión de usuarios</h2><p>Administre las cuentas y sus perfiles de acceso.</p></div><button class="icon-close" type="button" data-users-close aria-label="Cerrar gestión de usuarios">×</button></div>
+    <div class="users-toolbar"><label>Buscar usuario o nombre<input id="usersSearch" type="search" maxlength="200" placeholder="Usuario o nombre"></label><button class="primary" id="newUser" type="button">+ Nuevo usuario</button></div>
+    <p id="usersMessage" role="status" aria-live="polite"></p>
+    <div class="users-table-scroll"><table class="users-table"><thead><tr><th scope="col">Usuario</th><th scope="col">Nombre</th><th scope="col">Perfil</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr></thead><tbody id="usersList"></tbody></table></div>
+    <div class="form-footer"><button class="secondary" id="usersPrevious" type="button">Anterior</button><span id="usersPage"></span><button class="secondary" id="usersNext" type="button">Siguiente</button></div>
+  </dialog>
+
+  <dialog id="userDialog" aria-labelledby="userTitle"><form id="userForm">
+    <div class="modal-head"><h2 id="userTitle">Nuevo usuario</h2><button class="icon-close" type="button" data-users-close aria-label="Cerrar formulario">×</button></div>
+    <div class="form-grid">
+      <label>Usuario<input name="username" required minlength="3" maxlength="100" pattern="[A-Za-z0-9][A-Za-z0-9._\-]{2,99}" autocomplete="off"></label>
+      <label>Nombre para mostrar<input name="displayName" required maxlength="200" autocomplete="off"></label>
+      <label>Perfil<select name="role" required><option value="administrador">Administrador</option><option value="medico">Médico</option><option value="secretario">Secretario</option><option value="visualizador">Visualizador</option></select></label>
+      <p id="userRoleNote" class="span-2" hidden>La cuenta conserva su asignación técnica o múltiple. Esta pantalla no modifica esos roles.</p>
+      <label data-new-password>Contraseña<input name="password" type="password" required maxlength="1024" autocomplete="new-password"><small>Al menos 12 caracteres.</small></label>
+      <label data-new-password>Confirmar contraseña<input name="passwordConfirmation" type="password" required maxlength="1024" autocomplete="new-password"></label>
+    </div>
+    <p id="userError" class="auth-error" role="alert" hidden></p>
+    <div class="form-footer"><button class="secondary" type="button" data-users-close>Cancelar</button><button class="primary" type="submit">Guardar usuario</button></div>
+  </form></dialog>
+
+  <dialog id="userPasswordDialog" aria-labelledby="userPasswordTitle"><form id="userPasswordForm">
+    <div class="modal-head"><h2 id="userPasswordTitle">Cambiar contraseña</h2><button class="icon-close" type="button" data-users-close aria-label="Cerrar cambio de contraseña">×</button></div>
+    <p id="userPasswordTarget"></p><p>Se cerrarán todas las sesiones de esta cuenta. Deberá ingresar con la nueva contraseña.</p>
+    <div class="form-grid"><label>Nueva contraseña<input name="password" type="password" required maxlength="1024" autocomplete="new-password"><small>Al menos 12 caracteres.</small></label><label>Confirmar contraseña<input name="passwordConfirmation" type="password" required maxlength="1024" autocomplete="new-password"></label></div>
+    <p id="userPasswordError" class="auth-error" role="alert" hidden></p>
+    <div class="form-footer"><button class="secondary" type="button" data-users-close>Cancelar</button><button class="primary" type="submit">Cambiar contraseña</button></div>
+  </form></dialog>
   </div>
+  <script src="js/user-management.js"></script>
   <script src="js/app.js"></script>
   <script src="js/backups.js"></script>
 </body>

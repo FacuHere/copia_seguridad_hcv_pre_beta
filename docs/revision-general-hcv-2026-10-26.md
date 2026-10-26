@@ -141,3 +141,9 @@ Documentación/configuración de ejemplo: este registro y sus evidencias, `READM
 ## Comprobación manual posterior
 
 Usar una instalación de prueba con migraciones/grants revisados y almacenamiento temporal: iniciar sesión, crear paciente/estudio, adjuntar un archivo, reemplazarlo/eliminarlo y crear un respaldo. Elegir la misma carpeta para restaurar en Agregar y luego Reemplazar, verificando listas, documentos y confirmaciones. Cerrar sesión con una ficha abierta y comprobar que desaparezcan los datos. No repetir Reemplazar sobre una base existente sin un respaldo aprobado y un plan de recuperación.
+
+## Integración de Gestión de usuarios antes de publicar la rama
+
+Se incorporó a la rama de respaldos el módulo de usuarios ya integrado en `main` (`ccab5db`). Se conservaron ambos routers, diálogos y controles, los permisos específicos de usuarios y las protecciones de sesión y respuestas obsoletas de respaldos. La numeración queda en `007_user_management_roles.sql` y `008_backup_restore.sql`; esta preparación no ejecutó SQL ni cambió configuraciones o servicios.
+
+Después de combinar los cambios, `node --check` aprobó los 71 archivos JavaScript de `src/`, `public/js/` y `test/`. La suite `npm test -- --test-reporter=tap`, con lectura de `.env` deshabilitada y ambas integraciones MariaDB optativas desactivadas, dio **101 pruebas: 98 aprobadas, 0 fallidas y 3 omitidas**. Las omisiones corresponden al enlace simbólico restringido por Windows y las dos pruebas MariaDB optativas. Este resultado verifica la suite combinada; no acredita una nueva prueba de MariaDB real ni del selector nativo de carpetas.

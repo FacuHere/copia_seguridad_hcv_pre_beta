@@ -9,6 +9,7 @@ let selectedPatient = null;
 let errorListaPacientes = '';
 let rolesUsuarioActual = [];
 let versionVistaClinica = 0;
+let permisosUsuarioActual = new Set();
 const $ = selector => document.querySelector(selector);
 const pantallaAutenticacion = $('#authScreen');
 const contenedorAplicacion = $('#appShell');
@@ -46,6 +47,8 @@ function limpiarDatosClinicos() {
 }
 
 function mostrarInicioSesion(mensaje = '') {
+  gestionUsuarios.cerrar();
+  permisosUsuarioActual.clear();
   contenedorAplicacion.hidden = true;
   rolesUsuarioActual = [];
   $('#currentUser').textContent = '';
@@ -74,13 +77,20 @@ async function obtenerUsuarioActual() {
 async function mostrarAplicacion(usuario) {
   limpiarDatosClinicos();
   window.dispatchEvent(new Event('hcv:sesion-reiniciada'));
+  const acceso = await apiRequest('/api/auth/permisos');
+  permisosUsuarioActual = new Set(acceso.permissions || []);
+  gestionUsuarios.configurar({ usuario, permisos: [...permisosUsuarioActual], solicitar: apiRequest, finalizarSesion: mostrarInicioSesion });
   pantallaAutenticacion.hidden = true;
   contenedorAplicacion.hidden = false;
   $('#currentUser').textContent = usuario.displayName || usuario.username;
   rolesUsuarioActual = Array.isArray(usuario.roles) ? usuario.roles : [];
   $('#chooseFolder').hidden = !rolesUsuarioActual.includes('administrador');
+  $('#newPatient').hidden = !permisosUsuarioActual.has('patients.create');
+  $('#editPatient').hidden = !permisosUsuarioActual.has('patients.update');
+  $('#newStudy').hidden = !permisosUsuarioActual.has('studies.create');
   renderizar();
-  await cargarPacientes();
+  if (permisosUsuarioActual.has('patients.read')) await cargarPacientes();
+  else { pacientes = []; selectedPatient = null; pacienteActivoId = null; renderizar(); }
 }
 
 async function inicializarAutenticacion() {
@@ -318,7 +328,7 @@ function renderizarListaEstudios(paciente) {
     : errorCargaEstudios
       ? `<p class="empty-small">${escaparHtml(errorCargaEstudios)}</p>`
       : paciente.studies.length
-        ? paciente.studies.slice().sort((estudioA, estudioB) => estudioB.date.localeCompare(estudioA.date)).map(estudio => `<article class="study-card"><div class="study-top"><span class="badge">${escaparHtml(estudio.type)}</span><small>${escaparHtml(estudio.date)}</small></div><h4>${escaparHtml(estudio.diagnosis || estudio.procedure || 'Estudio sin título')}</h4><p><b>Profesional:</b> ${escaparHtml(estudio.professional || '—')}<br><b>Procedimiento:</b> ${escaparHtml(estudio.procedure || '—')}</p>${estudio.description ? `<p><b>Descripción:</b> ${escaparHtml(estudio.description)}</p>`:''}${estudio.conclusions ? `<p><b>Conclusiones:</b> ${escaparHtml(estudio.conclusions)}</p>`:''}<div class="study-actions"><button class="secondary mini" data-edit-study="${escaparHtml(estudio.id)}">Abrir / editar</button></div><section class="document-panel"><div class="document-heading"><b>Archivos</b>${rolesUsuarioActual.includes('administrador') ? `<button type="button" class="secondary mini" data-upload-document="${escaparHtml(estudio.id)}">Cargar archivo</button><input hidden type="file" data-document-input="${escaparHtml(estudio.id)}" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.dcm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,image/gif,image/webp,application/dicom">` : ''}</div><div data-document-list="${escaparHtml(estudio.id)}" class="document-list">Cargando archivos…</div></section></article>`).join('')
+        ? paciente.studies.slice().sort((estudioA, estudioB) => estudioB.date.localeCompare(estudioA.date)).map(estudio => `<article class="study-card"><div class="study-top"><span class="badge">${escaparHtml(estudio.type)}</span><small>${escaparHtml(estudio.date)}</small></div><h4>${escaparHtml(estudio.diagnosis || estudio.procedure || 'Estudio sin título')}</h4><p><b>Profesional:</b> ${escaparHtml(estudio.professional || '—')}<br><b>Procedimiento:</b> ${escaparHtml(estudio.procedure || '—')}</p>${estudio.description ? `<p><b>Descripción:</b> ${escaparHtml(estudio.description)}</p>`:''}${estudio.conclusions ? `<p><b>Conclusiones:</b> ${escaparHtml(estudio.conclusions)}</p>`:''}<div class="study-actions"><button class="secondary mini" data-edit-study="${escaparHtml(estudio.id)}">Abrir / editar</button></div><section class="document-panel"><div class="document-heading"><b>Archivos</b>${permisosUsuarioActual.has('documents.upload') ? `<button type="button" class="secondary mini" data-upload-document="${escaparHtml(estudio.id)}">Cargar archivo</button><input hidden type="file" data-document-input="${escaparHtml(estudio.id)}" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.dcm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,image/gif,image/webp,application/dicom">` : ''}</div><div data-document-list="${escaparHtml(estudio.id)}" class="document-list">Cargando archivos…</div></section></article>`).join('')
         : '<div class="empty-small">No hay estudios registrados.</div>';
 }
 function renderizar() {
@@ -394,7 +404,6 @@ async function cargarDocumentos(idEstudio, contenedor) {
     const respuesta = await apiRequest('/api/estudios/' + encodeURIComponent(idEstudio) + '/documentos');
     const documentos = Array.isArray(respuesta?.data) ? respuesta.data : [];
     if (!contenedor.isConnected || contenedor.dataset.documentLoadRequest !== idSolicitud) return null;
-    const esAdministrador = rolesUsuarioActual.includes('administrador');
     contenedor.innerHTML = documentos.length ? documentos.map(documento => {
       const esImagen = documento.mimeType?.startsWith('image/');
       const id = escaparHtml(documento.id);
@@ -404,9 +413,9 @@ async function cargarDocumentos(idEstudio, contenedor) {
       const enlaceVisualizacion = documento.mimeType === 'application/pdf' || esImagen
         ? '<a class="secondary mini" href="/api/documentos/' + id + '/content" target="_blank" rel="noopener">Ver</a>'
         : '';
-      const controlesAdministrativos = esAdministrador
-        ? '<button type="button" class="secondary mini" data-replace-document="' + id + '">Reemplazar</button><input hidden type="file" data-replace-input="' + id + '" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.dcm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,image/gif,image/webp,application/dicom"><button type="button" class="danger mini" data-delete-document="' + id + '">Eliminar</button>'
-        : '';
+      const controlesAdministrativos = (permisosUsuarioActual.has('documents.replace')
+        ? '<button type="button" class="secondary mini" data-replace-document="' + id + '">Reemplazar</button><input hidden type="file" data-replace-input="' + id + '" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.dcm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,image/gif,image/webp,application/dicom">' : '')
+        + (permisosUsuarioActual.has('documents.delete') ? '<button type="button" class="danger mini" data-delete-document="' + id + '">Eliminar</button>' : '');
       return '<article class="document-item">' + vistaPrevia + '<span><b>' + escaparHtml(documento.originalName) + '</b><small>' + escaparHtml(documento.mimeType) + ' · ' + escaparHtml(documento.sizeBytes) + ' bytes</small></span><span class="document-actions">' + enlaceVisualizacion + '<a class="secondary mini" href="/api/documentos/' + id + '/download">Descargar</a>' + controlesAdministrativos + '</span></article>';
     }).join('') : '<small class="empty-small">No hay archivos asociados.</small>';
     conectarControlesDocumento(contenedor, idEstudio);
@@ -477,6 +486,10 @@ function abrirNuevoEstudio() {
   editingStudy = null;
   const formulario = $('#studyForm');
   formulario.reset();
+  for (const campo of formulario.querySelectorAll('input, select, textarea')) campo.disabled = false;
+  formulario.elements.images.disabled = !permisosUsuarioActual.has('documents.upload');
+  formulario.elements.images.closest('label').hidden = formulario.elements.images.disabled;
+  $('#studySaveButton').hidden = !permisosUsuarioActual.has('studies.create');
   formulario.elements.date.disabled = false;
   $('#studyDialogTitle').textContent = 'Nuevo estudio';
   $('#studySaveButton').textContent = 'Guardar estudio';
@@ -494,11 +507,16 @@ async function abrirEditorEstudio(idEstudio) {
     editingStudy = { ...estudio, id: String(estudio.id), version: estudio.version };
     const form = $('#studyForm');
     form.reset();
+    const puedeEditar = permisosUsuarioActual.has('studies.update');
+    for (const campo of form.querySelectorAll('input, select, textarea')) campo.disabled = !puedeEditar;
+    form.elements.images.disabled = !puedeEditar || !permisosUsuarioActual.has('documents.upload');
+    form.elements.images.closest('label').hidden = form.elements.images.disabled;
+    $('#studySaveButton').hidden = !puedeEditar;
     for (const nombreCampo of ['type', 'date', 'professional', 'diagnosis', 'procedure', 'description', 'conclusions']) {
       form.elements[nombreCampo].value = estudio[nombreCampo] || '';
     }
     form.elements.date.disabled = true;
-    $('#studyDialogTitle').textContent = 'Editar estudio';
+    $('#studyDialogTitle').textContent = puedeEditar ? 'Editar estudio' : 'Consultar estudio';
     $('#studySaveButton').textContent = 'Guardar cambios';
     $('#studyDialog').showModal();
   } catch (error) {
