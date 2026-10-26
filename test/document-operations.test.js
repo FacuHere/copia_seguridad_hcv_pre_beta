@@ -13,13 +13,20 @@ async function withRoot(run) {
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 
-function fakePool({ operations = [], documents = [], failDocumentUpdate = false } = {}) {
+function fakePool({ operations = [], documents = [], failDocumentUpdate = false, comprobarAntesDeEliminar } = {}) {
   const events = [];
   const run = async (sql, params = []) => {
     const statement = sql.replace(/\s+/g, ' ').trim();
     if (statement.startsWith('SELECT * FROM document_file_operations')) return operations.filter(row => ['prepared', 'filesystem_applied'].includes(row.operation_state) || (row.operation_state === 'completed' && row.backup_key)).map(row => ({ ...row }));
     if (statement.startsWith('SELECT staging_key, backup_key FROM document_file_operations')) return operations.filter(row => ['prepared', 'filesystem_applied'].includes(row.operation_state)).map(row => ({ ...row }));
     if (statement.startsWith('SELECT operation_state FROM document_file_operations')) return operations.filter(row => row.operation_id === params[0]).map(row => ({ operation_state: row.operation_state }));
+    if (statement.startsWith('SELECT operation_state, staging_key, backup_key FROM document_file_operations')) return operations.filter(row => row.operation_id === params[0]).map(row => ({ ...row }));
+    if (statement.startsWith('UPDATE document_file_operations SET staging_key = NULL, backup_key = NULL')) {
+      const row = operations.find(item => item.operation_id === params[0] && item.operation_state === 'completed');
+      if (!row) return { affectedRows: 0 };
+      row.staging_key = null; row.backup_key = null;
+      return { affectedRows: 1 };
+    }
     if (statement.startsWith('UPDATE document_file_operations SET operation_state = \'filesystem_applied\'')) {
       const row = operations.find(item => item.operation_id === params[0]);
       if (row?.operation_state === 'prepared') { row.operation_state = 'filesystem_applied'; return { affectedRows: 1 }; }
@@ -38,6 +45,7 @@ function fakePool({ operations = [], documents = [], failDocumentUpdate = false 
       row.file_status = 'active'; return { affectedRows: 1 };
     }
     if (statement.startsWith('DELETE FROM documents')) {
+      if (comprobarAntesDeEliminar) await comprobarAntesDeEliminar();
       const index = documents.findIndex(item => String(item.id) === String(params[0]) && item.file_status === 'deleting');
       if (index < 0) return { affectedRows: 0 };
       documents.splice(index, 1); return { affectedRows: 1 };
@@ -161,6 +169,7 @@ test('delete recovery physically removes a journaled file before deleting its da
     assert.equal(pool.documents.length, 0);
     await assert.rejects(fs.stat(backupPath), { code: 'ENOENT' });
     assert.equal(operation.operation_state, 'completed');
+    assert.equal(operation.backup_key, null);
     assert.ok(pool.events.some(event => event.sql.startsWith('INSERT INTO audit_events')));
   });
 });
@@ -196,6 +205,65 @@ test('replacement recovery keeps the original document id and validates final by
     assert.equal(document.sha256, digest(fresh));
     assert.deepEqual(await fs.readFile(path.join(root, ...newKey.split('/'))), fresh);
     await assert.rejects(fs.stat(path.join(root, ...backupKey.split('/'))), { code: 'ENOENT' });
+    assert.equal(operation.backup_key, null);
+    assert.equal(operation.staging_key, null);
+  });
+});
+
+test('la eliminación normal con claves camelCase borra el archivo antes de eliminar los metadatos', async () => {
+  await withRoot(async root => {
+    const bytes = Buffer.from('archivo sintetico para eliminar');
+    const claveTemporal = '.staging/55555555-5555-4555-8555-555555555555.deleted';
+    const rutaTemporal = path.join(root, ...claveTemporal.split('/'));
+    await fs.mkdir(path.dirname(rutaTemporal), { recursive: true });
+    await fs.writeFile(rutaTemporal, bytes);
+    const fila = { operation_id: 'eliminar-normal', operation_state: 'filesystem_applied', backup_key: claveTemporal };
+    let eliminadoAntesDeLosMetadatos = false;
+    const pool = fakePool({
+      operations: [fila], documents: [{ id: '7', file_status: 'deleting' }],
+      async comprobarAntesDeEliminar() {
+        await assert.rejects(fs.stat(rutaTemporal), { code: 'ENOENT' });
+        eliminadoAntesDeLosMetadatos = true;
+      },
+    });
+    await finishDelete(pool, root, { operationId: fila.operation_id, documentId: '7', patientId: '1', studyId: '2',
+      actorId: '9', oldKey: 'anterior.pdf', backupKey: claveTemporal, oldSha256: digest(bytes), operation_state: 'filesystem_applied' });
+    assert.equal(eliminadoAntesDeLosMetadatos, true);
+    assert.equal(pool.documents.length, 0);
+    assert.equal(fila.backup_key, null);
+  });
+});
+
+test('la recuperación limpia referencias completed históricas con o sin una copia física residual', async () => {
+  for (const existeCopia of [true, false]) {
+    await withRoot(async root => {
+      const claveTemporal = '.staging/66666666-6666-4666-8666-666666666666.old';
+      const rutaTemporal = path.join(root, ...claveTemporal.split('/'));
+      await fs.mkdir(path.dirname(rutaTemporal), { recursive: true });
+      if (existeCopia) await fs.writeFile(rutaTemporal, 'copia anterior sintetica');
+      const operacion = { operation_id: 'historica', operation_state: 'completed', operation_type: 'replace', backup_key: claveTemporal, staging_key: null };
+      const pool = fakePool({ operations: [operacion] });
+      const resultados = await recoverOperations(pool, root);
+      assert.equal(resultados[0].outcome, 'cleanup_completed');
+      assert.equal(operacion.backup_key, null);
+      assert.equal(operacion.operation_state, 'completed');
+      await assert.rejects(fs.stat(rutaTemporal), { code: 'ENOENT' });
+      assert.deepEqual(await recoverOperations(pool, root), []);
+    });
+  }
+});
+
+test('un fallo de eliminación física conserva la referencia completed para reintentar su limpieza', async () => {
+  await withRoot(async root => {
+    const claveTemporal = '.staging/77777777-7777-4777-8777-777777777777.old';
+    const rutaTemporal = path.join(root, ...claveTemporal.split('/'));
+    await fs.mkdir(rutaTemporal, { recursive: true });
+    const operacion = { operation_id: 'limpieza-fallida', operation_type: 'replace', operation_state: 'completed', backup_key: claveTemporal };
+    const pool = fakePool({ operations: [operacion] });
+    assert.equal((await recoverOperations(pool, root))[0].outcome, 'needs_attention');
+    assert.equal(operacion.backup_key, claveTemporal);
+    assert.equal(operacion.operation_state, 'completed');
+    await fs.access(rutaTemporal);
   });
 });
 

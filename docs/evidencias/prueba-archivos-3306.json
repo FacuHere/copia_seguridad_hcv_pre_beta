@@ -1,0 +1,96 @@
+{
+  "pruebas": [
+    {
+      "prueba": "Los cuatro documentos anteriores vuelven a descargarse sin cambiar bytes ni metadatos",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Cargas HTTP de PDF aportado, imagen y DICOM: bytes, SHA-256, archivos privados y descarga correctos",
+      "resultado": "PASS",
+      "ids": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "prueba": "Imagen visible y PDF servido inline; descarga desde enlace idéntica al original",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Reemplazo mantiene ID; eliminación confirmada borra físicamente solo el auxiliar sintético",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "PDF, imagen, DICOM y dos estudios persisten después de recargar",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Módulo de respaldos",
+      "resultado": "BLOQUEADO",
+      "status": 403,
+      "error": {
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "No tiene permiso para realizar esta operación."
+        }
+      }
+    }
+  ],
+  "patientId": "6",
+  "studyId": "5",
+  "documentosCreados": [
+    {
+      "id": "7",
+      "patientId": "6",
+      "studyId": "5",
+      "originalName": "anexoe-plantilla-ejemplo-de-presupuesto_compress.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 114914,
+      "sha256": "a4acc27f6f517362c4bce84549c559952df4e80d777d2cff6a7f90c8452ea6aa",
+      "uploadedBy": "1"
+    },
+    {
+      "id": "8",
+      "patientId": "6",
+      "studyId": "5",
+      "originalName": "imagen-sintetica.png",
+      "mimeType": "image/png",
+      "sizeBytes": 69,
+      "sha256": "b1ff9c8ea3a780bad09b346c423d2d0e46815926879b18e841d928376a946640",
+      "uploadedBy": "1"
+    },
+    {
+      "id": "9",
+      "patientId": "6",
+      "studyId": "5",
+      "originalName": "objeto-sintetico.dcm",
+      "mimeType": "application/dicom",
+      "sizeBytes": 15,
+      "sha256": "f78f96230146cdee2ced0b073d6a3bd17f9d6318d3d96d1a6f28913e236a4447",
+      "uploadedBy": "1"
+    }
+  ],
+  "documentoAuxiliarEliminado": "10",
+  "estadoRespaldo": {
+    "status": 403,
+    "respuesta": {
+      "error": {
+        "code": "FORBIDDEN",
+        "message": "No tiene permiso para realizar esta operación."
+      }
+    }
+  },
+  "resultado": "PASS_ARCHIVOS_RESPALDO_PENDIENTE",
+  "erroresNavegador": [],
+  "confirmaciones": [
+    "Archivo guardado y verificado: anexoe-plantilla-ejemplo-de-presupuesto_compress.pdf",
+    "Archivo guardado y verificado: imagen-sintetica.png",
+    "Archivo guardado y verificado: objeto-sintetico.dcm",
+    "Archivo guardado y verificado: informe-sintetico.pdf",
+    "El archivo actual será reemplazado. ¿Desea continuar?",
+    "Archivo reemplazado y listado verificado.",
+    "El archivo se eliminará físicamente y no podrá recuperarse desde la aplicación. ¿Desea continuar?"
+  ],
+  "logoutStatus": 204
+}

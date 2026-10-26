@@ -12,8 +12,9 @@ test('patient and study forms keep required fields and separate submit from canc
   const dialogMatches = [...html.matchAll(/<dialog\b[^>]*id="(?:patientDialog|studyDialog)"[\s\S]*?<\/dialog>/g)];
   assert.equal(dialogMatches.length, 2);
 
-  for (const match of dialogMatches) {
-    const dialog = match[0];
+  for (const id of ['patientDialog', 'studyDialog']) {
+    const dialog = html.match(new RegExp(`<dialog\\b(?=[^>]*\\bid="${id}")[\\s\\S]*?<\\/dialog>`))?.[0];
+    assert.ok(dialog, `Debe existir el diálogo ${id}`);
     const cancelButtons = [...dialog.matchAll(/<button\b[^>]*data-dialog-cancel[^>]*>/g)];
     assert.equal(cancelButtons.length, 2);
     assert.ok(cancelButtons.every(([tag]) => /\btype="button"/.test(tag)));
@@ -35,14 +36,22 @@ test('patient and study forms keep required fields and separate submit from canc
   assert.doesNotMatch(app, /PATIENT_MODULES_KEY|patientModules|\.tables|addRow\(|localStorage|showDirectoryPicker|createLocalBackup|saveToFolder/);
 });
 
-test('future backup and report buttons remain inert controls', () => {
-  for (const [id, label] of [['chooseFolder', 'BACKUP'], ['exportData', 'Reportes']]) {
+test('backup control opens the implemented dialog while the future report button remains inert', () => {
+  const backups = fs.readFileSync(path.join(__dirname, '../public/js/backups.js'), 'utf8');
+  const backupButton = /<button\b(?=[^>]*\bid="chooseFolder")(?=[^>]*\btype="button")[^>]*>Respaldos<\/button>/;
+  assert.match(html, backupButton);
+  assert.match(html, /<dialog\b(?=[^>]*\bid="backupDialog")/);
+  assert.match(app, /\$\('#chooseFolder'\)\.hidden = !rolesUsuarioActual\.includes\('administrador'\)/);
+  assert.match(backups, /botonAbrirRespaldos\.addEventListener\('click', mostrarVentanaRespaldos\)/);
+  assert.match(backups, /\/api\/respaldos\/exportar/);
+  assert.match(backups, /\/api\/respaldos\/restauraciones/);
+
+  for (const [id, label] of [['exportData', 'Reportes']]) {
     const button = new RegExp(`<button\\b(?=[^>]*\\bid="${id}")(?=[^>]*\\btype="button")[^>]*>${label}<\\/button>`);
     assert.match(html, button);
   }
-  assert.doesNotMatch(html, /id="importData"[^>]*type="file"|id="exportData"[^>]*type="submit"|id="chooseFolder"[^>]*type="submit"/);
-  assert.doesNotMatch(app, /\$\('#(?:chooseFolder|exportData)'\)/);
-  assert.match(html, /reservado para futuras funciones de copia de seguridad/i);
+  assert.doesNotMatch(html, /id="importData"[^>]*type="file"|id="exportData"[^>]*type="submit"/);
+  assert.doesNotMatch(app + backups, /\$\('#exportData'\)/);
   assert.match(html, /reservado para futuras funciones de generación y consulta de informes/i);
 });
 

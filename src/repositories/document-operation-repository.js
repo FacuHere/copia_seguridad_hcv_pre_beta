@@ -59,6 +59,19 @@ async function completeOperation(connection, operationId, allowedStates = ['prep
   );
 }
 
+async function limpiarReferenciasTemporalesCompletadas(conexion, operacionId) {
+  const resultado = await conexion.query(
+    "UPDATE document_file_operations SET staging_key = NULL, backup_key = NULL WHERE operation_id = ? AND operation_state = 'completed'",
+    [operacionId],
+  );
+  if (resultado.affectedRows === 1) return true;
+  const filas = await conexion.query(
+    'SELECT operation_state, staging_key, backup_key FROM document_file_operations WHERE operation_id = ? LIMIT 1',
+    [operacionId],
+  );
+  return filas[0]?.operation_state === 'completed' && filas[0].staging_key === null && filas[0].backup_key === null;
+}
+
 async function findDocumentInProgress(connection, documentId) {
   const rows = await connection.query('SELECT storage_key, size_bytes, sha256 FROM documents WHERE id = ? AND file_status = \'moving\' LIMIT 1', [documentId]);
   return rows[0] || null;
@@ -117,6 +130,7 @@ module.exports = {
   markFilesystemApplied, activatePendingDocument, updateReplacement, deleteDeletingDocument,
   deletePendingDocument, markOperationFailed, markReplacementRestored, insertAudit,
   completeOperation, findDocumentInProgress, moveDocumentKey,
+  limpiarReferenciasTemporalesCompletadas,
   activateMovingDocument, findDocumentsForLabelMove, findScopedDocumentIds,
   createRenameOperation, findOperationsToRecover, findActiveStagingKeys,
   hasOperationJournal, findPendingOperations,

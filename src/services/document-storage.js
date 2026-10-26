@@ -333,13 +333,16 @@ async function hasDocxPackage(filePath, fileSize) {
     const relationships = await readPackagePart(entries.get('_rels/.rels'));
     const documentXml = await readPackagePart(entries.get('word/document.xml'));
     if (!contentTypes || !relationships || !documentXml) return false;
-    const documentOverride = contentTypes.match(/<Override\b[^>]*>/i)?.[0] || '';
-    const officeRelationship = relationships.match(/<Relationship\b[^>]*>/i)?.[0] || '';
+    // El orden de las declaraciones no identifica el documento principal del paquete.
+    const declaracionDocumento = (contentTypes.match(/<Override\b[^>]*>/gi) || []).find(declaracion =>
+      /PartName=["']\/word\/document\.xml["']/i.test(declaracion)
+      && /ContentType=["']application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document\.main\+xml["']/i.test(declaracion));
+    const relacionDocumento = (relationships.match(/<Relationship\b[^>]*>/gi) || []).find(relacion =>
+      /Type=["'][^"']*\/officeDocument["']/i.test(relacion)
+      && /Target=["']\/?word\/document\.xml["']/i.test(relacion));
     return /<Types\b/i.test(contentTypes)
-      && /PartName=["']\/word\/document\.xml["']/i.test(documentOverride)
-      && /ContentType=["']application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document\.main\+xml["']/i.test(documentOverride)
-      && /Type=["'][^"']*\/officeDocument["']/i.test(officeRelationship)
-      && /Target=["']\/?word\/document\.xml["']/i.test(officeRelationship)
+      && Boolean(declaracionDocumento)
+      && Boolean(relacionDocumento)
       && /<(?:[A-Za-z_][\w.-]*:)?document\b/i.test(documentXml)
       && /<(?:[A-Za-z_][\w.-]*:)?body\b/i.test(documentXml);
   } finally {

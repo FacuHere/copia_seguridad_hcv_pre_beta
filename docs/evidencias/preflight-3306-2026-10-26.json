@@ -1,0 +1,77 @@
+{
+  "pruebas": [
+    {
+      "prueba": "Inicio de sesión visible y required evita enviar formulario vacío",
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Acceso sin sesión",
+      "ruta": "/api/pacientes",
+      "status": 401,
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Acceso sin sesión",
+      "ruta": "/api/pacientes/1",
+      "status": 401,
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Acceso sin sesión",
+      "ruta": "/api/pacientes/1/estudios",
+      "status": 401,
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Acceso sin sesión",
+      "ruta": "/api/estudios/1",
+      "status": 401,
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Acceso sin sesión",
+      "ruta": "/api/estudios/1/documentos",
+      "status": 401,
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Acceso sin sesión",
+      "ruta": "/api/documentos/1/download",
+      "status": 401,
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Acceso sin sesión",
+      "ruta": "/api/respaldos/resumen-clinico",
+      "status": 401,
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Salud",
+      "ruta": "/api/health/database",
+      "status": 200,
+      "respuesta": {
+        "status": "ok",
+        "database": "connected"
+      },
+      "resultado": "PASS"
+    },
+    {
+      "prueba": "Salud",
+      "ruta": "/api/health/storage",
+      "status": 503,
+      "respuesta": {
+        "status": "not_configured",
+        "message": "FILE_STORAGE_ROOT no está configurado; cargas y acceso a archivos no están disponibles.",
+        "operations": []
+      },
+      "resultado": "BLOQUEO_CONFIGURACION"
+    },
+    {
+      "prueba": "Página de inicio sin excepciones JavaScript no controladas",
+      "resultado": "PASS"
+    }
+  ],
+  "credencialesUsadas": false,
+  "datosCreados": false
+}

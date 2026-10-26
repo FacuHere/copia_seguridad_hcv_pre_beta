@@ -8,6 +8,7 @@ let idSolicitudListaPacientes = 0;
 let selectedPatient = null;
 let errorListaPacientes = '';
 let rolesUsuarioActual = [];
+let versionVistaClinica = 0;
 let permisosUsuarioActual = new Set();
 const $ = selector => document.querySelector(selector);
 const pantallaAutenticacion = $('#authScreen');
@@ -16,10 +17,43 @@ const formularioInicioSesion = $('#loginForm');
 const errorInicioSesion = $('#loginError');
 const escaparHtml = value => String(value || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+function limpiarDatosClinicos() {
+  // Invalida también respuestas que aún estén viajando desde la sesión o vista anterior.
+  versionVistaClinica += 1;
+  idSolicitudListaPacientes += 1;
+  clearTimeout(temporizadorBusquedaPacientes);
+  pacientes = [];
+  pacienteActivoId = null;
+  pacienteEnEdicionId = null;
+  selectedPatient = null;
+  editingStudy = null;
+  cargandoEstudios = false;
+  errorCargaEstudios = '';
+  errorListaPacientes = '';
+  $('#patientSearch').value = '';
+  $('#studyCount').textContent = '0';
+  for (const selector of ['#patientName', '#patientMeta', '#summaryPanel', '#studyList']) {
+    $(selector).textContent = '';
+  }
+  for (const identificador of ['patient', 'study']) {
+    const formulario = $('#' + identificador + 'Form');
+    formulario.reset();
+    formulario.querySelector('button[type="submit"]').disabled = false;
+    const dialogo = $('#' + identificador + 'Dialog');
+    if (dialogo.open) dialogo.close();
+  }
+  document.querySelectorAll('.image-modal').forEach(modal => modal.remove());
+  renderizar();
+}
+
 function mostrarInicioSesion(mensaje = '') {
   gestionUsuarios.cerrar();
   permisosUsuarioActual.clear();
   contenedorAplicacion.hidden = true;
+  rolesUsuarioActual = [];
+  $('#currentUser').textContent = '';
+  limpiarDatosClinicos();
+  window.dispatchEvent(new Event('hcv:sesion-reiniciada'));
   pantallaAutenticacion.hidden = false;
   $('#authLoading').hidden = true;
   formularioInicioSesion.hidden = false;
@@ -41,6 +75,8 @@ async function obtenerUsuarioActual() {
 }
 
 async function mostrarAplicacion(usuario) {
+  limpiarDatosClinicos();
+  window.dispatchEvent(new Event('hcv:sesion-reiniciada'));
   const acceso = await apiRequest('/api/auth/permisos');
   permisosUsuarioActual = new Set(acceso.permissions || []);
   gestionUsuarios.configurar({ usuario, permisos: [...permisosUsuarioActual], solicitar: apiRequest, finalizarSesion: mostrarInicioSesion });
@@ -48,6 +84,7 @@ async function mostrarAplicacion(usuario) {
   contenedorAplicacion.hidden = false;
   $('#currentUser').textContent = usuario.displayName || usuario.username;
   rolesUsuarioActual = Array.isArray(usuario.roles) ? usuario.roles : [];
+  $('#chooseFolder').hidden = !rolesUsuarioActual.includes('administrador');
   $('#newPatient').hidden = !permisosUsuarioActual.has('patients.create');
   $('#editPatient').hidden = !permisosUsuarioActual.has('patients.update');
   $('#newStudy').hidden = !permisosUsuarioActual.has('studies.create');
@@ -140,6 +177,7 @@ $('#logoutButton').addEventListener('click', async () => {
 });
 
 async function apiRequest(ruta, opciones = {}) {
+  const versionSolicitud = versionVistaClinica;
   const esFormularioMultipart = typeof FormData !== 'undefined' && opciones.body instanceof FormData;
   const respuesta = await fetch(ruta, {
     ...opciones,
@@ -148,12 +186,15 @@ async function apiRequest(ruta, opciones = {}) {
   });
   let resultado = null;
   try { resultado = await respuesta.json(); } catch {}
+  if (versionSolicitud !== versionVistaClinica) {
+    throw Object.assign(new Error('STALE_CLINICAL_RESPONSE'), { code: 'STALE_CLINICAL_RESPONSE' });
+  }
   if (!respuesta.ok) {
-    if (respuesta.status === 401) mostrarInicioSesion('La sesión venció. Inicie sesión nuevamente.');
     const errorApi = new Error('API_REQUEST_FAILED');
     errorApi.status = respuesta.status;
     errorApi.code = resultado?.error?.code || '';
     errorApi.messageFromApi = resultado?.error?.message || '';
+    if (respuesta.status === 401) mostrarInicioSesion('La sesión venció. Inicie sesión nuevamente.');
     throw errorApi;
   }
   return resultado;
@@ -200,6 +241,18 @@ async function cargarPacientes(busqueda = '') {
     errorListaPacientes = mensajeApiPaciente(error, 'No se pudo cargar la lista de pacientes.');
   }
   renderizarPacientes();
+}
+
+async function actualizarVistaClinicaTrasRestauracion(modo) {
+  const idSeleccionado = pacienteActivoId;
+  const busqueda = $('#patientSearch').value;
+  limpiarDatosClinicos();
+  if (modo === 'agregar') $('#patientSearch').value = busqueda;
+  await cargarPacientes($('#patientSearch').value.trim());
+  if (errorListaPacientes) throw new Error('CLINICAL_REFRESH_FAILED');
+  if (modo === 'agregar' && idSeleccionado && pacientes.some(paciente => String(paciente.id) === idSeleccionado)) {
+    await cargarPaciente(idSeleccionado);
+  }
 }
 
 async function cargarPaciente(idPaciente) {
@@ -483,6 +536,7 @@ $('#patientForm').addEventListener('submit', async evento => {
   evento.preventDefault();
   const formulario = evento.currentTarget;
   if (!formulario.reportValidity()) return;
+  const versionFormulario = versionVistaClinica;
   const valoresFormulario = Object.fromEntries(new FormData(formulario));
   const editingId = pacienteEnEdicionId;
   const datosSolicitud = editingId ? { ...valoresFormulario, version: selectedPatient.version } : valoresFormulario;
@@ -505,12 +559,15 @@ $('#patientForm').addEventListener('submit', async evento => {
     pacienteEnEdicionId = null;
     $('#patientDialog').close();
     await cargarPacientes($('#patientSearch').value.trim());
+    if (versionFormulario !== versionVistaClinica) return;
     await cargarEstudios(idPacienteGuardado);
+    if (versionFormulario !== versionVistaClinica) return;
     renderizar();
   } catch (error) {
+    if (versionFormulario !== versionVistaClinica) return;
     window.alert(mensajeApiPaciente(error, editingId ? 'No se pudo actualizar el paciente.' : 'No se pudo guardar el paciente.', valoresFormulario));
   } finally {
-    botonGuardar.disabled = false;
+    if (versionFormulario === versionVistaClinica) botonGuardar.disabled = false;
   }
 });
 $('#newStudy').onclick=abrirNuevoEstudio;
@@ -518,6 +575,7 @@ $('#studyForm').addEventListener('submit', async evento => {
   evento.preventDefault();
   const form = evento.currentTarget;
   if (!form.reportValidity() || !selectedPatient) return;
+  const versionFormulario = versionVistaClinica;
 
   const imagenesSeleccionadas = Array.from(form.elements.images.files || []);
   const datosEstudio = {
@@ -565,13 +623,17 @@ $('#studyForm').addEventListener('submit', async evento => {
       const archivosSubidos = [];
       const erroresCarga = [];
       for (const file of imagenesSeleccionadas) {
+        if (versionFormulario !== versionVistaClinica) return;
         try {
           archivosSubidos.push({ archivo: file.name, documento: await uploadStudyDocument(savedStudyId, file) });
         } catch (error) {
+          if (versionFormulario !== versionVistaClinica) return;
           erroresCarga.push({ archivo: file.name, mensaje: mensajeApiDocumento(error, 'No se pudo guardar el archivo.') });
         }
       }
+      if (versionFormulario !== versionVistaClinica) return;
       const documentosListado = await refreshDocuments(savedStudyId);
+      if (versionFormulario !== versionVistaClinica) return;
       const archivosNoListados = documentosListado
         ? archivosSubidos.filter(archivoSubido => !documentosListado.some(documento => String(documento.id) === String(archivoSubido.documento.id)))
         : archivosSubidos;
@@ -584,9 +646,10 @@ $('#studyForm').addEventListener('submit', async evento => {
       }
     }
   } catch (error) {
+    if (versionFormulario !== versionVistaClinica) return;
     window.alert(mensajeApiEstudio(error, editingId ? 'No se pudo actualizar el estudio.' : 'No se pudo guardar el estudio.'));
   } finally {
-    botonGuardar.disabled = false;
+    if (versionFormulario === versionVistaClinica) botonGuardar.disabled = false;
   }
 });
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(`#${b.dataset.tab}Panel`).classList.add('active')});

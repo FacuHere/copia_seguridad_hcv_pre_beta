@@ -63,20 +63,31 @@ function makeStoredZip(entries) {
   end.writeUInt16LE(0, 20);
   return Buffer.concat([...localParts, centralDirectory, end]);
 }
-function makeDocxFixture() {
+function makeDocxFixture({ otrasPartesPrimero = false, destinoDocumento = 'word/document.xml' } = {}) {
+  const declaracionAdicional = otrasPartesPrimero
+    ? '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>'
+    : '';
+  const relacionAdicional = otrasPartesPrimero
+    ? '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>'
+    : '';
+  const partesAdicionales = otrasPartesPrimero ? [{
+    name: 'docProps/core.xml',
+    content: '<?xml version="1.0" encoding="UTF-8"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"/>',
+  }] : [];
   return makeStoredZip([
     {
       name: '[Content_Types].xml',
-      content: '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+      content: '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' + declaracionAdicional + '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
     },
     {
       name: '_rels/.rels',
-      content: '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
+      content: '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + relacionAdicional + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="' + destinoDocumento + '"/></Relationships>',
     },
     {
       name: 'word/document.xml',
       content: '<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>Synthetic HCV validation file</w:t></w:r></w:p></w:body></w:document>',
     },
+    ...partesAdicionales,
   ]);
 }
 module.exports = { makeDocxFixture };

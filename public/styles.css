@@ -420,6 +420,173 @@ dialog::backdrop {
   border-top: 1px solid var(--line)
 }
 
+.backup-dialog {
+  width: min(740px,94vw)
+}
+
+.backup-dialog [hidden] {
+  display: none !important
+}
+
+.backup-content {
+  padding: 0 24px 22px
+}
+
+.backup-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 0 12px;
+  border-bottom: 1px solid var(--line)
+}
+
+.backup-tab {
+  color: var(--muted);
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 9px 12px
+}
+
+.backup-tab.active {
+  color: var(--navy);
+  border-bottom-color: var(--blue)
+}
+
+.backup-panel {
+  display: none;
+  padding-top: 12px
+}
+
+.backup-panel.active {
+  display: block
+}
+
+.backup-panel > p {
+  color: var(--muted);
+  line-height: 1.5
+}
+
+.backup-folder-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  min-height: 42px
+}
+
+.backup-folder-row span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 13px
+}
+
+.backup-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 18px 0 4px;
+  font-size: 14px
+}
+
+.backup-option input,
+.backup-modes input {
+  accent-color: var(--blue)
+}
+
+.backup-note,
+.backup-modes small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45
+}
+
+.backup-notice {
+  margin: 18px 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--blue);
+  background: var(--sky);
+  color: var(--navy);
+  font-size: 13px;
+  line-height: 1.5
+}
+
+.backup-warning {
+  border-left-color: #a65032;
+  background: #fff3ed
+}
+
+.backup-modes {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px
+}
+
+.backup-modes legend {
+  padding: 0 5px;
+  font-weight: 600
+}
+
+.backup-modes label {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 14px
+}
+
+.backup-modes label span {
+  display: grid;
+  gap: 3px
+}
+
+.backup-preview {
+  max-height: 180px;
+  overflow: auto;
+  margin: 16px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 13px;
+  line-height: 1.5
+}
+
+.backup-preview p {
+  margin: 5px 0
+}
+
+.backup-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px
+}
+
+.backup-status {
+  min-height: 22px;
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45
+}
+
+.backup-status[data-state="success"] {
+  color: #216a42
+}
+
+.backup-status[data-state="error"] {
+  color: #9c3d2b
+}
+
+.backup-security-note {
+  padding: 10px 12px;
+  background: #fff3ed;
+  color: #713b2c;
+  font-size: 13px;
+  line-height: 1.45
+}
+
 .image-modal {
   position: fixed;
   inset: 0;
@@ -460,6 +627,19 @@ dialog::backdrop {
 
   .summary-grid,.form-grid {
     grid-template-columns: 1fr
+  }
+
+  .backup-content {
+    padding: 0 16px 18px
+  }
+
+  .backup-folder-row {
+    align-items: flex-start;
+    flex-direction: column
+  }
+
+  .backup-footer .primary {
+    width: 100%
   }
 
   .span-2 {

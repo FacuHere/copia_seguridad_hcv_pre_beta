@@ -81,6 +81,7 @@ async function main() {
 
   const { hashPassword } = require('../utils/passwords');
   const { createRecoveryPool } = require('../config/recovery-database');
+  const authRepository = require('../repositories/auth-repository');
   const input = await collectInput();
   let passwordHash;
   try {
@@ -116,6 +117,7 @@ async function main() {
       throw new ResetPasswordError('No se pudo actualizar la contraseña. No se registró ningún cambio.');
     }
 
+    await authRepository.deleteSessionsForUser(connection, userId);
     await connection.query(
       `INSERT INTO audit_events (user_id, action_code, entity_type, entity_id)
        VALUES (NULL, ?, ?, ?)` ,

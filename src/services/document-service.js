@@ -8,7 +8,7 @@ const {
   DocumentInputError, relativeDocumentKey, ensurePrivateRoot,
   openRegularFile, receiveSingleFile, moveKey, unlinkKey,
 } = require('./document-storage');
-const { fileInfo, finishDelete, setFilesystemApplied } = require('./document-operations');
+const { fileInfo, completarLimpiezaDocumental, finishDelete, setFilesystemApplied } = require('./document-operations');
 const { blockStorage } = require('./storage-readiness');
 const { logInternalError } = require('../utils/errors');
 
@@ -128,7 +128,7 @@ async function verifyOpenFile(fileHandle, expectedSize, expectedSha256) {
   return after.isFile() && after.size === before.size && hash.digest('hex') === expectedSha256;
 }
 
-async function prepareStream(idValue, disposition, { userId, clientIp, requestId }) {
+async function prepareStream(idValue, disposition, { userId, clientIp, requestId }, { blockOnIntegrityMismatch = true, auditAction = null } = {}) {
   const id = parseId(idValue);
   if (!id) throw new ApplicationError(400, 'INVALID_ID', 'El identificador no es válido.', { includeRequestId: true });
   const config = readFileStorageConfig();
@@ -149,12 +149,14 @@ async function prepareStream(idValue, disposition, { userId, clientIp, requestId
     fileHandle = await openRegularFile(config.root, document.storage_key);
     if (!await verifyOpenFile(fileHandle, document.size_bytes, document.sha256)) {
       const integrityError = Object.assign(new Error('DOCUMENT_INTEGRITY_MISMATCH'), { code: 'DOCUMENT_INTEGRITY_MISMATCH' });
-      blockStorage(integrityError.code, null, 'Se detectó un archivo que no coincide con su SHA-256 registrado. Revise el documento y el repositorio antes de continuar.');
-      console.error(JSON.stringify({ level: 'error', event: 'document_integrity_mismatch', requestId, documentId: String(document.id) }));
+      if (blockOnIntegrityMismatch) {
+        blockStorage(integrityError.code, null, 'Se detectó un archivo que no coincide con su SHA-256 registrado. Revise el documento y el repositorio antes de continuar.');
+      }
+      console.error(JSON.stringify({ level: 'error', event: auditAction ? 'backup_document_integrity_mismatch' : 'document_integrity_mismatch', requestId, documentId: String(document.id) }));
       throw integrityError;
     }
     await documentRepository.insertAudit(connection, {
-      userId, action: disposition === 'inline' ? 'document.view' : 'document.download',
+      userId, action: auditAction || (disposition === 'inline' ? 'document.view' : 'document.download'),
       entityType: 'document', entityId: String(document.id),
       details: { studyId: String(document.study_id), patientId: String(document.patient_id), result: 'success' }, clientIp,
     });
@@ -222,7 +224,7 @@ async function replace(idValue, requestStream, { userId, clientIp }) {
       await finalize.rollback().catch(() => {});
       throw error;
     } finally { finalize.release(); }
-    await unlinkKey(config.root, operation.backupKey);
+    await completarLimpiezaDocumental(pool, config.root, operation);
     return { id: String(document.id), patientId: String(document.patient_id), studyId: String(document.study_id), originalName: stagedFile.originalName, mimeType: stagedFile.mimeType, sizeBytes: stagedFile.sizeBytes, sha256: stagedFile.sha256, updatedBy: String(userId) };
   } catch (error) {
     if (journalCommitted) blockStorage(error?.code, operation?.operationId);

@@ -74,6 +74,10 @@ class MemoryMariaDb {
       const row = this.operations.get(params[0]); if (!row) return { affectedRows: 0 };
       row.operation_state = 'completed'; return { affectedRows: 1 };
     }
+    if (s.startsWith('UPDATE document_file_operations SET staging_key = NULL, backup_key = NULL')) {
+      const row = this.operations.get(params[0]); if (!row || row.operation_state !== 'completed') return { affectedRows: 0 };
+      row.staging_key = null; row.backup_key = null; return { affectedRows: 1 };
+    }
     if (s.startsWith("DELETE FROM documents WHERE id = ? AND file_status = 'deleting'")) {
       const row = this.documents.get(String(params[0])); if (!row || row.file_status !== 'deleting') return { affectedRows: 0 };
       this.documents.delete(String(params[0])); return { affectedRows: 1 };

@@ -6,6 +6,13 @@ info:
     Especificación basada en las rutas Express y los contratos encontrados en el código.
     Los errores enumerados son los observados; el requestId del cuerpo no se incluye en
     todas las respuestas actuales.
+    El soporte DICOM permite cargas individuales de varios .dcm por estudio, conservación
+    de bytes originales, SHA-256 y descarga autorizada. La comprobación de contenido DICOM
+    solo exige un archivo no vacío, además de los controles generales de extensión/MIME,
+    tamaño, nombre y ruta; no interpreta DICM ni valida completamente el formato.
+    No incluye visor, interpretación de tags o series, PACS, DICOMweb o integración con equipos.
+    Las pruebas realizadas son sintéticas; queda pendiente comprobar DICOM reales
+    representativos y sus tamaños.
 servers:
   - url: http://127.0.0.1:3000
     description: Servidor local de desarrollo; ajuste el host y puerto al entorno autorizado.
@@ -15,6 +22,7 @@ tags:
   - name: Pacientes
   - name: Estudios
   - name: Documentos
+  - name: Respaldos
   - name: Usuarios
 paths:
   /api/auth/permisos:
@@ -194,6 +202,7 @@ paths:
     post:
       tags: [Autenticación]
       summary: Inicia sesión y establece la cookie HttpOnly
+      description: Diez fallos de credenciales por IP dentro de 15 minutos activan un bloqueo de 15 minutos. Un login correcto limpia el contador.
       requestBody:
         required: true
         content:
@@ -604,6 +613,260 @@ paths:
         '404': { $ref: '#/components/responses/ApiError' }
         '409': { $ref: '#/components/responses/ApiError' }
         '503': { $ref: '#/components/responses/ApiError' }
+  /api/respaldos/exportar:
+    post:
+      tags: [Respaldos]
+      summary: Prepara una instantánea clínica para guardar en una carpeta local
+      description: Requiere backups.manage. El navegador debe guardar todos los archivos y manifest.json antes de completar la operación. Las referencias de usuario son opcionales y no incluyen contraseñas ni sesiones.
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                incluirReferenciasUsuarios: { type: boolean, default: false }
+      responses:
+        default: { $ref: '#/components/responses/ApiError' }
+        '201':
+          description: Datos clínicos preparados; el cliente todavía debe guardar los archivos y completar el respaldo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/BackupExport' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/respaldos/resumen-clinico:
+    get:
+      tags: [Respaldos]
+      summary: Obtiene conteos y una muestra de pacientes actuales
+      security: [{ SessionCookie: [] }]
+      responses:
+        default: { $ref: '#/components/responses/ApiError' }
+        '200':
+          description: Resumen para la vista previa de restauración
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/BackupClinicalSummary' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/respaldos/documentos/{id}:
+    get:
+      tags: [Respaldos]
+      summary: Transmite un documento para guardarlo en el respaldo local
+      security: [{ SessionCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        default: { $ref: '#/components/responses/ApiError' }
+        '200':
+          description: Bytes originales del documento como archivo adjunto
+          headers:
+            Content-Disposition: { schema: { type: string } }
+            Content-Length: { schema: { type: integer, format: int64 } }
+            X-Document-SHA256:
+              description: SHA-256 registrado y verificado antes de abrir el stream.
+              schema: { type: string, pattern: '^[a-f0-9]{64}$' }
+          content:
+            application/octet-stream: { schema: { type: string, format: binary } }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/respaldos/exportar/{operationId}/completar:
+    post:
+      tags: [Respaldos]
+      summary: Registra que el cliente terminó de guardar la carpeta de respaldo
+      description: El cliente llama este endpoint después de escribir manifest.json. La API no recibe la ruta del directorio del navegador.
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - { name: operationId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        default: { $ref: '#/components/responses/ApiError' }
+        '200':
+          description: Respaldo marcado como completado y auditado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      operationId: { type: string, format: uuid }
+                      completado: { type: boolean, enum: [true] }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+  /api/respaldos/restauraciones:
+    post:
+      tags: [Respaldos]
+      summary: Inicia una restauración en modo agregar o reemplazar
+      security: [{ SessionCookie: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BackupRestoreStart' }
+      responses:
+        default: { $ref: '#/components/responses/ApiError' }
+        '201':
+          description: Operación creada para recibir los registros del respaldo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      operationId: { type: string, format: uuid }
+                      modo: { type: string, enum: [agregar, reemplazar] }
+                      estado: { type: string, enum: [recibiendo] }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/respaldos/restauraciones/{operationId}/registros:
+    post:
+      tags: [Respaldos]
+      summary: Guarda un lote de registros clínicos recibidos desde la carpeta validada
+      description: De 1 a 10 registros, con máximo 256 KiB para el JSON completo. La interfaz divide sus lotes por bytes UTF-8 y envía como máximo cinco registros.
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - { name: operationId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BackupRecordBatch' }
+      responses:
+        default: { $ref: '#/components/responses/ApiError' }
+        '201':
+          description: Lote recibido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      recibidos: { type: integer }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '413': { $ref: '#/components/responses/ApiError' }
+  /api/respaldos/restauraciones/{operationId}/documentos/{documentId}:
+    post:
+      tags: [Respaldos]
+      summary: Recibe y verifica un archivo del respaldo
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - { name: operationId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: documentId, in: path, required: true, schema: { type: string, pattern: '^[1-9][0-9]*$' } }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        default: { $ref: '#/components/responses/ApiError' }
+        '201':
+          description: Archivo recibido en el staging privado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      documentoId: { type: string }
+                      recibido: { type: boolean, enum: [true] }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '413': { $ref: '#/components/responses/ApiError' }
+        '415': { $ref: '#/components/responses/ApiError' }
+        '422':
+          description: El archivo recibido no coincide con el nombre, MIME, tamaño o SHA-256 del respaldo
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiErrorBody' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/respaldos/restauraciones/{operationId}/confirmar:
+    post:
+      tags: [Respaldos]
+      summary: Valida el respaldo completo y aplica su restauración
+      description: agregar crea IDs nuevos y no fusiona DNI repetidos. reemplazar sustituye los datos clínicos y conserva usuarios y auditoría existente. La API no detiene globalmente el servicio. limpiezaPendiente conserva evidencia de un commit confirmado mientras se reintenta la limpieza física.
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - { name: operationId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        default: { $ref: '#/components/responses/ApiError' }
+        '200':
+          description: Restauración confirmada; limpiezaPendiente indica si queda trabajo físico registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/BackupRestoreResult' }
+        '400': { $ref: '#/components/responses/ApiError' }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
+        '422':
+          description: Conteos, estructura, relaciones o integridad del respaldo inválidos; también restricciones de MariaDB incumplidas
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiErrorBody' }
+        '503': { $ref: '#/components/responses/ApiError' }
+  /api/respaldos/operaciones/{operationId}/cancelar:
+    post:
+      tags: [Respaldos]
+      summary: Cancela una operación propia que todavía está recibiendo datos
+      security: [{ SessionCookie: [] }]
+      parameters:
+        - { name: operationId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        default: { $ref: '#/components/responses/ApiError' }
+        '200':
+          description: Operación cancelada y auditada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      operationId: { type: string, format: uuid }
+                      cancelada: { type: boolean, enum: [true] }
+        '401': { $ref: '#/components/responses/ApiError' }
+        '403': { $ref: '#/components/responses/ApiError' }
+        '404': { $ref: '#/components/responses/ApiError' }
+        '409': { $ref: '#/components/responses/ApiError' }
 components:
   securitySchemes:
     SessionCookie:
@@ -789,3 +1052,141 @@ components:
         status: { type: string, enum: [ready, not_configured, recovering, blocked] }
         message: { type: string }
         operations: { type: array, items: { type: object, additionalProperties: true } }
+    BackupConteos:
+      type: object
+      required: [pacientes, estudios, documentos]
+      properties:
+        pacientes: { type: integer, minimum: 0 }
+        estudios: { type: integer, minimum: 0 }
+        documentos: { type: integer, minimum: 0 }
+    BackupExport:
+      type: object
+      required: [operationId, formato, version, creadoEn, conteos, datos]
+      properties:
+        operationId: { type: string, format: uuid }
+        formato: { type: string, enum: [hcv-respaldo-clinico] }
+        version: { type: integer, enum: [1] }
+        creadoEn: { type: string, format: date-time }
+        conteos: { $ref: '#/components/schemas/BackupConteos' }
+        datos:
+          type: object
+          required: [pacientes, estudios, documentos]
+          properties:
+            pacientes: { type: array, items: { $ref: '#/components/schemas/BackupPatientRecord' } }
+            estudios: { type: array, items: { $ref: '#/components/schemas/BackupStudyRecord' } }
+            documentos: { type: array, items: { $ref: '#/components/schemas/BackupDocumentRecord' } }
+            referenciasUsuarios:
+              type: array
+              description: Opcional e informativo; nunca contiene contraseñas ni sesiones.
+              items: { $ref: '#/components/schemas/BackupUserReference' }
+    BackupPatientRecord:
+      type: object
+      required: [id, fullName, version, createdByUsername, updatedByUsername, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        fullName: { type: string, maxLength: 240 }
+        dni: { type: string, nullable: true, maxLength: 32 }
+        birthDate: { type: string, format: date, nullable: true }
+        phone: { type: string, nullable: true, maxLength: 80 }
+        address: { type: string, nullable: true, maxLength: 500 }
+        notes: { type: string, nullable: true }
+        version: { type: integer, minimum: 1 }
+        createdByUsername: { type: string }
+        updatedByUsername: { type: string }
+        createdAt: { type: string, pattern: '^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$' }
+        updatedAt: { type: string, pattern: '^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$' }
+    BackupStudyRecord:
+      type: object
+      required: [id, patientId, serviceCode, type, date, version, createdByUsername, updatedByUsername, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        patientId: { type: string }
+        serviceCode: { type: string }
+        type: { type: string, maxLength: 160 }
+        date: { type: string, format: date }
+        professional: { type: string, nullable: true }
+        diagnosis: { type: string, nullable: true }
+        procedure: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        conclusions: { type: string, nullable: true }
+        version: { type: integer, minimum: 1 }
+        createdByUsername: { type: string }
+        updatedByUsername: { type: string }
+        createdAt: { type: string }
+        updatedAt: { type: string }
+    BackupDocumentRecord:
+      type: object
+      required: [id, patientId, studyId, originalName, mimeType, sizeBytes, sha256, uploadedByUsername, createdAt, updatedAt, archivePath, derivedFromDocumentId]
+      properties:
+        id: { type: string }
+        patientId: { type: string }
+        studyId: { type: string }
+        originalName: { type: string, maxLength: 255 }
+        mimeType: { type: string, maxLength: 160 }
+        sizeBytes: { type: string, pattern: '^(0|[1-9][0-9]*)$' }
+        sha256: { type: string, pattern: '^[a-fA-F0-9]{64}$' }
+        uploadedByUsername: { type: string }
+        updatedByUsername: { type: string, nullable: true }
+        createdAt: { type: string }
+        updatedAt: { type: string }
+        archivePath: { type: string, pattern: '^documentos/[^/]+$' }
+        derivedFromDocumentId: { type: string, nullable: true }
+    BackupUserReference:
+      type: object
+      required: [username, displayName, isActive, roles]
+      properties:
+        username: { type: string }
+        displayName: { type: string }
+        isActive: { type: boolean }
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              codigo: { type: string }
+              permisos: { type: array, items: { type: string } }
+    BackupClinicalSummary:
+      type: object
+      required: [pacientes, estudios, documentos, muestraPacientes, hayMasPacientes]
+      properties:
+        pacientes: { type: integer }
+        estudios: { type: integer }
+        documentos: { type: integer }
+        muestraPacientes:
+          type: array
+          maxItems: 25
+          items:
+            type: object
+            required: [id, nombre]
+            properties:
+              id: { type: string }
+              nombre: { type: string }
+              dni: { type: string, nullable: true }
+        hayMasPacientes: { type: boolean }
+    BackupRestoreStart:
+      type: object
+      required: [formato, version, modo, conteos]
+      properties:
+        formato: { type: string, enum: [hcv-respaldo-clinico] }
+        version: { type: integer, enum: [1] }
+        modo: { type: string, enum: [agregar, reemplazar] }
+        conteos: { $ref: '#/components/schemas/BackupConteos' }
+    BackupRecordBatch:
+      type: object
+      required: [tipo, registros]
+      properties:
+        tipo: { type: string, enum: [pacientes, estudios, documentos] }
+        registros:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items: { type: object, required: [id], properties: { id: { type: string } }, additionalProperties: true }
+    BackupRestoreResult:
+      type: object
+      required: [operationId, modo, conteos, completado, limpiezaPendiente]
+      properties:
+        operationId: { type: string, format: uuid }
+        modo: { type: string, enum: [agregar, reemplazar] }
+        conteos: { $ref: '#/components/schemas/BackupConteos' }
+        completado: { type: boolean }
+        limpiezaPendiente: { type: boolean }

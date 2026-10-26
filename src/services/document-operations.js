@@ -41,6 +41,15 @@ async function fileInfo(root, key) {
   }
 }
 
+async function completarLimpiezaDocumental(pool, raiz, operacion) {
+  const operacionId = operacion.operation_id ?? operacion.operationId;
+  const claves = new Set([operacion.backup_key ?? operacion.backupKey, operacion.staging_key ?? operacion.stagingKey].filter(Boolean));
+  for (const clave of claves) await unlinkKey(raiz, clave);
+  // La referencia solo se borra después del unlink; un fallo conserva la limpieza recuperable.
+  const limpiado = await documentOperationRepository.limpiarReferenciasTemporalesCompletadas(pool, operacionId);
+  if (!limpiado) affected(null, 'complete_cleanup');
+}
+
 async function finishUpload(pool, root, operation) {
   const target = await fileInfo(root, operation.new_storage_key);
   if (!target || target.size !== Number(operation.size_bytes) || target.sha256 !== operation.sha256) {
@@ -81,7 +90,7 @@ async function finishReplacement(pool, root, operation) {
     await connection.rollback().catch(() => {});
     throw error;
   } finally { connection.release(); }
-  if (operation.backup_key) await unlinkKey(root, operation.backup_key);
+  await completarLimpiezaDocumental(pool, root, operation);
 }
 
 async function finishDelete(pool, root, operation) {
@@ -90,23 +99,25 @@ async function finishDelete(pool, root, operation) {
   const patientId = operation.patient_id ?? operation.patientId;
   const studyId = operation.study_id ?? operation.studyId;
   const actorId = operation.actor_user_id ?? operation.actorId;
+  const claveTemporal = operation.backup_key ?? operation.backupKey;
+  const claveAnterior = operation.old_storage_key ?? operation.oldKey;
   const expectedHash = operation.sha256 || operation.old_sha256 || operation.oldSha256 || null;
   // A prepared deletion may only be finalized after the old file has been moved
   // to its journaled staging key. An already absent backup is accepted only
   // after filesystem_applied was durably recorded (unlink completed).
-  const backup = await fileInfo(root, operation.backup_key);
-  const old = await fileInfo(root, operation.old_storage_key);
+  const backup = await fileInfo(root, claveTemporal);
+  const old = await fileInfo(root, claveAnterior);
   if (backup) {
     if (expectedHash && backup.sha256 !== expectedHash) throw new Error('DOCUMENT_DELETE_BACKUP_MISMATCH');
     await setFilesystemApplied(pool, operationId);
-    await unlinkKey(root, operation.backup_key);
+    await unlinkKey(root, claveTemporal);
   } else if (old) {
     if (expectedHash && old.sha256 !== expectedHash) throw new Error('DOCUMENT_DELETE_SOURCE_MISMATCH');
-    await moveKey(root, operation.old_storage_key, operation.backup_key);
-    const moved = await fileInfo(root, operation.backup_key);
+    await moveKey(root, claveAnterior, claveTemporal);
+    const moved = await fileInfo(root, claveTemporal);
     if (!moved || (expectedHash && moved.sha256 !== expectedHash)) throw new Error('DOCUMENT_DELETE_MOVE_MISMATCH');
     await setFilesystemApplied(pool, operationId);
-    await unlinkKey(root, operation.backup_key);
+    await unlinkKey(root, claveTemporal);
   } else if (operation.operation_state !== 'filesystem_applied') {
     throw new Error('DOCUMENT_DELETE_FILE_MISSING_BEFORE_DELETE');
   }
@@ -124,6 +135,7 @@ async function finishDelete(pool, root, operation) {
     await connection.rollback().catch(() => {});
     throw error;
   } finally { connection.release(); }
+  await completarLimpiezaDocumental(pool, root, operation);
 }
 
 async function failUpload(pool, operation, reasonCode) {
@@ -266,8 +278,7 @@ async function recoverOperations(pool, root) {
   for (const operation of operations) {
     try {
       if (operation.operation_state === 'completed') {
-        if (operation.backup_key) await unlinkKey(root, operation.backup_key);
-        if (operation.staging_key) await unlinkKey(root, operation.staging_key);
+        await completarLimpiezaDocumental(pool, root, operation);
         outcomes.push({ operationId: operation.operation_id, outcome: 'cleanup_completed' });
       } else if (operation.operation_type === 'upload') {
         const staged = await fileInfo(root, operation.staging_key);
@@ -368,7 +379,7 @@ async function cleanupOrphanStaging(pool, root, { log = () => {} } = {}) {
 }
 
 module.exports = {
-  fileInfo, finishUpload, finishReplacement, finishDelete, failUpload, renameStoragePrefix,
+  fileInfo, completarLimpiezaDocumental, finishUpload, finishReplacement, finishDelete, failUpload, renameStoragePrefix,
   prepareRenameInTransaction, assertRenameDoesNotAffectDocuments, completeRename,
   recoverOperations, setFilesystemApplied, cleanupOrphanStaging,
 };
