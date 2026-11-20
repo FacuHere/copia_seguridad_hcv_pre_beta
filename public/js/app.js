@@ -127,10 +127,6 @@ formularioInicioSesion.addEventListener('submit', async evento => {
       mostrarInicioSesion('Usuario o contraseña incorrectos.');
       return;
     }
-    if (respuesta.status === 429) {
-      mostrarInicioSesion('Se alcanzó el límite temporal de intentos. Espere antes de volver a intentar.');
-      return;
-    }
     if (!respuesta.ok) {
       mostrarInicioSesion('No se pudo iniciar sesión. Compruebe los datos e inténtelo nuevamente.');
       return;

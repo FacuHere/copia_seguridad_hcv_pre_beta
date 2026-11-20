@@ -202,7 +202,7 @@ paths:
     post:
       tags: [Autenticación]
       summary: Inicia sesión y establece la cookie HttpOnly
-      description: Diez fallos de credenciales por IP dentro de 15 minutos activan un bloqueo de 15 minutos. Un login correcto limpia el contador.
+      description: Valida formato, cuenta activa y contraseña en cada solicitud. Los fallos se auditan sin generar bloqueos automáticos por IP ni por cuenta o esperas progresivas. Se puede ingresar inmediatamente con credenciales correctas después de fallos desde una IP compartida. No consulta contadores heredados ni emite 429 o Retry-After por intentos fallidos.
       requestBody:
         required: true
         content:
@@ -226,14 +226,6 @@ paths:
                   user: { $ref: '#/components/schemas/AuthenticatedUser' }
         '400': { $ref: '#/components/responses/ApiError' }
         '401': { $ref: '#/components/responses/ApiError' }
-        '429':
-          description: Se alcanzó el límite temporal de intentos
-          headers:
-            Retry-After:
-              schema: { type: string }
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/ApiErrorBody' }
         '503': { $ref: '#/components/responses/DatabaseUnavailable' }
   /api/auth/me:
     get:
@@ -479,7 +471,7 @@ paths:
     post:
       tags: [Documentos]
       summary: Carga un archivo individual asociado al estudio
-      description: El servidor obtiene patientId del estudio; los campos adicionales no están habilitados en el parser multipart.
+      description: El servidor obtiene patientId del estudio; los campos adicionales no están habilitados en el parser multipart. Admite hasta MAX_FILE_SIZE_BYTES inclusive y conserva los nombres de archivo multipart en UTF-8.
       security: [{ SessionCookie: [] }]
       parameters:
         - { name: studyId, in: path, required: true, schema: { type: string, pattern: '^[1-9][0-9]*$' } }

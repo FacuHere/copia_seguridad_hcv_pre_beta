@@ -1,4 +1,5 @@
 const fs = require('node:fs');
+const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { resolveStoragePath, assertNoLinks, ensurePrivateRoot, moveKey, unlinkKey, mergeDirectoryPrefix } = require('./document-storage');
 const { state: storageReadiness } = require('./storage-readiness');
@@ -226,7 +227,20 @@ async function prepareRenameInTransaction(connection, { type, patientId, studyId
   if (!rows.length) return null;
   if (['blocked', 'recovering'].includes(storageReadiness.status)) throw operationError('STORAGE_RECOVERY_REQUIRED');
   if (rows.some(row => row.file_status !== 'active')) throw operationError('DOCUMENT_RENAME_IN_PROGRESS');
-  if (rows.some(row => !row.storage_key.startsWith(`${oldPrefix}/`))) throw operationError('DOCUMENT_RENAME_SOURCE_MISMATCH');
+  if (rows.some(row => !row.storage_key.startsWith(`${oldPrefix}/`))) {
+    // Las cargas anteriores podían usar la representación textual de Date en la carpeta.
+    // Conservar esa ruta registrada como origen, únicamente si todos los archivos
+    // pertenecen a la misma carpeta del paciente y del estudio esperado.
+    const prefijosRegistrados = new Set(rows.map(row => path.posix.dirname(row.storage_key)));
+    const prefijoRegistrado = [...prefijosRegistrados][0];
+    const carpetaEstudios = path.posix.dirname(oldPrefix);
+    if (type !== 'rename_study' || prefijosRegistrados.size !== 1
+      || path.posix.dirname(prefijoRegistrado) !== carpetaEstudios
+      || !path.posix.basename(prefijoRegistrado).startsWith(`E-${studyId} - `)) {
+      throw operationError('DOCUMENT_RENAME_SOURCE_MISMATCH');
+    }
+    oldPrefix = prefijoRegistrado;
+  }
 
   const { randomUUID } = require('node:crypto');
   const operation = {

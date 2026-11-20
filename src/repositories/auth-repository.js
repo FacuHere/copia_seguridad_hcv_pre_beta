@@ -16,47 +16,6 @@ async function deleteExpiredSessions(connection) {
   return connection.query('DELETE FROM app_sessions WHERE expires_at <= UTC_TIMESTAMP()');
 }
 
-async function deleteOldLoginAttempts(connection) {
-  return connection.query(
-    'DELETE FROM auth_login_attempts WHERE window_started_at < DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 DAY)',
-  );
-}
-
-async function ensureLoginAttempt(connection, clientIp) {
-  return connection.query(
-    `INSERT INTO auth_login_attempts (client_ip, window_started_at, failure_count)
-     VALUES (?, UTC_TIMESTAMP(), 0)
-     ON DUPLICATE KEY UPDATE client_ip = VALUES(client_ip)`,
-    [clientIp],
-  );
-}
-
-async function findLoginAttempt(connection, clientIp, windowMinutes = 15) {
-  const rows = await connection.query(
-    `SELECT failure_count,
-            window_started_at <= DATE_SUB(UTC_TIMESTAMP(), INTERVAL ${windowMinutes} MINUTE) AS window_expired,
-            blocked_until > UTC_TIMESTAMP() AS is_blocked,
-            GREATEST(1, TIMESTAMPDIFF(SECOND, UTC_TIMESTAMP(), blocked_until)) AS retry_after
-     FROM auth_login_attempts WHERE client_ip = ? FOR UPDATE`,
-    [clientIp],
-  );
-  return rows[0];
-}
-
-async function resetLoginAttemptWindow(connection, clientIp) {
-  await connection.query(
-    'UPDATE auth_login_attempts SET window_started_at = UTC_TIMESTAMP(), failure_count = 0, blocked_until = NULL WHERE client_ip = ?',
-    [clientIp],
-  );
-  const rows = await connection.query(
-    `SELECT failure_count, 0 AS window_expired, blocked_until > UTC_TIMESTAMP() AS is_blocked,
-            GREATEST(1, TIMESTAMPDIFF(SECOND, UTC_TIMESTAMP(), blocked_until)) AS retry_after
-     FROM auth_login_attempts WHERE client_ip = ? FOR UPDATE`,
-    [clientIp],
-  );
-  return rows[0];
-}
-
 async function findUserByUsername(connection, username) {
   const rows = await connection.query(
     // Coordinar el login con cambios de contraseña/estado: no crear una sesión con credenciales revocadas.
@@ -73,24 +32,6 @@ async function findUserRoles(connection, userId) {
      WHERE ur.user_id = ? ORDER BY r.code`,
     [userId],
   );
-}
-
-async function recordFailedLogin(connection, maxFailures, blockMinutes, clientIp) {
-  // Evaluar el umbral antes del incremento evita contar dos veces el mismo fallo en MariaDB.
-  return connection.query(
-    `UPDATE auth_login_attempts
-     SET blocked_until = CASE
-           WHEN failure_count + 1 >= ? THEN DATE_ADD(UTC_TIMESTAMP(), INTERVAL ${blockMinutes} MINUTE)
-           ELSE blocked_until
-         END,
-         failure_count = failure_count + 1
-     WHERE client_ip = ?`,
-    [maxFailures, clientIp],
-  );
-}
-
-async function clearLoginAttempts(connection, clientIp) {
-  return connection.query('DELETE FROM auth_login_attempts WHERE client_ip = ?', [clientIp]);
 }
 
 async function createSession(connection, userId, hashedToken, sessionSeconds) {
@@ -118,14 +59,8 @@ async function recordAudit(connection, userId, action, clientIp) {
 module.exports = {
   findSession,
   deleteExpiredSessions,
-  deleteOldLoginAttempts,
-  ensureLoginAttempt,
-  findLoginAttempt,
-  resetLoginAttemptWindow,
   findUserByUsername,
   findUserRoles,
-  recordFailedLogin,
-  clearLoginAttempts,
   createSession,
   deleteSession,
   deleteSessionsForUser,

@@ -13,6 +13,27 @@ async function withRoot(run) {
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 
+test('renombra la carpeta heredada del mismo estudio y rechaza carpetas ajenas', async () => {
+  const prefijoPaciente = 'Pacientes/P-4 - QC/Estudios';
+  for (const ajena of [false, true]) {
+    const fila = { id: '31', file_status: 'active', storage_key: `${prefijoPaciente}/E-${ajena ? '9' : '8'} - Sun Nov 01 - Otro/D-31 - prueba.pdf` };
+    const conexion = { async query(sql, parametros) {
+      if (sql.startsWith('SELECT id, storage_key')) return [{ ...fila }];
+      if (sql.startsWith('INSERT INTO document_file_operations')) return { affectedRows: 1 };
+      if (sql.startsWith('UPDATE documents SET storage_key')) { fila.storage_key = parametros[0]; fila.file_status = 'moving'; return { affectedRows: 1 }; }
+      throw new Error('Consulta inesperada en la prueba');
+    } };
+    const datos = { type: 'rename_study', patientId: '4', studyId: '8', oldPrefix: `${prefijoPaciente}/E-8 - 2026-11-01 - Otro`, newPrefix: `${prefijoPaciente}/E-8 - 2026-11-01 - Radiología`, actorUserId: '9' };
+    if (ajena) await assert.rejects(prepareRenameInTransaction(conexion, datos), { code: 'DOCUMENT_RENAME_SOURCE_MISMATCH' });
+    else {
+      const operacion = await prepareRenameInTransaction(conexion, datos);
+      assert.match(operacion.old_prefix, /Sun Nov 01/);
+      assert.equal(fila.storage_key, `${datos.newPrefix}/D-31 - prueba.pdf`);
+      assert.equal(fila.file_status, 'moving');
+    }
+  }
+});
+
 function fakePool({ operations = [], documents = [], failDocumentUpdate = false, comprobarAntesDeEliminar } = {}) {
   const events = [];
   const run = async (sql, params = []) => {
