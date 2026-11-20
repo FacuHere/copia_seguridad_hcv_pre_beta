@@ -1,0 +1,20 @@
+Resultado y versión conservados. Vista: reports/qc/documentacion-viva/index.html
+La versión no se mantuvo estable; revisar el contexto antes de aceptar la ejecución.
+Resultado y versión conservados. Vista: reports/qc/documentacion-viva/index.html
+test_cambio_de_imagen_impide_dar_por_valida_la_ejecucion (test_documentacion_viva.PruebasDocumentacionViva.test_cambio_de_imagen_impide_dar_por_valida_la_ejecucion) ... ok
+test_conserva_fallo_y_aprobacion_sin_contarlos_como_dos_casos (test_documentacion_viva.PruebasDocumentacionViva.test_conserva_fallo_y_aprobacion_sin_contarlos_como_dos_casos) ... ok
+test_detecta_modificacion_de_evidencia_con_huella_registrada (test_documentacion_viva.PruebasDocumentacionViva.test_detecta_modificacion_de_evidencia_con_huella_registrada) ... ok
+test_ejecutor_conserva_version_y_regenera_vista (test_documentacion_viva.PruebasDocumentacionViva.test_ejecutor_conserva_version_y_regenera_vista) ... ok
+test_escapa_html_de_las_notas_revisadas (test_documentacion_viva.PruebasDocumentacionViva.test_escapa_html_de_las_notas_revisadas) ... ok
+test_falta_de_reporte_no_produce_falso_aprobado (test_documentacion_viva.PruebasDocumentacionViva.test_falta_de_reporte_no_produce_falso_aprobado) ... ok
+test_generar_vista_preserva_bytes_del_original (test_documentacion_viva.PruebasDocumentacionViva.test_generar_vista_preserva_bytes_del_original) ... ok
+test_no_acepta_duracion_no_finita (test_documentacion_viva.PruebasDocumentacionViva.test_no_acepta_duracion_no_finita) ... ok
+test_nuevos_nombres_de_ejecucion_admiten_varios_casos_en_archivos_distintos (test_documentacion_viva.PruebasDocumentacionViva.test_nuevos_nombres_de_ejecucion_admiten_varios_casos_en_archivos_distintos) ... ok
+test_rechaza_un_escenario_con_dos_tc_para_no_inflar_trazabilidad (test_documentacion_viva.PruebasDocumentacionViva.test_rechaza_un_escenario_con_dos_tc_para_no_inflar_trazabilidad) ... ok
+test_reporte_vacio_o_corrupto_no_se_convierte_en_aprobacion (test_documentacion_viva.PruebasDocumentacionViva.test_reporte_vacio_o_corrupto_no_se_convierte_en_aprobacion) ... ok
+test_resumen_no_publica_trazas_nombres_ni_valores_arbitrarios (test_documentacion_viva.PruebasDocumentacionViva.test_resumen_no_publica_trazas_nombres_ni_valores_arbitrarios) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.120s
+
+OK

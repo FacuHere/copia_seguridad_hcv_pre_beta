@@ -1,0 +1,68 @@
+{
+  "inicio": "2026-11-17T14:56:13.181563+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "cli",
+  "entorno": {},
+  "resultados": [
+    {
+      "caso": "TC-190",
+      "objetivo": "Crear administrador inicial por CLI y rechazar un segundo bootstrap",
+      "canal": "CLI real sobre la misma base beta; usuarios y datos recuperados desde resguardo",
+      "inicio": "2026-11-17T14:56:14.517592+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El CLI real crea el administrador en la misma base temporalmente sin usuarios",
+          "cumple": true
+        },
+        {
+          "criterio": "El bootstrap crea una sola cuenta",
+          "cumple": true
+        },
+        {
+          "criterio": "El administrador inicial recibe el perfil técnico system_admin",
+          "cumple": true
+        },
+        {
+          "criterio": "El perfil inicial conserva únicamente los permisos técnicos previstos",
+          "cumple": true
+        },
+        {
+          "criterio": "Un segundo bootstrap se rechaza sin crear otra cuenta",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se recuperan los datos y las cuentas originales después de probar el bootstrap",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 2.835
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1030" viewBox="0 0 1600 1030" role="img" aria-labelledby="titulo descripcion">
+<title id="titulo">Arquitectura de pruebas de Historial Clínico Visual</title>
+<desc id="descripcion">Cuatro niveles según la Unidad 3: unitarias, integración, sistema y aceptación. La figura es conceptual y no representa cantidades medidas ni cobertura. Se muestran ejemplos reales y la UAT pendiente.</desc>
+<rect width="1600" height="1030" fill="#f4f7fb"/>
+<g font-family="Segoe UI, Arial, sans-serif">
+<text x="80" y="75" font-size="38" font-weight="700" fill="#123343">Arquitectura de pruebas · HCV</text>
+<text x="80" y="115" font-size="21" fill="#53667a">Unidad 3 · Clasificación del proyecto y ejemplos</text>
+<text x="600" y="157" text-anchor="middle" font-size="16" letter-spacing="1.4" font-weight="700" fill="#53667a">NIVELES DE VERIFICACIÓN</text>
+<text x="1138" y="157" font-size="16" letter-spacing="1.4" font-weight="700" fill="#53667a">APLICACIÓN Y EVIDENCIA</text>
+<polygon points="420,180 780,180 850,330 350,330" fill="#354660"/>
+<polygon points="350,346 850,346 925,496 275,496" fill="#175d73"/>
+<polygon points="275,512 925,512 1000,662 200,662" fill="#177b80"/>
+<polygon points="200,678 1000,678 1075,828 125,828" fill="#208b78"/>
+<g text-anchor="middle" fill="white">
+<text x="600" y="225" font-size="25" font-weight="700">4 · ACEPTACIÓN (UAT)</text>
+<text x="600" y="265" font-size="21">Necesidades del negocio</text>
+<text x="600" y="302" font-size="18">Pendiente con usuarios del hospital</text>
+<text x="600" y="391" font-size="27" font-weight="700">3 · SISTEMA</text>
+<text x="600" y="431" font-size="22">Recorrido completo del usuario</text>
+<text x="600" y="468" font-size="19">Behave + Playwright · TC-006</text>
+<text x="600" y="557" font-size="28" font-weight="700">2 · INTEGRACIÓN</text>
+<text x="600" y="597" font-size="22">Interacción entre componentes</text>
+<text x="600" y="634" font-size="19">Dependencias reales y dobles identificados</text>
+<text x="600" y="723" font-size="28" font-weight="700">1 · UNITARIAS</text>
+<text x="600" y="763" font-size="23">Funciones y componentes aislados</text>
+<text x="600" y="800" font-size="20">Entradas controladas y resultados concretos</text>
+</g>
+<g fill="#ffffff" stroke="#dce5ed" stroke-width="1.5">
+<rect x="1115" y="180" width="405" height="150" rx="12"/>
+<rect x="1115" y="346" width="405" height="150" rx="12"/>
+<rect x="1115" y="512" width="405" height="150" rx="12"/>
+<rect x="1115" y="678" width="405" height="150" rx="12"/>
+</g>
+<g fill="#123343">
+<text x="1138" y="214" font-size="21" font-weight="700">Validación por usuarios</text>
+<text x="1138" y="247" font-size="17">Ejemplo: evaluar el trabajo en un</text>
+<text x="1138" y="273" font-size="17">puesto compartido, con un guion acordado.</text>
+<text x="1138" y="308" font-size="16" font-weight="600" fill="#71540a">No hay aceptación formal registrada.</text>
+<text x="1138" y="380" font-size="21" font-weight="700">Sistema desplegado en Docker</text>
+<text x="1138" y="413" font-size="17">TC-006: navegador + Express + MariaDB.</text>
+<text x="1138" y="439" font-size="17">Se conservan el fallo 429 y la aprobación.</text>
+<text x="1138" y="474" font-size="16" font-weight="600" fill="#08735e">Piloto Behave aprobado · seis pasos.</text>
+<text x="1138" y="546" font-size="21" font-weight="700">Interacciones y fronteras</text>
+<text x="1138" y="579" font-size="17">Ejemplo: HTTP con repositorio simulado.</text>
+<text x="1138" y="605" font-size="17">API y MariaDB reales: verificadas en beta.</text>
+<text x="1138" y="640" font-size="16" font-weight="600" fill="#53667a">Los dobles se identifican en otras pruebas.</text>
+<text x="1138" y="712" font-size="21" font-weight="700">Comprobaciones acotadas</text>
+<text x="1138" y="745" font-size="17">Ejemplos: edad, puertos y validadores</text>
+<text x="1138" y="771" font-size="17">de rutas y relaciones de respaldos.</text>
+<text x="1138" y="806" font-size="16" font-weight="600" fill="#08735e">Selección inicial: 13 aprobadas.</text>
+</g>
+<rect x="80" y="865" width="1440" height="92" rx="12" fill="#e7edf5"/>
+<text x="105" y="898" font-size="19" font-weight="700" fill="#314660">COMPLEMENTO · QC ESTÁTICO DE LOS ARTEFACTOS</text>
+<text x="105" y="929" font-size="19" fill="#425a70">Buscar patrones en el código aporta evidencia estructural; no acredita la ejecución de una API ni de la interfaz.</text>
+<text x="80" y="997" font-size="17" fill="#53667a">Esquema conceptual: las áreas no representan porcentajes, cantidad de casos ni cobertura de código.</text>
+</g>
+</svg>

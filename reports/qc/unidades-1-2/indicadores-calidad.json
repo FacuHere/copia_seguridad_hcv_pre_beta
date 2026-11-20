@@ -1,0 +1,79 @@
+{
+  "fecha_cliente": "2026-11-16",
+  "alcance_ciclo": "QC-U3-001",
+  "casos_seleccionados": [
+    "TC-006",
+    "TC-007",
+    "TC-014",
+    "TC-015",
+    "TC-017",
+    "TC-018"
+  ],
+  "casos_con_behave_aprobado": {
+    "numerador": 1,
+    "denominador": 6,
+    "porcentaje": 16.67,
+    "interpretacion": "Cobertura de automatización del ciclo seleccionado, no cobertura de código ni de todos los requisitos."
+  },
+  "resultados_manuales_contradictorios": {
+    "cantidad": 10,
+    "interpretacion": "Hallazgos documentales; no se infiere si esas pruebas manuales se realizaron."
+  },
+  "requisitos_con_brecha_TC": [
+    "RF-3.3",
+    "RF-4.1",
+    "RF-4.6",
+    "RF-5.1",
+    "RF-5.2",
+    "RF-7.1"
+  ],
+  "registros_behave_por_tipo": {
+    "automatizacion": 2,
+    "producto": 1,
+    "ninguno": 2
+  },
+  "segundos_automaticos_pasos": [
+    {
+      "archivo": "TC-015-20261116-143246.json",
+      "segundos": 0.162331,
+      "tipo_hallazgo": "automatizacion",
+      "imagen": null,
+      "interpretacion": "Duración de pasos registrada por Behave; no esfuerzo humano ni latencia individual de login."
+    },
+    {
+      "archivo": "TC-015-20261116-144536.json",
+      "segundos": 5.269044,
+      "tipo_hallazgo": "automatizacion",
+      "imagen": null,
+      "interpretacion": "Duración de pasos registrada por Behave; no esfuerzo humano ni latencia individual de login."
+    },
+    {
+      "archivo": "TC-015-20261116-150951.json",
+      "segundos": 2.143813,
+      "tipo_hallazgo": "producto",
+      "imagen": "sha256:c58521b74fd11d5193d27f0e5d4382936c30951887c98104c2f662918e63d72e",
+      "interpretacion": "Duración de pasos registrada por Behave; no esfuerzo humano ni latencia individual de login."
+    },
+    {
+      "archivo": "TC-015-20261116-151206.json",
+      "segundos": 2.262328,
+      "tipo_hallazgo": "ninguno",
+      "imagen": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb",
+      "interpretacion": "Duración de pasos registrada por Behave; no esfuerzo humano ni latencia individual de login."
+    },
+    {
+      "archivo": "QC-20261116-160706-645857.json",
+      "segundos": 2.537803,
+      "tipo_hallazgo": "ninguno",
+      "imagen": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb",
+      "interpretacion": "Duración de pasos registrada por Behave; no esfuerzo humano ni latencia individual de login."
+    }
+  ],
+  "esfuerzo_humano_horas": null,
+  "costos_monetarios": null,
+  "limitaciones": [
+    "No se calcula disponibilidad del sistema ni ahorro económico.",
+    "No se mezclan versiones para una tasa de calidad.",
+    "Sin evidencia de incidentes clínicos productivos o costos externos."
+  ]
+}

@@ -63,9 +63,11 @@ Las rutas indicadas son rutas completas, después del prefijo instalado en `serv
 | `GET /api/auth/me` | Sesión válida | Devuelve `{"user":{"id":1,"username":"...","displayName":"...","roles":["..."]}}`. |
 | `POST /api/auth/logout` | Cookie opcional | Invalida la sesión activa y borra la cookie. Respuesta `204` sin cuerpo; si no puede comprobarse o invalidarse la sesión puede responder `503`. |
 
-El login puede responder `400 INVALID_CREDENTIALS_FORMAT`, `401 INVALID_LOGIN`, `429 LOGIN_RATE_LIMITED` (incluye `Retry-After`) o `503` si la base no está disponible.
+El login puede responder `400 INVALID_CREDENTIALS_FORMAT`, `401 INVALID_LOGIN` o `503` si la base no está disponible.
 
-El contador por IP activa el bloqueo al registrar el décimo fallo dentro de la ventana de 15 minutos; las solicitudes durante los siguientes 15 minutos responden `429`. Un login correcto limpia ese contador. Al cerrar o perder la sesión, el frontend borra fichas, formularios y referencias de respaldo; las respuestas y colas de carga de una sesión anterior no actualizan la vista ni continúan bajo otra sesión.
+Los fallos de credenciales no generan bloqueos automáticos por IP ni por cuenta, ni esperas progresivas. Cada solicitud vuelve a validar las credenciales: una cuenta activa puede ingresar inmediatamente con la contraseña correcta, aunque antes se hayan acumulado fallos desde el mismo puesto o una IP compartida. Se conserva la auditoría `auth.login_failed` para fallos con formato válido, sin guardar el nombre de usuario intentado ni la contraseña. El login no consulta ni modifica la tabla heredada `auth_login_attempts`, por lo que sus bloqueos previos tampoco impiden el ingreso. No emite `429 LOGIN_RATE_LIMITED` ni `Retry-After` por intentos fallidos.
+
+Al cerrar o perder la sesión, el frontend borra fichas, formularios y referencias de respaldo; las respuestas y colas de carga de una sesión anterior no actualizan la vista ni continúan bajo otra sesión.
 
 ### Pacientes
 
@@ -100,7 +102,7 @@ El backend asigna el servicio activo `GENERAL`; el cliente no envía `serviceId`
 | `PUT /api/documentos/{id}` | `documents.replace` | `multipart/form-data`, campo de archivo `file`; mantiene `documents.id`. `200 {"data":{id,patientId,studyId,originalName,mimeType,sizeBytes,sha256,updatedBy}}`. |
 | `DELETE /api/documentos/{id}` | `documents.delete` | Elimina físicamente el archivo y su registro tras completar el journal. Respuesta `204` sin cuerpo. |
 
-El código acepta PDF, DOC, DOCX, JPG/JPEG, PNG, GIF, WEBP y `.dcm`. DOC/DOCX están incluidos porque así lo valida actualmente `document-storage.js`, aunque los formatos originalmente previstos deben revisarse si se cambia esa política.
+El código acepta PDF, DOC, DOCX, JPG/JPEG, PNG, GIF, WEBP y `.dcm`. DOC/DOCX están incluidos porque así lo valida actualmente `document-storage.js`, aunque los formatos originalmente previstos deben revisarse si se cambia esa política. El tamaño máximo es inclusivo: se admite un archivo de exactamente `MAX_FILE_SIZE_BYTES` bytes y se rechaza el que lo supera. Los nombres multipart enviados en UTF-8 conservan espacios y tildes.
 
 El soporte DICOM se limita al almacenamiento privado y la descarga autorizada de archivos originales, con SHA-256. Cada carga recibe un archivo; un estudio puede contener varios `.dcm`. Además de los controles generales de extensión/MIME, tamaño, nombre y ruta, la comprobación de contenido DICOM solo exige que no esté vacío: no interpreta `DICM`, tags o series ni valida completamente el formato. No hay visor, PACS, DICOMweb o integración con equipos, ni conversión a imágenes comunes. El inline solo se admite para PDF e imágenes; DICOM se descarga por `/download`.
 
@@ -164,7 +166,6 @@ Errores de aplicación relevantes verificados en los handlers y servicios:
 | `413` | `FILE_TOO_LARGE` / `REQUEST_TOO_LARGE` | El archivo supera `MAX_FILE_SIZE_BYTES` o el JSON supera el límite del parser. |
 | `415` | `UNSUPPORTED_FILE_TYPE`, `MIME_MISMATCH`, `INVALID_FILE_CONTENT`, `INLINE_NOT_SUPPORTED` | Tipo/contenido no permitido o formato que no tiene visualización inline. |
 | `422` | `INVALID_DATA` | Los datos incumplen una restricción de MariaDB; `STUDY_DATE_IMMUTABLE` y `PATIENT_REASSIGNMENT_NOT_ALLOWED` protegen la fecha y la asociación del estudio. |
-| `429` | `LOGIN_RATE_LIMITED` | Se superó el límite temporal de intentos; el servidor añade `Retry-After`. |
 | `503` | `DATABASE_UNAVAILABLE`, `AUTH_UNAVAILABLE`, `FILE_STORAGE_NOT_CONFIGURED`, `FILE_UPLOAD_NOT_CONFIGURED`, `GENERAL_SERVICE_NOT_CONFIGURED`, `STORAGE_RECOVERY_REQUIRED` | Base/sesión, configuración de archivos, servicio GENERAL o recuperación no disponibles. |
 
 La lista resume los errores observados y no reemplaza el código como fuente de verdad. Algunas respuestas de error específicas usan otro código para la misma clase de status, y el `requestId` en el cuerpo no es uniforme.

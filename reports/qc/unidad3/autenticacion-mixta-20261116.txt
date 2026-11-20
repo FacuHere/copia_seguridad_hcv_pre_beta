@@ -1,0 +1,38 @@
+
+> historial-clinico-visual@1.0.0 test
+> node --test --test-reporter=tap test/auth.test.js
+
+TAP version 13
+# Subtest: más de diez fallos desde una misma IP permiten ingresar inmediatamente con la misma cuenta y con otra
+ok 1 - más de diez fallos desde una misma IP permiten ingresar inmediatamente con la misma cuenta y con otra
+  ---
+  duration_ms: 1029.1675
+  type: 'test'
+  ...
+# Subtest: los fallos de distintas cuentas o cuentas inexistentes no impiden ingresar desde la IP compartida
+ok 2 - los fallos de distintas cuentas o cuentas inexistentes no impiden ingresar desde la IP compartida
+  ---
+  duration_ms: 863.2927
+  type: 'test'
+  ...
+# Subtest: el login conserva la validación de formato sin acceder a MariaDB ni crear sesiones
+ok 3 - el login conserva la validación de formato sin acceder a MariaDB ni crear sesiones
+  ---
+  duration_ms: 0.5767
+  type: 'test'
+  ...
+# Subtest: un fallo de auditoría revierte la transacción y libera la conexión
+ok 4 - un fallo de auditoría revierte la transacción y libera la conexión
+  ---
+  duration_ms: 58.0347
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2181.9987

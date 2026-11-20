@@ -1,0 +1,38 @@
+{
+  "inicio": "2026-11-17T14:55:41.086676+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "cli",
+  "entorno": {},
+  "resultados": [
+    {
+      "caso": "TC-190",
+      "objetivo": "Crear administrador inicial por CLI y rechazar un segundo bootstrap",
+      "canal": "CLI real sobre la misma base beta; usuarios y datos recuperados desde resguardo",
+      "inicio": "2026-11-17T14:55:41.572350+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El CLI real crea el administrador en la misma base temporalmente sin usuarios",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "El CLI real crea el administrador en la misma base temporalmente sin usuarios",
+      "duracion_segundos": 1.57
+    }
+  ]
+}

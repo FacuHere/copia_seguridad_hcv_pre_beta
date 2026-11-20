@@ -1,0 +1,816 @@
+{
+  "version": 2,
+  "fecha": "2026-11-17",
+  "documento": "docs/qc-unidad-4-diseno-pruebas.md",
+  "estado": "30 puntos ejecutados y aprobados por API en Docker beta",
+  "convenciones": {
+    "identificadores_u4": "Identifican puntos/variantes de diseño, no nuevos TC.",
+    "tc_origen": "Referencia al caso vigente del plan; las siete fronteras inicialmente sin caso tienen TC-192 a TC-198.",
+    "dominio": "Longitudes de cadenas ASCII sin espacios exteriores; no cubre todos los tipos JSON ni Unicode.",
+    "dependencias": "Mantener válidos los demás campos y confirmar permisos, perfil configurado, servicio disponible y usuario no existente cuando corresponda.",
+    "canales": "Ejecución API aprobada según el cierre de la campaña; los recorridos de interfaz se identifican por separado.",
+    "password": "Regla administrativa de alta, distinta de la validación de credenciales en login.",
+    "opcionales": "DNI, teléfono, dirección y notas: se cubre únicamente la frontera superior; ausencia/null/espacios quedan fuera de estos puntos."
+  },
+  "fuentes": [
+    {
+      "ruta": "docs/Plan de pruebas manuales QC HCV.docx",
+      "sha256": "16ae4bd86320f34e79e76b8d2b7380c88da5d9b9a32c2bcadf911f0d305c6d77"
+    },
+    {
+      "ruta": "docs/api-rest-hcv.md",
+      "sha256": "94be1f84e7a6391d05d849d90784249adde8c41c6ec8a77a31675715538cec30"
+    },
+    {
+      "ruta": "docs/openapi-hcv.yaml",
+      "sha256": "98ed99924b2ae13e3e1ca666cf2274c1fa162e7a5d5403e855e9014a62f6abc3"
+    },
+    {
+      "ruta": "public/index.html",
+      "sha256": "a488c128e19cf8061bf56dbcfb3c1fab71d06434030e3dfdb058b2e4f68b0320"
+    },
+    {
+      "ruta": "C:\\Users\\Hered\\Downloads\\unidad4_pruebas_funcionales (2).html",
+      "sha256": "76130910f620211cd7added922045946d907edbccca404bf8cca864c6a4fb92f",
+      "uso": "Apartados 1.2, 2, 3, 4 y 5; definiciones BAOE consultadas también en las tarjetas del HTML original."
+    }
+  ],
+  "datos": "reports/qc/unidad4/datos-longitudes.json",
+  "resumen": {
+    "campos": 7,
+    "fronteras": 10,
+    "puntos": 30,
+    "puntos_con_tc_origen": 30,
+    "puntos_sin_tc_dedicado": 0,
+    "ejecuciones_nuevas": 30
+  },
+  "campos": [
+    {
+      "campo": "fullName",
+      "nombre": "Nombre del paciente",
+      "rn": "RN-002",
+      "rf": "RF-2.3",
+      "hu": [
+        "HU-07"
+      ],
+      "metodo": "POST",
+      "ruta": "/api/pacientes",
+      "minimo_en_este_diseno": 1,
+      "maximo": 240,
+      "unidad": "carácter ASCII; equivale a un punto Unicode y una unidad UTF-16",
+      "alcance_bva": "inferior y superior",
+      "fronteras": [
+        {
+          "tipo": "inferior",
+          "limite": 1,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-NOM-INFERIOR-00000",
+              "longitud": 0,
+              "dato": "textos_ascii.0",
+              "tc_origen": "TC-026",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 400,
+                "error_code": "INVALID_PATIENT",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir el alta por el mínimo/obligatoriedad del campo. La validación puede impedir el envío o mostrar el rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-NOM-INFERIOR-00001",
+              "longitud": 1,
+              "dato": "textos_ascii.1",
+              "tc_origen": "TC-192",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-NOM-INFERIOR-00002",
+              "longitud": 2,
+              "dato": "textos_ascii.2",
+              "tc_origen": "TC-193",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            }
+          ]
+        },
+        {
+          "tipo": "superior",
+          "limite": 240,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-NOM-SUPERIOR-00239",
+              "longitud": 239,
+              "dato": "textos_ascii.239",
+              "tc_origen": "TC-031",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-NOM-SUPERIOR-00240",
+              "longitud": 240,
+              "dato": "textos_ascii.240",
+              "tc_origen": "TC-032",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-NOM-SUPERIOR-00241",
+              "longitud": 241,
+              "dato": "textos_ascii.241",
+              "tc_origen": "TC-033",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 400,
+                "error_code": "INVALID_PATIENT",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir/limitar el exceso; no guardar una longitud superior al máximo. Si recorta a un valor válido, registrar el recorte; no acredita rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "campo": "dni",
+      "nombre": "DNI",
+      "rn": "RN-002",
+      "rf": "RF-2.3",
+      "hu": [
+        "HU-07"
+      ],
+      "metodo": "POST",
+      "ruta": "/api/pacientes",
+      "minimo_en_este_diseno": null,
+      "maximo": 32,
+      "unidad": "carácter ASCII; equivale a un punto Unicode y una unidad UTF-16",
+      "alcance_bva": "solo superior",
+      "fronteras": [
+        {
+          "tipo": "superior",
+          "limite": 32,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-DNI-SUPERIOR-00031",
+              "longitud": 31,
+              "dato": "textos_ascii.31",
+              "tc_origen": "TC-034",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-DNI-SUPERIOR-00032",
+              "longitud": 32,
+              "dato": "textos_ascii.32",
+              "tc_origen": "TC-035",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-DNI-SUPERIOR-00033",
+              "longitud": 33,
+              "dato": "textos_ascii.33",
+              "tc_origen": "TC-036",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 400,
+                "error_code": "INVALID_PATIENT",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir/limitar el exceso; no guardar una longitud superior al máximo. Si recorta a un valor válido, registrar el recorte; no acredita rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "campo": "phone",
+      "nombre": "Teléfono",
+      "rn": "RN-002",
+      "rf": "RF-2.3",
+      "hu": [
+        "HU-07"
+      ],
+      "metodo": "POST",
+      "ruta": "/api/pacientes",
+      "minimo_en_este_diseno": null,
+      "maximo": 80,
+      "unidad": "carácter ASCII; equivale a un punto Unicode y una unidad UTF-16",
+      "alcance_bva": "solo superior",
+      "fronteras": [
+        {
+          "tipo": "superior",
+          "limite": 80,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-TEL-SUPERIOR-00079",
+              "longitud": 79,
+              "dato": "textos_ascii.79",
+              "tc_origen": "TC-037",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-TEL-SUPERIOR-00080",
+              "longitud": 80,
+              "dato": "textos_ascii.80",
+              "tc_origen": "TC-038",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-TEL-SUPERIOR-00081",
+              "longitud": 81,
+              "dato": "textos_ascii.81",
+              "tc_origen": "TC-039",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 400,
+                "error_code": "INVALID_PATIENT",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir/limitar el exceso; no guardar una longitud superior al máximo. Si recorta a un valor válido, registrar el recorte; no acredita rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "campo": "address",
+      "nombre": "Dirección",
+      "rn": "RN-002",
+      "rf": "RF-2.3",
+      "hu": [
+        "HU-07"
+      ],
+      "metodo": "POST",
+      "ruta": "/api/pacientes",
+      "minimo_en_este_diseno": null,
+      "maximo": 500,
+      "unidad": "carácter ASCII; equivale a un punto Unicode y una unidad UTF-16",
+      "alcance_bva": "solo superior",
+      "fronteras": [
+        {
+          "tipo": "superior",
+          "limite": 500,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-DIR-SUPERIOR-00499",
+              "longitud": 499,
+              "dato": "textos_ascii.499",
+              "tc_origen": "TC-040",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-DIR-SUPERIOR-00500",
+              "longitud": 500,
+              "dato": "textos_ascii.500",
+              "tc_origen": "TC-041",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-DIR-SUPERIOR-00501",
+              "longitud": 501,
+              "dato": "textos_ascii.501",
+              "tc_origen": "TC-042",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 400,
+                "error_code": "INVALID_PATIENT",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir/limitar el exceso; no guardar una longitud superior al máximo. Si recorta a un valor válido, registrar el recorte; no acredita rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "campo": "notes",
+      "nombre": "Notas",
+      "rn": "RN-002",
+      "rf": "RF-2.3",
+      "hu": [
+        "HU-07"
+      ],
+      "metodo": "POST",
+      "ruta": "/api/pacientes",
+      "minimo_en_este_diseno": null,
+      "maximo": 10000,
+      "unidad": "carácter ASCII; equivale a un punto Unicode y una unidad UTF-16",
+      "alcance_bva": "solo superior",
+      "fronteras": [
+        {
+          "tipo": "superior",
+          "limite": 10000,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-NOT-SUPERIOR-09999",
+              "longitud": 9999,
+              "dato": "textos_ascii.9999",
+              "tc_origen": "TC-043",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-NOT-SUPERIOR-10000",
+              "longitud": 10000,
+              "dato": "textos_ascii.10000",
+              "tc_origen": "TC-044",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            },
+            {
+              "id": "U4-NOT-SUPERIOR-10001",
+              "longitud": 10001,
+              "dato": "textos_ascii.10001",
+              "tc_origen": "TC-045",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 400,
+                "error_code": "INVALID_PATIENT",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir/limitar el exceso; no guardar una longitud superior al máximo. Si recorta a un valor válido, registrar el recorte; no acredita rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+              "sha256_reporte": "69c68f501d57ef4df1e390c98ae71c4f1a58303d87810ec557917c318420bb8a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "campo": "username",
+      "nombre": "Usuario nuevo",
+      "rn": "RN-005",
+      "rf": "RF-5.3",
+      "hu": [
+        "HU-27",
+        "HU-29"
+      ],
+      "metodo": "POST",
+      "ruta": "/api/usuarios",
+      "minimo_en_este_diseno": 3,
+      "maximo": 100,
+      "unidad": "carácter ASCII; equivale a un punto Unicode y una unidad UTF-16",
+      "alcance_bva": "inferior y superior",
+      "fronteras": [
+        {
+          "tipo": "inferior",
+          "limite": 3,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-USR-INFERIOR-00002",
+              "longitud": 2,
+              "dato": "usuarios_ascii.2",
+              "tc_origen": "TC-122",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 422,
+                "error_code": "INVALID_USER",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir el alta por el mínimo/obligatoriedad del campo. La validación puede impedir el envío o mostrar el rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113227-usuarios.json",
+              "sha256_reporte": "3da053d0d15064862fc70710dcb80fc3aaebaf104b5f84161edd79f1e239a426"
+            },
+            {
+              "id": "U4-USR-INFERIOR-00003",
+              "longitud": 3,
+              "dato": "usuarios_ascii.3",
+              "tc_origen": "TC-125",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113227-usuarios.json",
+              "sha256_reporte": "3da053d0d15064862fc70710dcb80fc3aaebaf104b5f84161edd79f1e239a426"
+            },
+            {
+              "id": "U4-USR-INFERIOR-00004",
+              "longitud": 4,
+              "dato": "usuarios_ascii.4",
+              "tc_origen": "TC-194",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-114734-fronteras.json",
+              "sha256_reporte": "9d8e70d30cbe06784b8bf323c49677fa67cbe0fcab460f6214409663663c3b4d"
+            }
+          ]
+        },
+        {
+          "tipo": "superior",
+          "limite": 100,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-USR-SUPERIOR-00099",
+              "longitud": 99,
+              "dato": "usuarios_ascii.99",
+              "tc_origen": "TC-195",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-114734-fronteras.json",
+              "sha256_reporte": "9d8e70d30cbe06784b8bf323c49677fa67cbe0fcab460f6214409663663c3b4d"
+            },
+            {
+              "id": "U4-USR-SUPERIOR-00100",
+              "longitud": 100,
+              "dato": "usuarios_ascii.100",
+              "tc_origen": "TC-126",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113227-usuarios.json",
+              "sha256_reporte": "3da053d0d15064862fc70710dcb80fc3aaebaf104b5f84161edd79f1e239a426"
+            },
+            {
+              "id": "U4-USR-SUPERIOR-00101",
+              "longitud": 101,
+              "dato": "usuarios_ascii.101",
+              "tc_origen": "TC-127",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 422,
+                "error_code": "INVALID_USER",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir/limitar el exceso; no guardar una longitud superior al máximo. Si recorta a un valor válido, registrar el recorte; no acredita rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113227-usuarios.json",
+              "sha256_reporte": "3da053d0d15064862fc70710dcb80fc3aaebaf104b5f84161edd79f1e239a426"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "campo": "password",
+      "nombre": "Contraseña administrativa de alta",
+      "rn": "RN-005",
+      "rf": "RF-5.3",
+      "hu": [
+        "HU-27",
+        "HU-29"
+      ],
+      "metodo": "POST",
+      "ruta": "/api/usuarios",
+      "minimo_en_este_diseno": 12,
+      "maximo": 1024,
+      "unidad": "carácter ASCII; equivale a un punto Unicode y una unidad UTF-16",
+      "alcance_bva": "inferior y superior",
+      "fronteras": [
+        {
+          "tipo": "inferior",
+          "limite": 12,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-CLA-INFERIOR-00011",
+              "longitud": 11,
+              "dato": "textos_ascii.11",
+              "tc_origen": "TC-128",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 422,
+                "error_code": "INVALID_PASSWORD",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir el alta por el mínimo/obligatoriedad del campo. La validación puede impedir el envío o mostrar el rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113227-usuarios.json",
+              "sha256_reporte": "3da053d0d15064862fc70710dcb80fc3aaebaf104b5f84161edd79f1e239a426"
+            },
+            {
+              "id": "U4-CLA-INFERIOR-00012",
+              "longitud": 12,
+              "dato": "textos_ascii.12",
+              "tc_origen": "TC-129",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113227-usuarios.json",
+              "sha256_reporte": "3da053d0d15064862fc70710dcb80fc3aaebaf104b5f84161edd79f1e239a426"
+            },
+            {
+              "id": "U4-CLA-INFERIOR-00013",
+              "longitud": 13,
+              "dato": "textos_ascii.13",
+              "tc_origen": "TC-130",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113227-usuarios.json",
+              "sha256_reporte": "3da053d0d15064862fc70710dcb80fc3aaebaf104b5f84161edd79f1e239a426"
+            }
+          ]
+        },
+        {
+          "tipo": "superior",
+          "limite": 1024,
+          "tecnica": "BVA-3",
+          "puntos": [
+            {
+              "id": "U4-CLA-SUPERIOR-01023",
+              "longitud": 1023,
+              "dato": "textos_ascii.1023",
+              "tc_origen": "TC-196",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-114734-fronteras.json",
+              "sha256_reporte": "9d8e70d30cbe06784b8bf323c49677fa67cbe0fcab460f6214409663663c3b4d"
+            },
+            {
+              "id": "U4-CLA-SUPERIOR-01024",
+              "longitud": 1024,
+              "dato": "textos_ascii.1024",
+              "tc_origen": "TC-197",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 201,
+                "error_code": null,
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "Alta con valor exacto"
+              },
+              "expectativa_interfaz": "Admitir y conservar el valor completo al guardar",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-114734-fronteras.json",
+              "sha256_reporte": "9d8e70d30cbe06784b8bf323c49677fa67cbe0fcab460f6214409663663c3b4d"
+            },
+            {
+              "id": "U4-CLA-SUPERIOR-01025",
+              "longitud": 1025,
+              "dato": "textos_ascii.1025",
+              "tc_origen": "TC-198",
+              "estado_diseno": "Caso dedicado identificado",
+              "estado_ejecucion": "aprobado por API el 17/11/2026",
+              "expectativa_api": {
+                "http": 422,
+                "error_code": "INVALID_PASSWORD",
+                "condicion": "Resto del cuerpo válido, sesión autorizada, entorno operativo y ausencia de conflicto de usuario.",
+                "persistencia": "No crear el recurso por esta solicitud"
+              },
+              "expectativa_interfaz": "Impedir/limitar el exceso; no guardar una longitud superior al máximo. Si recorta a un valor válido, registrar el recorte; no acredita rechazo del servidor.",
+              "nota_trazabilidad": "La ejecución corresponde al objetivo API de la ficha actualizada; los pasos de interfaz se distinguen en sus registros.",
+              "reporte": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-114734-fronteras.json",
+              "sha256_reporte": "9d8e70d30cbe06784b8bf323c49677fa67cbe0fcab460f6214409663663c3b4d"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faltantes": [],
+  "ejemplos_baoe": [
+    {
+      "tc": "TC-032",
+      "canal": "interfaz",
+      "seccion": "6.1",
+      "canal_diseno": "interfaz",
+      "canal_ejecutado": "API",
+      "estado_ejecucion": "aprobado por API el 17/11/2026"
+    },
+    {
+      "tc": "TC-033",
+      "canal": "API propuesta",
+      "seccion": "6.2",
+      "canal_diseno": "API propuesta",
+      "canal_ejecutado": "API",
+      "estado_ejecucion": "aprobado por API el 17/11/2026"
+    },
+    {
+      "tc": "TC-122",
+      "canal": "interfaz",
+      "seccion": "6.3",
+      "canal_diseno": "interfaz",
+      "canal_ejecutado": "API",
+      "estado_ejecucion": "aprobado por API el 17/11/2026"
+    },
+    {
+      "tc": "TC-129",
+      "canal": "interfaz",
+      "seccion": "6.4",
+      "canal_diseno": "interfaz",
+      "canal_ejecutado": "API",
+      "estado_ejecucion": "aprobado por API el 17/11/2026"
+    }
+  ],
+  "puntos_sin_tc_dedicado": []
+}

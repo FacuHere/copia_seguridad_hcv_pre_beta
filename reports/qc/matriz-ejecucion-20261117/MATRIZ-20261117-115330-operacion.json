@@ -1,0 +1,441 @@
+{
+  "inicio": "2026-11-17T14:53:30.301128+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "operacion",
+  "entorno": {},
+  "resultados": [
+    {
+      "caso": "TC-022",
+      "objetivo": "Comprobar TTL de ocho horas y rechazo efectivo de una sesión vencida preparada",
+      "canal": "API y MariaDB reales; vencimiento adelantado solo para la cuenta sintética",
+      "inicio": "2026-11-17T14:53:30.301178+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "La sesión se crea con duración de 28800 segundos (ocho horas)",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 401; esperado [401]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.398
+    },
+    {
+      "caso": "TC-115",
+      "objetivo": "Aplicar permisos reales de una cuenta técnica system_admin",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:53:30.708413+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/permisos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/97",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/permisos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El perfil técnico conserva exactamente los dos permisos administrativos",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/usuarios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/97: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 403; esperado [403]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.293
+    },
+    {
+      "caso": "TC-144",
+      "objetivo": "Impedir desactivar al último administrador desde otra cuenta autorizada",
+      "canal": "API y MariaDB reales; estados de administradores recuperados en finally",
+      "inicio": "2026-11-17T14:53:31.010591+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/89",
+          "esperado": [
+            409
+          ],
+          "obtenido": 409,
+          "codigo_error": "LAST_ADMIN_PROTECTION"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/89: HTTP 409; esperado [409]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se rechaza específicamente por protección del último administrador",
+          "cumple": true
+        },
+        {
+          "criterio": "El último administrador permanece activo",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.535
+    },
+    {
+      "caso": "TC-145",
+      "objetivo": "Conservar roles técnicos o múltiples y deshabilitar su edición de perfil",
+      "canal": "Interfaz, API y MariaDB reales; roles preparados solo en cuentas sintéticas",
+      "inicio": "2026-11-17T14:53:31.558807+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/90",
+          "esperado": [
+            409
+          ],
+          "obtenido": 409,
+          "codigo_error": "ROLE_ASSIGNMENT_UNSUPPORTED"
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/90",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/91",
+          "esperado": [
+            409
+          ],
+          "obtenido": 409,
+          "codigo_error": "ROLE_ASSIGNMENT_UNSUPPORTED"
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/91",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/90: HTTP 409; esperado [409]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/90: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Editar el nombre conserva los roles técnicos o múltiples",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/91: HTTP 409; esperado [409]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/91: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Editar el nombre conserva los roles técnicos o múltiples",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 3.243
+    },
+    {
+      "caso": "TC-185",
+      "objetivo": "Informar caída real de MariaDB y recuperar el servicio después",
+      "canal": "Interfaz y API reales; parada y arranque controlados de la misma MariaDB beta",
+      "inicio": "2026-11-17T14:53:34.811152+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/health/database",
+          "esperado": [
+            503
+          ],
+          "obtenido": 503,
+          "codigo_error": null
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/health/database",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/health/database: HTTP 503; esperado [503]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/health/database: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 28.665
+    },
+    {
+      "caso": "TC-189",
+      "objetivo": "Recuperar al reiniciar una carga preparada en el journal real",
+      "canal": "MariaDB, filesystem y arranque real de la misma API beta",
+      "inicio": "2026-11-17T14:54:03.485852+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/119/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/health/storage",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La operación quedó preparada antes del reinicio",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/119/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El arranque recuperó exactamente los bytes preparados",
+          "cumple": true
+        },
+        {
+          "criterio": "El journal quedó completado después del arranque",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/health/storage: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El almacenamiento vuelve a quedar listo",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 6.232
+    }
+  ]
+}

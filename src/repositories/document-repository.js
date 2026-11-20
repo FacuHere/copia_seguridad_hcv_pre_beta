@@ -1,6 +1,6 @@
 async function findStudyForUpload(connection, studyId, lock = false) {
   const rows = await connection.query(
-    `SELECT s.id AS studyId, s.patient_id AS patientId, s.study_date AS studyDate, s.study_type AS studyType,
+    `SELECT s.id AS studyId, s.patient_id AS patientId, DATE_FORMAT(s.study_date, '%Y-%m-%d') AS studyDate, s.study_type AS studyType,
             p.dni AS patientDni, p.full_name AS patientName
      FROM studies s JOIN patients p ON p.id = s.patient_id
      WHERE s.id = ? LIMIT 1${lock ? ' FOR UPDATE' : ''}`,

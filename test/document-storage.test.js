@@ -35,6 +35,23 @@ function multipartRequest(content, filename, mimeType = 'application/octet-strea
   return req;
 }
 
+test('admite el límite inclusivo de archivo y conserva nombres UTF-8', async () => {
+  await withRoot(async root => {
+    const limite = 256;
+    for (const cantidad of [limite - 1, limite]) {
+      const contenido = Buffer.concat([Buffer.from('%PDF-1.4\n'), Buffer.alloc(cantidad - 9, 32)]);
+      const archivo = await receiveSingleFile(multipartRequest(contenido, 'Informe clínico QC.pdf', 'application/pdf'), root, limite);
+      assert.equal(archivo.sizeBytes, cantidad);
+      assert.equal(archivo.originalName, 'Informe clínico QC.pdf');
+      assert.deepEqual(await fs.readFile(path.join(root, archivo.stagingKey)), contenido);
+      await unlinkKey(root, archivo.stagingKey);
+    }
+    const excesivo = Buffer.concat([Buffer.from('%PDF-1.4\n'), Buffer.alloc(limite + 1 - 9, 32)]);
+    await assert.rejects(receiveSingleFile(multipartRequest(excesivo, 'exceso.pdf', 'application/pdf'), root, limite), error => error.code === 'FILE_TOO_LARGE');
+    assert.deepEqual(await fs.readdir(path.join(root, '.staging')), []);
+  });
+});
+
 test('private storage config requires absolute root and positive explicit upload limit', () => {
   assert.equal(readFileStorageConfig({}).uploadsEnabled, false);
   assert.throws(() => readFileStorageConfig({ FILE_STORAGE_ROOT: 'relative/path' }), /ruta absoluta/);

@@ -1,0 +1,35 @@
+{
+  "fecha_cliente": "2026-11-16",
+  "actividades_completadas": [
+    "Ciclo PHVA local U1-QC-002 documentado con antes/después y límites.",
+    "Clasificación de costos sin inventar horas humanas ni importes.",
+    "Indicadores acotados calculados con fuentes y denominadores.",
+    "Revisión U2-QC-001 de tres RF y tres HU.",
+    "Criterios de aceptación derivados para seis TC; revisión de Chrome/Edge en TC-017/018.",
+    "Revisión INVEST registrada, con criterios parciales/no acreditados visibles.",
+    "DoR/DoD operativos de QC definidos, distintos de aprobación institucional.",
+    "Seis brechas de TC justificadas fuera del ciclo sin declararlas cubiertas.",
+    "Diez contradicciones manuales confirmadas y separadas de las ejecuciones automáticas.",
+    "Mantenimiento local de documentación viva implementado y verificado con TC-015 real."
+  ],
+  "validaciones": {
+    "herramientas_qc": {
+      "aprobadas": 12,
+      "fuente": "reports/qc/unidades-1-2/herramientas-qc-20261116.txt"
+    },
+    "behave": {
+      "casos": 1,
+      "pasos_aprobados": 6,
+      "fuente": "reports/qc/QC-20261116-160706-645857.json"
+    },
+    "fuentes_word": "Huellas originales verificadas; sin cambios."
+  },
+  "pendientes_confirmacion_real": [
+    "Resultados manuales declarados Pass y No ejecutado.",
+    "Reglas institucionales de permisos y contraseñas.",
+    "Aceptación hospitalaria, HTTPS y red real.",
+    "Estimación colectiva y DoD de entrega.",
+    "Horas humanas e importes históricos no registrados."
+  ],
+  "proximo_incremento_tecnico": "Implementar los cinco TC restantes del ciclo, con datos y navegadores preparados."
+}

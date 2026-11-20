@@ -1,0 +1,98 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Documentación viva de pruebas de HCV</title>
+<style>
+:root{color-scheme:light;font-family:Segoe UI,Arial,sans-serif;color:#153249;background:#f1f5f8}
+*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:auto;padding:48px 28px}
+h1{font-size:38px;line-height:1.15;margin:10px 0 18px}h2{font-size:21px;margin:4px 0 12px}
+p{line-height:1.6}.introduccion{max-width:850px}.ceja{font-size:13px;font-weight:700;letter-spacing:1.6px;color:#1b756e}
+.cifras{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:30px 0}
+.cifra,article{background:#fff;border:1px solid #dbe5eb;border-radius:12px}
+.cifra{padding:21px}.cifra strong{display:block;font-size:34px}.cifra span{font-size:14px;color:#4d6578}
+article{padding:25px;margin:20px 0;break-inside:avoid}article header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.identificador{font-size:13px;color:#536a7b;margin:0;overflow-wrap:anywhere}.estado{font-size:13px;font-weight:700;padding:8px 12px;border-radius:20px;white-space:nowrap;background:#edf1f5}
+.passed{background:#dff3ea;color:#126044}.failed,.error{background:#fde9e6;color:#9e3029}
+.pending{background:#fff1cb;color:#765400}
+.traza{font-size:14px;color:#176a70}.tabla{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #e3eaf0;vertical-align:top}th{background:#eff5f8}
+summary{cursor:pointer;font-weight:600;color:#176a70;padding:10px 0}code{font-size:12px;overflow-wrap:anywhere}
+a{color:#146c78}footer{font-size:13px;color:#536a7b;margin-top:28px}
+@media(max-width:650px){main{padding:28px 16px}.cifras{grid-template-columns:repeat(2,1fr)}h1{font-size:30px}article header{display:block}.estado{display:inline-block;margin:8px 0}}
+@media print{body{background:white}main{padding:0}.cifras{gap:8px}article{border-radius:0}details{display:block}}
+</style></head><body><main><p class="ceja">HISTORIAL CLÍNICO VISUAL · CONTROL DE CALIDAD</p>
+<h1>Documentación viva de pruebas</h1>
+<p class="introduccion">Evidencias conservadas de las ejecuciones de Behave. Cada resultado corresponde a su versión y contexto registrados. Una aprobación no reemplaza un fallo anterior ni acredita aceptación hospitalaria.</p>
+<section class="cifras" aria-label="Resumen de ejecuciones"><div class="cifra"><strong>5</strong><span>Reportes conservados</span></div><div class="cifra"><strong>1</strong><span>Casos distintos</span></div><div class="cifra"><strong>2</strong><span>Ejecuciones aprobadas</span></div><div class="cifra"><strong>3</strong><span>Ejecuciones sin aprobación</span></div></section><p>Los conteos corresponden a ejecuciones, no a pasos ni a cobertura de código. No se combinan versiones diferentes para calcular un porcentaje de calidad.</p>
+<article>
+<header><div><p class="identificador">QC-20261116-160706-645857</p>
+<h2>TC-015 — Ingreso de otra cuenta después de intentos fallidos</h2></div>
+<span class="estado passed">Aprobado</span></header>
+<p class="traza">RN-001 → RF-1.1 → HU-01 → TC-015</p>
+<p><strong>Tipo de hallazgo:</strong> Sin fallo informado</p>
+<p><strong>Nota de revisión:</strong> Ejecución registrada automáticamente; una falla requiere clasificación posterior.</p>
+<details><summary>Ver pasos y contexto</summary>
+<div class="tabla"><table><thead><tr><th>Paso</th><th>Comprobación</th><th>Resultado</th><th>Duración</th></tr></thead><tbody><tr><td>1</td><td>que existen las cuentas de prueba A y M activas</td><td>Aprobado</td><td>0.881 s</td></tr><tr><td>2</td><td>que no hay una sesión iniciada en este navegador</td><td>Aprobado</td><td>0.014 s</td></tr><tr><td>3</td><td>que la cuenta M acumuló 12 intentos fallidos desde este navegador</td><td>Aprobado</td><td>1.487 s</td></tr><tr><td>4</td><td>intento ingresar inmediatamente con credenciales válidas de la cuenta A</td><td>Aprobado</td><td>0.144 s</td></tr><tr><td>5</td><td>debo acceder a la aplicación identificado como la cuenta A</td><td>Aprobado</td><td>0.010 s</td></tr><tr><td>6</td><td>no se debe exigir una espera por los intentos fallidos anteriores</td><td>Aprobado</td><td>0.001 s</td></tr></tbody></table></div>
+<p><strong>Imagen de aplicación:</strong> <code>sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb</code></p>
+<p>Versión estable durante la ejecución.</p>
+<p>Duración acumulada de pasos: 2.538 s. No representa esfuerzo humano ni disponibilidad del sistema.</p>
+<p><a href="../QC-20261116-160706-645857.json">Reporte JSON original</a></p>
+</details></article>
+<article>
+<header><div><p class="identificador">TC-015-20261116-151206</p>
+<h2>TC-015 — Ingreso de otra cuenta después de intentos fallidos</h2></div>
+<span class="estado passed">Aprobado</span></header>
+<p class="traza">RN-001 → RF-1.1 → HU-01 → TC-015</p>
+<p><strong>Tipo de hallazgo:</strong> Sin fallo informado</p>
+<p><strong>Nota de revisión:</strong> Después de actualizar únicamente la API beta: doce rechazos 401, acceso válido 200 y seis pasos aprobados.</p>
+<details><summary>Ver pasos y contexto</summary>
+<div class="tabla"><table><thead><tr><th>Paso</th><th>Comprobación</th><th>Resultado</th><th>Duración</th></tr></thead><tbody><tr><td>1</td><td>que existen las cuentas de prueba A y M activas</td><td>Aprobado</td><td>0.761 s</td></tr><tr><td>2</td><td>que no hay una sesión iniciada en este navegador</td><td>Aprobado</td><td>0.015 s</td></tr><tr><td>3</td><td>que la cuenta M acumuló 12 intentos fallidos desde este navegador</td><td>Aprobado</td><td>1.331 s</td></tr><tr><td>4</td><td>intento ingresar inmediatamente con credenciales válidas de la cuenta A</td><td>Aprobado</td><td>0.139 s</td></tr><tr><td>5</td><td>debo acceder a la aplicación identificado como la cuenta A</td><td>Aprobado</td><td>0.015 s</td></tr><tr><td>6</td><td>no se debe exigir una espera por los intentos fallidos anteriores</td><td>Aprobado</td><td>0.001 s</td></tr></tbody></table></div>
+<p><strong>Imagen de aplicación:</strong> <code>sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb</code></p>
+<p>No se registró una comparación de versión al inicio y al final.</p>
+<p>Duración acumulada de pasos: 2.262 s. No representa esfuerzo humano ni disponibilidad del sistema.</p>
+<p><a href="../TC-015-20261116-151206.json">Reporte JSON original</a></p>
+</details></article>
+<article>
+<header><div><p class="identificador">TC-015-20261116-150951</p>
+<h2>TC-015 — Ingreso de otra cuenta después de intentos fallidos</h2></div>
+<span class="estado failed">Fallido</span></header>
+<p class="traza">RN-001 → RF-1.1 → HU-01 → TC-015</p>
+<p><strong>Tipo de hallazgo:</strong> Producto</p>
+<p><strong>Nota de revisión:</strong> Bloqueo compartido reproducido: la otra cuenta recibió HTTP 429 y Retry-After de 899 segundos.</p>
+<details><summary>Ver pasos y contexto</summary>
+<div class="tabla"><table><thead><tr><th>Paso</th><th>Comprobación</th><th>Resultado</th><th>Duración</th></tr></thead><tbody><tr><td>1</td><td>que existen las cuentas de prueba A y M activas</td><td>Aprobado</td><td>0.895 s</td></tr><tr><td>2</td><td>que no hay una sesión iniciada en este navegador</td><td>Aprobado</td><td>0.011 s</td></tr><tr><td>3</td><td>que la cuenta M acumuló 12 intentos fallidos desde este navegador</td><td>Aprobado</td><td>1.203 s</td></tr><tr><td>4</td><td>intento ingresar inmediatamente con credenciales válidas de la cuenta A</td><td>Aprobado</td><td>0.034 s</td></tr><tr><td>5</td><td>debo acceder a la aplicación identificado como la cuenta A</td><td>Fallido</td><td>0.001 s</td></tr><tr><td>6</td><td>no se debe exigir una espera por los intentos fallidos anteriores</td><td>Sin ejecutar</td><td>0.000 s</td></tr></tbody></table></div>
+<p><strong>Imagen de aplicación:</strong> <code>sha256:c58521b74fd11d5193d27f0e5d4382936c30951887c98104c2f662918e63d72e</code></p>
+<p>No se registró una comparación de versión al inicio y al final.</p>
+<p>Duración acumulada de pasos: 2.144 s. No representa esfuerzo humano ni disponibilidad del sistema.</p>
+<p><a href="../TC-015-20261116-150951.json">Reporte JSON original</a></p>
+</details></article>
+<article>
+<header><div><p class="identificador">TC-015-20261116-144536</p>
+<h2>TC-015 — Ingreso de otra cuenta después de intentos fallidos</h2></div>
+<span class="estado failed">Fallido</span></header>
+<p class="traza">RN-001 → RF-1.1 → HU-01 → TC-015</p>
+<p><strong>Tipo de hallazgo:</strong> Automatización</p>
+<p><strong>Nota de revisión:</strong> Espera incorrecta del botón de ingreso después de que la aplicación lo ocultara al autenticar.</p>
+<details><summary>Ver pasos y contexto</summary>
+<div class="tabla"><table><thead><tr><th>Paso</th><th>Comprobación</th><th>Resultado</th><th>Duración</th></tr></thead><tbody><tr><td>1</td><td>que existen las cuentas de prueba A y M activas</td><td>Fallido</td><td>5.269 s</td></tr><tr><td>2</td><td>que no hay una sesión iniciada en este navegador</td><td>Sin ejecutar</td><td>0.000 s</td></tr><tr><td>3</td><td>que la cuenta M acumuló 12 intentos fallidos desde este navegador</td><td>Sin ejecutar</td><td>0.000 s</td></tr><tr><td>4</td><td>intento ingresar inmediatamente con credenciales válidas de la cuenta A</td><td>Sin ejecutar</td><td>0.000 s</td></tr><tr><td>5</td><td>debo acceder a la aplicación identificado como la cuenta A</td><td>Sin ejecutar</td><td>0.000 s</td></tr><tr><td>6</td><td>no se debe exigir una espera por los intentos fallidos anteriores</td><td>Sin ejecutar</td><td>0.000 s</td></tr></tbody></table></div>
+<p><strong>Imagen de aplicación:</strong> <code>Sin versión de aplicación registrada</code></p>
+<p>No se registró una comparación de versión al inicio y al final.</p>
+<p>Duración acumulada de pasos: 5.269 s. No representa esfuerzo humano ni disponibilidad del sistema.</p>
+<p><a href="../TC-015-20261116-144536.json">Reporte JSON original</a></p>
+</details></article>
+<article>
+<header><div><p class="identificador">TC-015-20261116-143246</p>
+<h2>TC-015 — Ingreso de otra cuenta después de intentos fallidos</h2></div>
+<span class="estado error">Error</span></header>
+<p class="traza">RN-001 → RF-1.1 → HU-01 → TC-015</p>
+<p><strong>Tipo de hallazgo:</strong> Automatización</p>
+<p><strong>Nota de revisión:</strong> Error durante la preparación. La terminal permitió identificar un selector ambiguo; el JSON original conserva el estado error sin ese detalle de excepción.</p>
+<details><summary>Ver pasos y contexto</summary>
+<div class="tabla"><table><thead><tr><th>Paso</th><th>Comprobación</th><th>Resultado</th><th>Duración</th></tr></thead><tbody><tr><td>1</td><td>que existen las cuentas de prueba A y M activas</td><td>Error</td><td>0.162 s</td></tr><tr><td>2</td><td>que no hay una sesión iniciada en este navegador</td><td>Sin ejecutar</td><td>0.000 s</td></tr><tr><td>3</td><td>que la cuenta M acumuló 12 intentos fallidos desde este navegador</td><td>Sin ejecutar</td><td>0.000 s</td></tr><tr><td>4</td><td>intento ingresar inmediatamente con credenciales válidas de la cuenta A</td><td>Sin ejecutar</td><td>0.000 s</td></tr><tr><td>5</td><td>debo acceder a la aplicación identificado como la cuenta A</td><td>Sin ejecutar</td><td>0.000 s</td></tr><tr><td>6</td><td>no se debe exigir una espera por los intentos fallidos anteriores</td><td>Sin ejecutar</td><td>0.000 s</td></tr></tbody></table></div>
+<p><strong>Imagen de aplicación:</strong> <code>Sin versión de aplicación registrada</code></p>
+<p>No se registró una comparación de versión al inicio y al final.</p>
+<p>Duración acumulada de pasos: 0.162 s. No representa esfuerzo humano ni disponibilidad del sistema.</p>
+<p><a href="../TC-015-20261116-143246.json">Reporte JSON original</a></p>
+</details></article>
+<footer>Vista local generada desde los reportes originales y notas de revisión. Se excluyen trazas completas, nombres y valores arbitrarios de los reportes. Los rótulos de pasos proceden del catálogo revisado. Regenerar esta vista no ejecuta pruebas ni verifica el estado actual del servidor.</footer>
+</main></body></html>

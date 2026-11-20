@@ -1,0 +1,49 @@
+{
+  "inicio": "2026-11-17T14:33:38.270626+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "retest",
+  "entorno": {
+    "api_imagen_inicio": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb|2026-11-17T14:22:46.617135344Z"
+  },
+  "resultados": [
+    {
+      "caso": "TC-068",
+      "objetivo": "Cambiar tipo del estudio conservando archivos",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:33:38.314617+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/estudios/2",
+          "esperado": [
+            200
+          ],
+          "obtenido": 409,
+          "codigo_error": "DOCUMENT_RENAME_SOURCE_MISMATCH"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/estudios/2: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/estudios/2: HTTP 409; esperado [200]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "PUT /api/estudios/2: HTTP 409; esperado [200]",
+      "duracion_segundos": 0.015
+    }
+  ]
+}

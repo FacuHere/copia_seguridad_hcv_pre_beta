@@ -1,0 +1,155 @@
+{
+  "inicio": "2026-11-17T14:47:34.328307+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "fronteras",
+  "entorno": {
+    "api_imagen_inicio": "sha256:a44b5f40798bead7019069dd66e2b4d0aa6b51415d1650ccb2cfbeb597900990|2026-11-17T14:35:58.200552138Z"
+  },
+  "resultados": [
+    {
+      "caso": "TC-194",
+      "objetivo": "Aceptar usuario de 4 caracteres y autenticarlo",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:47:34.375924+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.185
+    },
+    {
+      "caso": "TC-195",
+      "objetivo": "Aceptar usuario de 99 caracteres y autenticarlo",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:47:34.571480+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.177
+    },
+    {
+      "caso": "TC-196",
+      "objetivo": "Contraseña administrativa de 1023 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:47:34.758634+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.175
+    },
+    {
+      "caso": "TC-197",
+      "objetivo": "Contraseña administrativa de 1024 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:47:34.942858+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.168
+    },
+    {
+      "caso": "TC-198",
+      "objetivo": "Contraseña administrativa de 1025 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:47:35.120648+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422,
+          "codigo_error": "INVALID_PASSWORD"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 422; esperado [422]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.006
+    }
+  ]
+}

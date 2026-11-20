@@ -1,0 +1,10 @@
+# Copiar fuera del repositorio: C:\HCV-Docker-Beta-Test\secrets.env
+# Completar las tres contraseñas con al menos 12 caracteres; pueden coincidir en este entorno beta.
+# No compartir el archivo completado ni agregarlo a Git.
+HCV_BETA_ROOT_PASSWORD=Saridon09$09
+HCV_BETA_APP_PASSWORD=Saridon09$09
+HCV_BETA_ADMIN_USERNAME=beta_admin
+HCV_BETA_ADMIN_PASSWORD=Saridon09$09
+# Ejemplo de ensayo: 100 MiB por archivo. Ajustar antes de iniciar el conjunto.
+# No representa un dimensionamiento definitivo de producción ni de DICOM.
+HCV_BETA_MAX_FILE_SIZE_BYTES=104857600

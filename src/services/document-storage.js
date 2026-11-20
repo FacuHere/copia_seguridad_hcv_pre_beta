@@ -364,7 +364,9 @@ async function hasDocxPackage(filePath, fileSize) {
     let stagingWriter;
     let settled = false;
     try {
-      parser = Busboy({ headers: req.headers, limits: { files: 1, fields: 0, fileSize: maxBytes, fieldNameSize: 64, fieldSize: 256 } });
+      // Busboy señala el límite al alcanzarlo; admitir el máximo requiere leer un byte adicional.
+      const limiteDelParser = maxBytes < Number.MAX_SAFE_INTEGER ? maxBytes + 1 : maxBytes;
+      parser = Busboy({ headers: req.headers, defParamCharset: 'utf8', limits: { files: 1, fields: 0, fileSize: limiteDelParser, fieldNameSize: 64, fieldSize: 256 } });
     } catch {
       reject(new DocumentInputError('INVALID_MULTIPART', 'La solicitud multipart no es válida.'));
       return;
@@ -447,7 +449,7 @@ async function hasDocxPackage(filePath, fileSize) {
       stagingWriter = fs.createWriteStream(stagingPath, { flags: 'wx', mode: 0o600 });
       fileTask = pipeline(stream, inspector, stagingWriter)
         .then(async () => {
-          if (stream.truncated || limitExceeded) throw new DocumentInputError('FILE_TOO_LARGE', 'El archivo supera MAX_FILE_SIZE_BYTES.');
+          if (sizeBytes > maxBytes || stream.truncated || limitExceeded) throw new DocumentInputError('FILE_TOO_LARGE', 'El archivo supera MAX_FILE_SIZE_BYTES.');
           const prefix = Buffer.concat(prefixChunks, prefixLength);
           if (!expected.signature(prefix)) throw new DocumentInputError(extension === '.dcm' ? 'INVALID_DICOM_FILE' : 'INVALID_FILE_CONTENT', 'El contenido no coincide con el formato declarado.');
           if (extension === '.dcm' && sizeBytes === 0) throw new DocumentInputError('INVALID_DICOM_FILE', 'El archivo DICOM está vacío.');

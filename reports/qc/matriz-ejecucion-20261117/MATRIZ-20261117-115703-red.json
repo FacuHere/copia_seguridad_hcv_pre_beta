@@ -1,0 +1,99 @@
+{
+  "inicio": "2026-11-17T14:57:03.768704+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "red",
+  "entorno": {
+    "puertos_publicados": {
+      "3000/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "3002"
+        }
+      ]
+    },
+    "https_en_puerto_beta": false,
+    "resultado_sondeo_tls": "SSLError",
+    "http_local": 200,
+    "redireccion_http_local": null,
+    "url_lan_y_dos_pc_de_prueba": "No disponibles en esta ejecución"
+  },
+  "resultados": [
+    {
+      "caso": "TC-172",
+      "objetivo": "Abrir el nombre interno desde dos PC",
+      "canal": "Comprobación de precondiciones: publicación Docker, respuesta HTTP y sondeo TLS reales",
+      "inicio": "2026-11-17T14:57:03.877448+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "bloqueado",
+      "observacion": "La API beta está publicada exclusivamente en 127.0.0.1:3002. No se dispone del nombre DNS hospitalario ni de dos puestos de la LAN para comprobar este recorrido.",
+      "duracion_segundos": 0.0
+    },
+    {
+      "caso": "TC-173",
+      "objetivo": "Comprobar HTTPS confiable sin advertencias",
+      "canal": "Comprobación de precondiciones: publicación Docker, respuesta HTTP y sondeo TLS reales",
+      "inicio": "2026-11-17T14:57:03.886944+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "bloqueado",
+      "observacion": "El puerto beta responde HTTP y el sondeo TLS no logra establecer HTTPS. Falta un destino HTTPS del despliegue hospitalario.",
+      "duracion_segundos": 0.0
+    },
+    {
+      "caso": "TC-174",
+      "objetivo": "Validar identidad y vigencia del certificado",
+      "canal": "Comprobación de precondiciones: publicación Docker, respuesta HTTP y sondeo TLS reales",
+      "inicio": "2026-11-17T14:57:03.895188+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "bloqueado",
+      "observacion": "No hay un certificado TLS presentado por el destino beta local que pueda evaluarse frente al nombre DNS hospitalario.",
+      "duracion_segundos": 0.0
+    },
+    {
+      "caso": "TC-175",
+      "objetivo": "Comprobar rechazo en un puesto sin confianza en la CA interna",
+      "canal": "Comprobación de precondiciones: publicación Docker, respuesta HTTP y sondeo TLS reales",
+      "inicio": "2026-11-17T14:57:03.903694+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "bloqueado",
+      "observacion": "Faltan un servicio HTTPS con certificado interno y los puestos con y sin confianza para comparar su comportamiento.",
+      "duracion_segundos": 0.0
+    },
+    {
+      "caso": "TC-176",
+      "objetivo": "Comprobar el tratamiento del acceso HTTP en la LAN",
+      "canal": "Comprobación de precondiciones: publicación Docker, respuesta HTTP y sondeo TLS reales",
+      "inicio": "2026-11-17T14:57:03.913694+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "bloqueado",
+      "observacion": "Se observó HTTP 200 en localhost, permitido para esta instalación beta. No hay un destino LAN configurado para evaluar redirección o rechazo por HTTP.",
+      "duracion_segundos": 0.0
+    },
+    {
+      "caso": "TC-177",
+      "objetivo": "Utilizar respaldos desde un puesto de red con HTTPS",
+      "canal": "Comprobación de precondiciones: publicación Docker, respuesta HTTP y sondeo TLS reales",
+      "inicio": "2026-11-17T14:57:03.922640+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "bloqueado",
+      "observacion": "Las pruebas locales de respaldo aprobaron; falta el puesto cliente y el destino HTTPS de la LAN para este caso específico.",
+      "duracion_segundos": 0.0
+    },
+    {
+      "caso": "TC-178",
+      "objetivo": "Comprobar enlaces de documentos bajo HTTPS",
+      "canal": "Comprobación de precondiciones: publicación Docker, respuesta HTTP y sondeo TLS reales",
+      "inicio": "2026-11-17T14:57:03.933523+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "bloqueado",
+      "observacion": "Las descargas y vistas locales aprobaron por HTTP. El puerto beta no ofrece HTTPS; falta el destino TLS para repetir los enlaces con ese protocolo.",
+      "duracion_segundos": 0.0
+    }
+  ]
+}

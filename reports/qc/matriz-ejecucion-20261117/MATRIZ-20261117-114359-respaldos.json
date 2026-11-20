@@ -1,0 +1,2309 @@
+{
+  "inicio": "2026-11-17T14:43:59.299979+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "respaldos",
+  "entorno": {},
+  "resultados": [
+    {
+      "caso": "TC-147",
+      "objetivo": "Crear respaldo completo en el cliente y comprobar todos sus archivos",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:02.234318+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "El manifiesto coincide con el conjunto clínico",
+          "cumple": true
+        },
+        {
+          "criterio": "Inventario completo de archivos",
+          "cumple": true
+        },
+        {
+          "criterio": "Todos los archivos guardados en el cliente coinciden en SHA-256",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.891
+    },
+    {
+      "caso": "TC-150",
+      "objetivo": "Incluir y excluir referencias de usuarios sin secretos",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:44:03.137783+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/exportar",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/exportar/3b260564-d5f1-45b2-b79f-a3343d05e277/completar",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/exportar",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/exportar/584518cf-547c-42a3-a4e4-a5ffa0d61f2e/completar",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/respaldos/exportar: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/exportar/3b260564-d5f1-45b2-b79f-a3343d05e277/completar: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La opción controla la inclusión de referencias",
+          "cumple": true
+        },
+        {
+          "criterio": "El respaldo no contiene hashes de credenciales o sesiones",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/exportar: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/exportar/584518cf-547c-42a3-a4e4-a5ffa0d61f2e/completar: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La opción controla la inclusión de referencias",
+          "cumple": true
+        },
+        {
+          "criterio": "El respaldo no contiene hashes de credenciales o sesiones",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.042
+    },
+    {
+      "caso": "TC-151",
+      "objetivo": "Cancelar selección de destino sin iniciar exportación",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:03.187828+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "fallido",
+      "error_tipo": "Error",
+      "observacion": "La herramienta no pudo completar el recorrido; revisar el detalle privado.",
+      "duracion_segundos": 0.015
+    },
+    {
+      "caso": "TC-152",
+      "objetivo": "Informar que no se tiene permiso sobre el destino",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:03.211606+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "fallido",
+      "error_tipo": "Error",
+      "observacion": "La herramienta no pudo completar el recorrido; revisar el detalle privado.",
+      "duracion_segundos": 0.002
+    },
+    {
+      "caso": "TC-153",
+      "objetivo": "Bloquear controles durante el respaldo y habilitarlos al terminar",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:03.221980+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "Los controles se deshabilitaron durante el respaldo",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.849
+    },
+    {
+      "caso": "TC-154",
+      "objetivo": "Guardar dos respaldos sin sobrescribir la carpeta anterior",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:04.079419+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "Dos respaldos en el mismo destino tienen carpetas distintas",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.858
+    },
+    {
+      "caso": "TC-155",
+      "objetivo": "Validar carpeta y mostrar su resumen",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:04.949257+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.139
+    },
+    {
+      "caso": "TC-156",
+      "objetivo": "Rechazar carpeta con formato ajeno",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:05.097866+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.068
+    },
+    {
+      "caso": "TC-157",
+      "objetivo": "Rechazar respaldo sin manifest.json",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:05.175317+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.087
+    },
+    {
+      "caso": "TC-158",
+      "objetivo": "Rechazar respaldo sin datos-clinicos.json",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:05.270556+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.102
+    },
+    {
+      "caso": "TC-159",
+      "objetivo": "Detectar archivo clínico faltante en la carpeta",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:05.381931+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.099
+    },
+    {
+      "caso": "TC-160",
+      "objetivo": "Rechazar archivo de datos con SHA-256 alterado",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:05.490681+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.101
+    },
+    {
+      "caso": "TC-161",
+      "objetivo": "Rechazar documento alterado del mismo tamaño antes de confirmar",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:05.601323+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Documento alterado rechazado sin reemplazar datos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.946
+    },
+    {
+      "caso": "TC-162",
+      "objetivo": "Restaurar agregando datos y archivos sin reemplazar los actuales",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:06.557835+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Agregar conserva lo existente y suma todos los registros del respaldo",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.403
+    },
+    {
+      "caso": "TC-163",
+      "objetivo": "Agregar un paciente con DNI coincidente sin fusionarlo",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:44:07.969743+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/1d1b312f-4cc8-4d4f-8882-b1e07930e37a/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/1d1b312f-4cc8-4d4f-8882-b1e07930e37a/confirmar",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/1d1b312f-4cc8-4d4f-8882-b1e07930e37a/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/1d1b312f-4cc8-4d4f-8882-b1e07930e37a/confirmar: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El DNI coincidente genera un registro adicional sin fusión",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.052
+    },
+    {
+      "caso": "TC-164",
+      "objetivo": "Cancelar la confirmación de Agregar",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:08.031972+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar conserva todos los conteos clínicos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.094
+    },
+    {
+      "caso": "TC-165",
+      "objetivo": "Mostrar advertencia y cancelar Reemplazar",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:08.138228+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar conserva todos los conteos clínicos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.108
+    },
+    {
+      "caso": "TC-168",
+      "objetivo": "Reemplazo incompleto no elimina los datos actuales",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:44:08.256390+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/e4c1cca7-815e-4357-8ea5-885980e2095b/confirmar",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422,
+          "codigo_error": "BACKUP_RECORD_COUNT_MISMATCH"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/e4c1cca7-815e-4357-8ea5-885980e2095b/confirmar: HTTP 422; esperado [422]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Rechazo previo al commit conserva los conteos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.042
+    },
+    {
+      "caso": "TC-166",
+      "objetivo": "Restaurar reemplazando y comprobar integridad documental",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:08.308622+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/exportar",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/exportar/c6454de4-3ad8-45f7-8306-76a47b802384/completar",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Reemplazar deja exactamente los conteos del respaldo",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/exportar: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/exportar/c6454de4-3ad8-45f7-8306-76a47b802384/completar: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Todos los hashes documentales se conservan al restaurar",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.914
+    },
+    {
+      "caso": "TC-167",
+      "objetivo": "Conservar cuentas y perfiles al reemplazar",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:44:10.232515+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/usuarios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/usuarios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Todas las cuentas, estados y perfiles se conservaron",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.008
+    },
+    {
+      "caso": "TC-170",
+      "objetivo": "Escribir respaldos en el sistema de archivos del navegador cliente",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:10.252660+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "El respaldo se guardó mediante un handle nativo del cliente",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.002
+    },
+    {
+      "caso": "TC-171",
+      "objetivo": "Informar falta de soporte del selector de carpetas",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:10.267065+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.041
+    },
+    {
+      "caso": "TC-169",
+      "objetivo": "Olvidar carpetas elegidas al cerrar sesión",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:10.317690+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.291
+    },
+    {
+      "caso": "TC-149",
+      "objetivo": "Respaldar un conjunto clínico vacío",
+      "canal": "UI y API reales; conjunto vacío temporal y recuperación posterior",
+      "inicio": "2026-11-17T14:44:10.619495+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/09283244-c1ee-4519-9b9d-76a2bcd454fd/confirmar",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/1",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/2",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/3",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/4",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/5",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/6",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/7",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/8",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/9",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/10",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/12",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/13",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/14",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/15",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/16",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/18",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/19",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/21",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/22",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/23",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/24",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/25",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/26",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/confirmar",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/respaldos/restauraciones: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/09283244-c1ee-4519-9b9d-76a2bcd454fd/confirmar: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Conjunto clínico vacío preparado",
+          "cumple": true
+        },
+        {
+          "criterio": "Manifiesto de respaldo vacío correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/1: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/2: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/3: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/4: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/5: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/6: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/7: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/8: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/9: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/10: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/12: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/13: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/14: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/15: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/16: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/18: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/19: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/21: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/22: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/23: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/24: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/25: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/documentos/26: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/b6de0e6e-ba01-415d-b055-7ac792662864/confirmar: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.261
+    },
+    {
+      "caso": "TC-148",
+      "objetivo": "Respaldar pacientes y estudios sin documentos",
+      "canal": "UI y API reales; datos temporales y recuperación posterior",
+      "inicio": "2026-11-17T14:44:11.894396+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/cd9742e6-3000-45a2-a13c-d6106fb2b122/confirmar",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/1",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/2",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/3",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/4",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/5",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/6",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/7",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/8",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/9",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/10",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/12",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/13",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/14",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/15",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/16",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/18",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/19",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/21",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/22",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/23",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/24",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/25",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/26",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/confirmar",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/respaldos/restauraciones: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/cd9742e6-3000-45a2-a13c-d6106fb2b122/confirmar: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "Manifiesto incluye paciente y estudio sin exigir archivos",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/registros: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/1: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/2: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/3: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/4: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/5: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/6: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/7: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/8: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/9: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/10: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/12: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/13: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/14: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/15: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/16: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/18: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/19: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/21: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/22: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/23: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/24: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/25: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/documentos/26: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/respaldos/restauraciones/6650358f-4ce5-4a34-a7af-ba0534b81230/confirmar: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.296
+    }
+  ]
+}
