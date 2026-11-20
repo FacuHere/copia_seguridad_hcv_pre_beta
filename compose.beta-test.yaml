@@ -1,0 +1,97 @@
+name: hcv_docker_beta_test
+
+services:
+  db:
+    image: mariadb:12.2.2
+    environment:
+      MARIADB_ROOT_PASSWORD: ${HCV_BETA_ROOT_PASSWORD:?Complete el archivo de secretos exclusivo de Docker beta}
+      MARIADB_DATABASE: hcv_docker_beta_test
+      MARIADB_ROOT_HOST: "%"
+    volumes:
+      - database_data:/var/lib/mysql
+    networks: [hcv_beta_network]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    restart: unless-stopped
+    stop_grace_period: 60s
+
+  api:
+    image: hcv_docker_beta_test-api:beta
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: "3000"
+      HOST: 0.0.0.0
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: hcv_docker_beta_test
+      DB_USER: hcv_beta_app
+      DB_PASSWORD: ${HCV_BETA_APP_PASSWORD:?Complete la contraseña SQL de la API beta}
+      FILE_STORAGE_ROOT: /var/lib/hcv-files
+      MAX_FILE_SIZE_BYTES: ${HCV_BETA_MAX_FILE_SIZE_BYTES:?Defina el límite de archivo para las pruebas}
+      COOKIE_SECURE: "false"
+    volumes:
+      - document_files:/var/lib/hcv-files
+    ports:
+      - "127.0.0.1:3002:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [hcv_beta_network]
+    healthcheck:
+      test: ["CMD", "node", "-e", "Promise.all(['database','storage'].map(x=>fetch('http://127.0.0.1:3000/api/health/'+x))).then(rs=>process.exit(rs.every(r=>r.ok)?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+    stop_grace_period: 60s
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.3-apache
+    environment:
+      PMA_HOST: db
+      PMA_PORT: "3306"
+      PMA_ARBITRARY: "0"
+    ports:
+      - "127.0.0.1:8082:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [hcv_beta_network]
+    restart: unless-stopped
+
+  inicializar:
+    image: hcv_docker_beta_test-api:beta
+    profiles: [preparacion]
+    entrypoint: ["node", "/app/docker/inicializar.js"]
+    environment:
+      HCV_DOCKER_BETA_SETUP: "1"
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: hcv_docker_beta_test
+      MARIADB_ROOT_PASSWORD: ${HCV_BETA_ROOT_PASSWORD:?Complete la contraseña SQL administrativa beta}
+      MARIADB_APP_PASSWORD: ${HCV_BETA_APP_PASSWORD:?Complete la contraseña SQL de la API beta}
+      HCV_TEST_ADMIN_USERNAME: ${HCV_BETA_ADMIN_USERNAME:-beta_admin}
+      HCV_TEST_ADMIN_PASSWORD: ${HCV_BETA_ADMIN_PASSWORD:?Complete la contraseña web del administrador de pruebas}
+      MAX_FILE_SIZE_BYTES: ${HCV_BETA_MAX_FILE_SIZE_BYTES:?Defina el límite de archivo para las pruebas}
+    volumes:
+      - ./docker/beta-test/inicializar.js:/app/docker/inicializar.js:ro
+      - ./sql:/migrations:ro
+    networks: [hcv_beta_network]
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+volumes:
+  database_data:
+  document_files:
+
+networks:
+  hcv_beta_network:
