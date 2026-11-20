@@ -1,0 +1,4327 @@
+{
+  "inicio": "2026-11-17T14:30:27.357518+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "api",
+  "entorno": {
+    "api_imagen_inicio": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb|2026-11-17T14:22:46.617135344Z"
+  },
+  "resultados": [
+    {
+      "caso": "TC-186",
+      "objetivo": "Salud de MariaDB y almacenamiento",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:27.405475+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/health/database",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/health/storage",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/health/database: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "MariaDB conectada",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/health/storage: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Almacenamiento listo",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.007
+    },
+    {
+      "caso": "TC-016",
+      "objetivo": "Ingreso válido desde contexto independiente después de doce rechazos",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:27.449187+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La identidad autenticada es la esperada",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.079
+    },
+    {
+      "caso": "TC-024",
+      "objetivo": "Crear paciente con todos sus datos y recuperarlos",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.540230+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/4",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/4: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.026
+    },
+    {
+      "caso": "TC-025",
+      "objetivo": "Crear paciente sin datos opcionales",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.575978+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/5",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/5: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.019
+    },
+    {
+      "caso": "TC-026",
+      "objetivo": "Rechazar nombre vacío o compuesto por espacios",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.606952+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 400; esperado [400]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.006
+    },
+    {
+      "caso": "TC-027",
+      "objetivo": "Rechazar nombre vacío o compuesto por espacios",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.623290+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 400; esperado [400]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.006
+    },
+    {
+      "caso": "TC-028",
+      "objetivo": "Conservar tildes y apóstrofos",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.640367+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/6",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/6: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.017
+    },
+    {
+      "caso": "TC-029",
+      "objetivo": "Aceptar DNI repetido sin fusionar fichas",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.666622+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "Dos registros independientes sin fusión",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.019
+    },
+    {
+      "caso": "TC-030",
+      "objetivo": "Aceptar nombres repetidos sin fusionar fichas",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.694498+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "Dos registros independientes sin fusión",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.016
+    },
+    {
+      "caso": "TC-031",
+      "objetivo": "API fullName con 239 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.719885+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/11",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/11: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.015
+    },
+    {
+      "caso": "TC-032",
+      "objetivo": "API fullName con 240 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.743260+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/12",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/12: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.019
+    },
+    {
+      "caso": "TC-033",
+      "objetivo": "API fullName con 241 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.770198+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 400; esperado [400]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-034",
+      "objetivo": "API dni con 31 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.782886+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/13",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/13: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.016
+    },
+    {
+      "caso": "TC-035",
+      "objetivo": "API dni con 32 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.808584+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/14",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/14: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.018
+    },
+    {
+      "caso": "TC-036",
+      "objetivo": "API dni con 33 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.835175+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 400; esperado [400]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-037",
+      "objetivo": "API phone con 79 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.848613+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/15",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/15: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.015
+    },
+    {
+      "caso": "TC-038",
+      "objetivo": "API phone con 80 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.873455+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/16",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/16: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.018
+    },
+    {
+      "caso": "TC-039",
+      "objetivo": "API phone con 81 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.900531+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 400; esperado [400]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-040",
+      "objetivo": "API address con 499 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.913160+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/17",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/17: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.015
+    },
+    {
+      "caso": "TC-041",
+      "objetivo": "API address con 500 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.936527+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/18",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/18: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.016
+    },
+    {
+      "caso": "TC-042",
+      "objetivo": "API address con 501 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.961236+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 400; esperado [400]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-043",
+      "objetivo": "API notes con 9999 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:28.973969+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/19",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/19: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.025
+    },
+    {
+      "caso": "TC-044",
+      "objetivo": "API notes con 10000 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.008542+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/20",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/20: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.024
+    },
+    {
+      "caso": "TC-045",
+      "objetivo": "API notes con 10001 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.042414+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 400; esperado [400]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-046",
+      "objetivo": "Fecha bisiesta existente",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.056439+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/21",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/21: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.018
+    },
+    {
+      "caso": "TC-047",
+      "objetivo": "Rechazar fecha inexistente",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.082851+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 400; esperado [400]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-048",
+      "objetivo": "Búsqueda por nombre y fragmento",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.096447+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La búsqueda completa/parcial incluye el paciente preparado",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La búsqueda completa/parcial incluye el paciente preparado",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.022
+    },
+    {
+      "caso": "TC-049",
+      "objetivo": "Búsqueda por DNI completo y parcial",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.126929+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La búsqueda completa/parcial incluye el paciente preparado",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La búsqueda completa/parcial incluye el paciente preparado",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.022
+    },
+    {
+      "caso": "TC-054",
+      "objetivo": "Actualizar ficha y comprobar persistencia",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.158715+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/pacientes/24",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/24",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/pacientes/24: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/24: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se conservan cambios y aumenta la versión",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.026
+    },
+    {
+      "caso": "TC-056",
+      "objetivo": "Limpiar un campo opcional previamente registrado",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.193477+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/pacientes/25",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/25",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/pacientes/25: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/25: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se conservan cambios y aumenta la versión",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.023
+    },
+    {
+      "caso": "TC-057",
+      "objetivo": "Detectar una versión antigua sin sobrescribir",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.225797+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/pacientes/26",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/pacientes/26",
+          "esperado": [
+            409
+          ],
+          "obtenido": 409
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/pacientes/26: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/pacientes/26: HTTP 409; esperado [409]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.019
+    },
+    {
+      "caso": "TC-061",
+      "objetivo": "Crear y consultar un estudio completo",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.254015+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/3",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/3: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva sus campos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.017
+    },
+    {
+      "caso": "TC-062",
+      "objetivo": "Crear estudio sin opcionales",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.280345+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/4",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/4: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva sus campos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.018
+    },
+    {
+      "caso": "TC-063",
+      "objetivo": "Rechazar estudio sin fecha o con fecha inexistente",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.306722+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            400
+          ],
+          "obtenido": 400
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios: HTTP 400; esperado [400]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 400; esperado [400]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.008
+    },
+    {
+      "caso": "TC-064",
+      "objetivo": "Crear y recuperar los siete tipos disponibles",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.323486+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/5",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/6",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/7",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/8",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/9",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/10",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/11",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/5: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva sus campos",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/6: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva sus campos",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/7: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva sus campos",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/8: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva sus campos",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/9: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva sus campos",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/10: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva sus campos",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/11: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva sus campos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.106
+    },
+    {
+      "caso": "TC-066",
+      "objetivo": "Impedir cambio de fecha en estudio existente",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.438088+00:00",
+      "http": [
+        {
+          "metodo": "PUT",
+          "ruta": "/api/estudios/2",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "PUT /api/estudios/2: HTTP 422; esperado [422]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-067",
+      "objetivo": "Editar textos de un estudio",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.452502+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/estudios/12",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/estudios/12: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Texto del estudio actualizado",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.019
+    },
+    {
+      "caso": "TC-070",
+      "objetivo": "Detectar versión antigua de estudio",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.480461+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/estudios/13",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/estudios/13",
+          "esperado": [
+            409
+          ],
+          "obtenido": 409
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/estudios/13: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/estudios/13: HTTP 409; esperado [409]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.02
+    },
+    {
+      "caso": "TC-071",
+      "objetivo": "Mantener estudios separados por paciente",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.509191+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/28/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/28/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio de A no aparece en B",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.032
+    },
+    {
+      "caso": "TC-072",
+      "objetivo": "Paciente nuevo sin estudios",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.549763+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/29/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/29/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Listado de estudios vacío",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.017
+    },
+    {
+      "caso": "TC-187",
+      "objetivo": "Consultar estudio por identificador y rechazar identificador inexistente",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.576039+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2147483647",
+          "esperado": [
+            404
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/estudios/2: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio conserva su paciente",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/2147483647: HTTP 404; esperado [404]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.012
+    },
+    {
+      "caso": "TC-077",
+      "objetivo": "Cargar PDF y comprobar contenido, tamaño, hash y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.597741+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/2/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/2/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga idéntica al archivo subido",
+          "cumple": true
+        },
+        {
+          "criterio": "SHA-256 coincide con los bytes",
+          "cumple": true
+        },
+        {
+          "criterio": "Tamaño persistido correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "Asociación al estudio y paciente correctos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.056
+    },
+    {
+      "caso": "TC-078",
+      "objetivo": "Cargar DOC y comprobar contenido, tamaño, hash y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.663007+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/3/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/3/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga idéntica al archivo subido",
+          "cumple": true
+        },
+        {
+          "criterio": "SHA-256 coincide con los bytes",
+          "cumple": true
+        },
+        {
+          "criterio": "Tamaño persistido correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "Asociación al estudio y paciente correctos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.048
+    },
+    {
+      "caso": "TC-079",
+      "objetivo": "Cargar DOCX y comprobar contenido, tamaño, hash y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.721815+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/4/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/4/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga idéntica al archivo subido",
+          "cumple": true
+        },
+        {
+          "criterio": "SHA-256 coincide con los bytes",
+          "cumple": true
+        },
+        {
+          "criterio": "Tamaño persistido correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "Asociación al estudio y paciente correctos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.056
+    },
+    {
+      "caso": "TC-080",
+      "objetivo": "Cargar JPG y comprobar contenido, tamaño, hash y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.787069+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/5/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/5/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga idéntica al archivo subido",
+          "cumple": true
+        },
+        {
+          "criterio": "SHA-256 coincide con los bytes",
+          "cumple": true
+        },
+        {
+          "criterio": "Tamaño persistido correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "Asociación al estudio y paciente correctos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.041
+    },
+    {
+      "caso": "TC-081",
+      "objetivo": "Cargar JPEG y comprobar contenido, tamaño, hash y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.838421+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/6/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/6/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga idéntica al archivo subido",
+          "cumple": true
+        },
+        {
+          "criterio": "SHA-256 coincide con los bytes",
+          "cumple": true
+        },
+        {
+          "criterio": "Tamaño persistido correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "Asociación al estudio y paciente correctos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.047
+    },
+    {
+      "caso": "TC-082",
+      "objetivo": "Cargar PNG y comprobar contenido, tamaño, hash y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.894087+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/7/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/7/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga idéntica al archivo subido",
+          "cumple": true
+        },
+        {
+          "criterio": "SHA-256 coincide con los bytes",
+          "cumple": true
+        },
+        {
+          "criterio": "Tamaño persistido correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "Asociación al estudio y paciente correctos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.04
+    },
+    {
+      "caso": "TC-083",
+      "objetivo": "Cargar GIF y comprobar contenido, tamaño, hash y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.942313+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/8/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/8/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga idéntica al archivo subido",
+          "cumple": true
+        },
+        {
+          "criterio": "SHA-256 coincide con los bytes",
+          "cumple": true
+        },
+        {
+          "criterio": "Tamaño persistido correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "Asociación al estudio y paciente correctos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.036
+    },
+    {
+      "caso": "TC-084",
+      "objetivo": "Cargar WEBP y comprobar contenido, tamaño, hash y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:29.987866+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/9/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/9/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga idéntica al archivo subido",
+          "cumple": true
+        },
+        {
+          "criterio": "SHA-256 coincide con los bytes",
+          "cumple": true
+        },
+        {
+          "criterio": "Tamaño persistido correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "Asociación al estudio y paciente correctos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.049
+    },
+    {
+      "caso": "TC-085",
+      "objetivo": "Cargar DCM y comprobar contenido, tamaño, hash y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:30.046190+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/10/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/10/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga idéntica al archivo subido",
+          "cumple": true
+        },
+        {
+          "criterio": "SHA-256 coincide con los bytes",
+          "cumple": true
+        },
+        {
+          "criterio": "Tamaño persistido correcto",
+          "cumple": true
+        },
+        {
+          "criterio": "Asociación al estudio y paciente correctos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.045
+    },
+    {
+      "caso": "TC-188",
+      "objetivo": "Listar documentos de un estudio y excluir documentos de otro",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:30.100601+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/15/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/estudios/2/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Listado incluye los documentos preparados",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/15/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El estudio vacío no hereda documentos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.026
+    },
+    {
+      "caso": "TC-090",
+      "objetivo": "Descarga idéntica en bytes y tamaño para cada formato",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:30.136568+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/2/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/3/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/4/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/5/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/6/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/7/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/8/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/9/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/10/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/documentos/2/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de pdf conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/3/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de doc conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/4/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de docx conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/5/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de jpg conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/6/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de jpeg conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/7/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de png conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/8/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de gif conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/9/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de webp conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/10/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de dcm conservados",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.112
+    },
+    {
+      "caso": "TC-091",
+      "objetivo": "Rechazar archivo incompatible o vacío",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:30.257964+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            400,
+            415
+          ],
+          "obtenido": 415
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 415; esperado [400, 415]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.007
+    },
+    {
+      "caso": "TC-092",
+      "objetivo": "Rechazar archivo incompatible o vacío",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:30.274152+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            400,
+            415
+          ],
+          "obtenido": 415
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 415; esperado [400, 415]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.006
+    },
+    {
+      "caso": "TC-093",
+      "objetivo": "Rechazar archivo incompatible o vacío",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:30.290101+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            400,
+            415
+          ],
+          "obtenido": 415
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 415; esperado [400, 415]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.007
+    },
+    {
+      "caso": "TC-094",
+      "objetivo": "Rechazar archivo incompatible o vacío",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:30.306772+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            400,
+            415
+          ],
+          "obtenido": 415
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 415; esperado [400, 415]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.007
+    },
+    {
+      "caso": "TC-095",
+      "objetivo": "Rechazar archivo incompatible o vacío",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:30.324061+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            400,
+            415
+          ],
+          "obtenido": 415
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 415; esperado [400, 415]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.007
+    },
+    {
+      "caso": "TC-096",
+      "objetivo": "Frontera de tamaño de archivo configurada",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:30.340411+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "Datos de ensayo tienen longitud exacta 104857599",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 23.224
+    },
+    {
+      "caso": "TC-097",
+      "objetivo": "Frontera de tamaño de archivo configurada",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:30:53.577202+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 413
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "Datos de ensayo tienen longitud exacta 104857600",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 413; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/estudios/2/documentos: HTTP 413; esperado [201]",
+      "duracion_segundos": 22.787
+    },
+    {
+      "caso": "TC-098",
+      "objetivo": "Frontera de tamaño de archivo configurada",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:16.373947+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            413
+          ],
+          "obtenido": 413
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "Datos de ensayo tienen longitud exacta 104857601",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 413; esperado [413]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 22.496
+    },
+    {
+      "caso": "TC-100",
+      "objetivo": "Conservar nombre de archivo con espacios y tildes",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:38.880967+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "Nombre conservado",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "Nombre conservado",
+      "duracion_segundos": 0.033
+    },
+    {
+      "caso": "TC-101",
+      "objetivo": "Dos documentos con el mismo nombre sin sobrescritura",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:38.923421+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "Dos documentos con mismo nombre mantienen IDs distintos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.047
+    },
+    {
+      "caso": "TC-102",
+      "objetivo": "Reemplazar documento conservando ID y asociación",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:38.980090+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/documentos/15",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/15/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/documentos/15: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "ID y asociación conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/15/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Contenido nuevo persistido",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.077
+    },
+    {
+      "caso": "TC-104",
+      "objetivo": "Conservar original ante reemplazo rechazado",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.066279+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/documentos/16",
+          "esperado": [
+            415
+          ],
+          "obtenido": 415
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/16/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/documentos/16: HTTP 415; esperado [415]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/16/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Original intacto tras rechazo",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.046
+    },
+    {
+      "caso": "TC-105",
+      "objetivo": "Eliminar documento y comprobar ausencia de contenido",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.121989+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "DELETE",
+          "ruta": "/api/documentos/17",
+          "esperado": [
+            204
+          ],
+          "obtenido": 204
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/17/download",
+          "esperado": [
+            404
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/estudios/2/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "DELETE /api/documentos/17: HTTP 204; esperado [204]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/17/download: HTTP 404; esperado [404]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.063
+    },
+    {
+      "caso": "TC-107",
+      "objetivo": "Separar documentos de dos pacientes y dos estudios",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.196306+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/estudios/16/documentos",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/estudios/16/documentos: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/2/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Documento no aparece bajo otro estudio/paciente",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.049
+    },
+    {
+      "caso": "TC-108",
+      "objetivo": "Restringir enlaces de documentos sin sesión",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.255226+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/2/content",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/2/download",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/documentos/2/content: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/2/download: HTTP 401; esperado [401]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.008
+    },
+    {
+      "caso": "TC-058",
+      "objetivo": "Cambiar nombre y DNI conservando archivos",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.272263+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/pacientes/3",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/2/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/3/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/4/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/5/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/6/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/7/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/8/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/9/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/10/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes/3: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/pacientes/3: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/2/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de pdf conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/3/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de doc conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/4/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de docx conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/5/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de jpg conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/6/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de jpeg conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/7/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de png conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/8/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de gif conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/9/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de webp conservados",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/documentos/10/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Bytes y tamaño de dcm conservados",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.411
+    },
+    {
+      "caso": "TC-068",
+      "objetivo": "Cambiar tipo del estudio conservando archivos",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.692329+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/estudios/2",
+          "esperado": [
+            200
+          ],
+          "obtenido": 409
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/estudios/2: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/estudios/2: HTTP 409; esperado [200]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "PUT /api/estudios/2: HTTP 409; esperado [200]",
+      "duracion_segundos": 0.013
+    },
+    {
+      "caso": "TC-116",
+      "objetivo": "Crear cuenta administrador y autenticarla",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.721057+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-117",
+      "objetivo": "Crear cuenta medico y autenticarla",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.733774+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-118",
+      "objetivo": "Crear cuenta secretario y autenticarla",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.746469+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-119",
+      "objetivo": "Crear cuenta visualizador y autenticarla",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.759392+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-120",
+      "objetivo": "Rechazar nombre de cuenta duplicado",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.772721+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "fallido",
+      "error_tipo": "IndexError",
+      "observacion": "La herramienta no pudo completar el recorrido; revisar el detalle privado.",
+      "duracion_segundos": 0.0
+    },
+    {
+      "caso": "TC-121",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.782530+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            422
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [422]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [422]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-122",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.795784+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            422
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [422]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [422]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-123",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.808711+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            422
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [422]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [422]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-124",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.821585+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            422
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [422]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [422]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-127",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.835055+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            422
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [422]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [422]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-128",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.848769+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            422
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [422]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [422]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-131",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.862301+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            422
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [422]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [422]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-125",
+      "objetivo": "Crear usuario de tres caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.875449+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-126",
+      "objetivo": "Crear usuario de cien caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.888781+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-129",
+      "objetivo": "Aceptar contraseña de 12 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.902738+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-130",
+      "objetivo": "Aceptar contraseña de 13 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.917170+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-133",
+      "objetivo": "Buscar cuenta por usuario y nombre visible",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.933250+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-135",
+      "objetivo": "Editar nombre visible conservando username",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.949664+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-136",
+      "objetivo": "Desactivar cuenta e invalidar su sesión",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.966576+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-138",
+      "objetivo": "Reactivar sin reactivar la sesión anterior",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.982238+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-139",
+      "objetivo": "Cambiar contraseña y revocar dos sesiones de esa cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:39.998844+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-140",
+      "objetivo": "Mantener la sesión de otra cuenta al cambiar contraseña",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.013107+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La sesión administrativa de otra cuenta sigue vigente",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-141",
+      "objetivo": "Cambiar contraseña de una cuenta propia sintética",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.027958+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-143",
+      "objetivo": "Impedir autodesactivación y pérdida del rol administrador",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.041013+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "TypeError",
+      "observacion": "La herramienta no pudo completar el recorrido; revisar el detalle privado.",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-110",
+      "objetivo": "Comprobar permisos efectivos de administrador",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.059465+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-111",
+      "objetivo": "Comprobar permisos efectivos de medico",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.073369+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-112",
+      "objetivo": "Comprobar permisos efectivos de secretario",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.087057+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-113",
+      "objetivo": "Comprobar permisos efectivos de visualizador",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.101638+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-114",
+      "objetivo": "Cambiar perfil y revocar sesiones existentes",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.115685+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-021",
+      "objetivo": "Rechazar login de cuenta inactiva",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.131011+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-192",
+      "objetivo": "Nombre de un carácter",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.148020+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/31",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/31: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.019
+    },
+    {
+      "caso": "TC-193",
+      "objetivo": "Nombre de dos caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.178358+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/32",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/32: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Los campos guardados coinciden al volver a consultarlos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.018
+    },
+    {
+      "caso": "TC-194",
+      "objetivo": "Usuario con longitud 4",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.206816+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-195",
+      "objetivo": "Usuario con longitud 99",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.221700+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.003
+    },
+    {
+      "caso": "TC-196",
+      "objetivo": "Contraseña administrativa de 1023 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.236228+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-197",
+      "objetivo": "Contraseña administrativa de 1024 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.253539+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            201
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [201]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [201]",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-198",
+      "objetivo": "Contraseña administrativa de 1025 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:31:40.269096+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/users",
+          "esperado": [
+            422
+          ],
+          "obtenido": 404
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/users: HTTP 404; esperado [422]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "POST /api/users: HTTP 404; esperado [422]",
+      "duracion_segundos": 0.003
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "inicio": "2026-11-17T14:41:36.590417+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "ui",
+  "entorno": {},
+  "resultados": [
+    {
+      "caso": "TC-087",
+      "objetivo": "Mostrar imágenes admitidas con su contenido protegido",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:41:37.716407+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "La imagen jpg se decodifica en el navegador",
+          "cumple": true
+        },
+        {
+          "criterio": "La imagen jpeg se decodifica en el navegador",
+          "cumple": true
+        },
+        {
+          "criterio": "La imagen png se decodifica en el navegador",
+          "cumple": true
+        },
+        {
+          "criterio": "La imagen gif se decodifica en el navegador",
+          "cumple": true
+        },
+        {
+          "criterio": "La imagen webp se decodifica en el navegador",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.919
+    }
+  ]
+}

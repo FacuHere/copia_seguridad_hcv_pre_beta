@@ -1,0 +1,778 @@
+{
+  "version": 1,
+  "fecha_clasificacion": "2026-11-16",
+  "autor_clasificacion": "asistencia de QC del trabajo académico",
+  "criterio": "Clasificación propuesta en el contexto documentado; no reemplaza decisiones del hospital ni simula un triage anterior. La severidad de herramientas/documentación no se atribuye al producto.",
+  "escala_severidad": {
+    "S1": "Crítica",
+    "S2": "Alta",
+    "S3": "Media",
+    "S4": "Baja"
+  },
+  "escala_prioridad": {
+    "P1": "Alta",
+    "P2": "Media",
+    "P3": "Baja"
+  },
+  "resumen": {
+    "registros": 24,
+    "por_tipo": {
+      "producto": 14,
+      "automatizacion": 2,
+      "entorno": 4,
+      "documentacion": 2,
+      "diseno": 2
+    },
+    "nota": "24 hallazgos de tipos y fechas diferentes, no 24 defectos abiertos del producto. ENV-01 y PRO-01 describen el mismo incidente desde causa y síntoma."
+  },
+  "fuentes": [
+    {
+      "ruta": "docs/evidencias/habilitacion-007-3306.json",
+      "sha256": "2c9eb876cd3360aad29bca2bdc04ee2defa4d0dbca0726d8b3e966f849402f92"
+    },
+    {
+      "ruta": "docs/prueba-carga-respaldo-3306-2026-10-26.md",
+      "sha256": "a4bab69354103309eeacb0c54120245a9c71884057486c7ddd3d77a01b375b53"
+    },
+    {
+      "ruta": "docs/qc-login-sin-bloqueo.md",
+      "sha256": "b5d88cc67c4b66d38b65e9203e5deef5a3de4dc48bc5aaa3eebd287a9f5802a1"
+    },
+    {
+      "ruta": "docs/qc-unidad-4-diseno-pruebas.md",
+      "sha256": "686c7bea0b2c63d3740ffaeac226a91f01322b3494d3619c80ca7ca2a7576380"
+    },
+    {
+      "ruta": "docs/qc-unidades-1-2-aplicacion.md",
+      "sha256": "a4dd7cc80f926bdf4a36089848510558e217407339e70e0fa59be9f2f4f6950c"
+    },
+    {
+      "ruta": "docs/qc/diseno-ep-bva-hcv.json",
+      "sha256": "c5cbd6bff1a5216071039aed4efb84d3c2f6e60aeacc6aae8401899002509279"
+    },
+    {
+      "ruta": "docs/qc/registro-ejecuciones-behave.json",
+      "sha256": "4cb7d4c8227936a3f9e90c1e8d6d44f0b9ccd94c4a2d471f568c3d1d625cc6e6"
+    },
+    {
+      "ruta": "docs/revision-general-hcv-2026-10-26.md",
+      "sha256": "a5da29bf8ed63be04be4b7ae71a2ae117d326630ddc8b59f4cfeccd47009f65f"
+    },
+    {
+      "ruta": "reports/qc/TC-015-20261116-143246.json",
+      "sha256": "e7d0afb4dca5193c39aa3dc8feed3f68d07df5b47c0943a5c22d353182093de2"
+    },
+    {
+      "ruta": "reports/qc/TC-015-20261116-144536.json",
+      "sha256": "406938ff2f8e5a45ecba0ffcd35c973b80c92580bbbf0e692f2d421c806fbd1f"
+    },
+    {
+      "ruta": "reports/qc/TC-015-20261116-150951.json",
+      "sha256": "ee83b08bec0a2a8849649c35b01a136e434b96854d22be616d1384da77dcd75d"
+    },
+    {
+      "ruta": "reports/qc/TC-015-20261116-151206.json",
+      "sha256": "84d44e95cf7b42b3d14269d0751f278ed121c0fdd57ed127b05f934f5395c6d7"
+    },
+    {
+      "ruta": "reports/qc/unidad4/revision-diseno.json",
+      "sha256": "85f82fd545ce299850df3877021bffca8b9d6e22a79606ef5a62f2caa84fa571"
+    },
+    {
+      "ruta": "reports/qc/unidades-1-2/conciliacion-manual.json",
+      "sha256": "d65a5ac4be237f1faf9f8325acb718735e37c1f6403905663e13e04729045b8b"
+    },
+    {
+      "ruta": "reports/qc/unidades-1-2/fuentes-documentales.json",
+      "sha256": "4d8e085692a36f654a9424ed6dc14d5a5d1807ff411019ee28c08733b87c650a"
+    }
+  ],
+  "hallazgos": [
+    {
+      "id": "HCV-01",
+      "titulo": "Restauración bloqueada al leer metadatos raíz",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-6.2"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "Toda restauración desde la interfaz se detenía antes de la API.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Recuperar el conjunto clínico es una función relevante de continuidad.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-01"
+        }
+      ],
+      "sintoma_fuente": "El lector solo aceptaba `documentos/nombre`, pero intentaba leer `manifest.json` y `datos-clinicos.json` de la raíz. Toda restauración UI fallaba antes de llamar a la API.",
+      "correccion_fuente": "Allowlist exacta para los dos metadatos raíz; se conserva la validación de rutas documentales en `public/js/backups.js`.",
+      "verificacion_fuente": "Regresión de lectura/traversal y restauraciones reales Agregar/Reemplazar desde Chrome.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-02",
+      "titulo": "Respaldo bloqueado por referencias residuales del journal",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-6.1",
+        "RF-4.4",
+        "RF-4.5"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "La exportación podía quedar impedida indefinidamente tras operaciones documentales.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Impide obtener copias del conjunto clínico.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-02"
+        }
+      ],
+      "sintoma_fuente": "Un journal documental `completed` conservaba `backup_key` tras eliminar su copia. El respaldo lo interpretaba como pendiente y respondía 409 indefinidamente.",
+      "correccion_fuente": "Limpieza compartida que elimina archivos antes de vaciar referencias; recuperación de filas históricas; el respaldo distingue operación sin confirmar de limpieza residual confirmada. `document-operations.js`, `document-service.js`, ambos repositorios de operaciones/respaldo.",
+      "verificacion_fuente": "Reemplazo 200 y eliminación 204 seguidos de exportación 201 con MariaDB real; limpieza histórica comprobada.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-03",
+      "titulo": "Archivo temporal de eliminación sin limpiar hasta reiniciar",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-4.5"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "La metadata podía eliminarse antes de retirar el archivo privado residual. No se afirma exposición pública.",
+      "prioridad_propuesta": "P2",
+      "justificacion_prioridad": "Requiere corregir la coordinación de archivos; el residuo tenía recuperación al reiniciar.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-03"
+        }
+      ],
+      "sintoma_fuente": "`finishDelete()` recibía `backupKey`/`oldKey` del flujo normal, pero solo leía nombres SQL. Podía borrar metadata dejando el `.deleted` hasta el reinicio.",
+      "correccion_fuente": "Normalización de ambas formas antes de resolver/eliminar el archivo en `document-operations.js`.",
+      "verificacion_fuente": "Regresión que exige eliminación física antes del DELETE; comprobación física HTTP/MariaDB.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-04",
+      "titulo": "Limpieza postcommit confundida con restauración no confirmada",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-6.2"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "Un reintento perdía el reconocimiento de un commit ya realizado. No se atribuye pérdida clínica efectivamente ocurrida.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Una recuperación debe distinguir un commit de una operación no confirmada.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-04"
+        }
+      ],
+      "sintoma_fuente": "Un fallo de limpieza postcommit pasaba a `requiere_atencion`; el reintento no admitía ese estado y perdía la evidencia del commit. Podía terminar como `RESTORE_NOT_COMMITTED`.",
+      "correccion_fuente": "`limpieza_pendiente` conserva el resultado confirmado; se acepta la variante histórica inequívoca y se impide entrar a rollback para una operación confirmada. `backup-service.js`.",
+      "verificacion_fuente": "Regresiones de múltiples fallos y reintento; MariaDB real con fallo transitorio controlado y posterior finalización.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-05",
+      "titulo": "Cancelación podía abandonar archivos y detalles de recuperación",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-6.2"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "Una caída entre el cambio de estado y la limpieza dejaba trabajo fuera de recuperación.",
+      "prioridad_propuesta": "P2",
+      "justificacion_prioridad": "Exige asegurar recuperación, aunque el escenario requiere esa ventana de interrupción.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-05"
+        }
+      ],
+      "sintoma_fuente": "Cancelar marcaba `fallido` antes de limpiar; la recuperación excluía ese estado. Una caída en esa ventana abandonaba archivos y detalles.",
+      "correccion_fuente": "Estado recuperable hasta completar limpieza y auditoría; selección de fallidos históricos que todavía tengan detalles. `backup-service.js`, `backup-repository.js`.",
+      "verificacion_fuente": "Temporales reales y journal MariaDB; limpieza al recuperar y un solo evento de cancelación tras repetir recuperación.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-06",
+      "titulo": "Lotes de restauración válidos superaban el límite JSON",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-6.2"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "El lote fallaba con HTTP 413 a pesar de contener registros válidos.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Bloquea recuperar información que el sistema debe poder conservar.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-06"
+        }
+      ],
+      "sintoma_fuente": "Cinco registros válidos con notas grandes formaban más de 256 KiB y recibían 413.",
+      "correccion_fuente": "Lotes por bytes UTF-8, incluido el sobre, además del máximo de cinco registros; mensaje explícito si un registro individual no cabe. `backups.js`.",
+      "verificacion_fuente": "Regresiones UTF-8 y envío real desde Chrome de cinco pacientes con notas sintéticas grandes sin 413.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-07",
+      "titulo": "Reentrada del diálogo permitía cambiar el origen de una operación",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-6.1",
+        "RF-6.2"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "Se podían habilitar controles y alterar carpetas durante una operación.",
+      "prioridad_propuesta": "P2",
+      "justificacion_prioridad": "Debe corregirse la coordinación; esperar sin reabrir ofrecía una alternativa de uso.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-07"
+        }
+      ],
+      "sintoma_fuente": "Reabrir el diálogo o elegir otra carpeta podía habilitar controles durante una operación y cambiar su origen.",
+      "correccion_fuente": "Estado activo para ejecución/pickers; carpetas capturadas localmente; generaciones de sesión invalidan tareas anteriores. `backups.js`.",
+      "verificacion_fuente": "Pruebas de reentrada y picker/respuesta obsoletos; cierre/reapertura durante creación en Chrome mantuvo controles bloqueados.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-08",
+      "titulo": "Vista clínica conservaba identificadores después de restaurar",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-6.2",
+        "RF-2.2"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "La interfaz podía presentar fichas o IDs que el modo Reemplazar ya había eliminado.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "La consulta posterior debe representar el conjunto realmente restaurado.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-08"
+        }
+      ],
+      "sintoma_fuente": "Tras restaurar, solo se actualizaba el resumen del diálogo. La ficha/lista principal podía conservar IDs eliminados.",
+      "correccion_fuente": "`actualizarVistaClinicaTrasRestauracion(modo)` recarga el listado y descarta ficha/IDs de Reemplazar; preserva selección válida en Agregar. Un error de refresco posterior al commit no se presenta como rollback. `app.js`, `backups.js`.",
+      "verificacion_fuente": "Ambos modos desde Chrome; conteos reales y ausencia del ID anterior después de Reemplazar.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-09",
+      "titulo": "Datos y roles anteriores conservados al cambiar de sesión",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-1.1",
+        "RF-1.2",
+        "RF-1.3"
+      ],
+      "tc": [],
+      "severidad": "S1",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "El estado y respuestas en vuelo podían publicar contenido de la identidad anterior.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "La separación entre identidades es esencial para confidencialidad y autorización.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-09"
+        }
+      ],
+      "sintoma_fuente": "Logout conservaba fichas y roles en memoria. Una nueva identidad podía recibir contenido anterior; respuestas en vuelo podían volver a publicarlo.",
+      "correccion_fuente": "`limpiarDatosClinicos()`, versión de vista, limpieza al cerrar/perder/cambiar sesión y evento interno de reinicio para respaldos. `app.js`, `backups.js`.",
+      "verificacion_fuente": "Logout real dejó arrays/ficha/roles/metadatos vacíos; respuesta iniciada antes de limpiar fue rechazada como obsoleta.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-10",
+      "titulo": "DOCX válidos rechazados por el orden de sus elementos",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-4.2"
+      ],
+      "tc": [],
+      "severidad": "S3",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "Una clase de paquetes DOCX válidos era rechazada; otros formatos y paquetes podían operar.",
+      "prioridad_propuesta": "P2",
+      "justificacion_prioridad": "Planificar la compatibilidad sin alterar bytes ni omitir controles de integridad.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-10"
+        }
+      ],
+      "sintoma_fuente": "El validador DOCX miraba solo el primer Override y Relationship. Rechazaba paquetes válidos con propiedades antes del documento principal.",
+      "correccion_fuente": "Busca la declaración y relación correctas entre todos los elementos; conserva CRC, tamaños, partes requeridas y bytes originales. `document-storage.js`.",
+      "verificacion_fuente": "Regresión falló antes del arreglo y pasó después; DOCX sintético con propiedades anteriores se cargó y descargó mediante Chrome/MariaDB.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-11",
+      "titulo": "Bloqueo histórico se activaba un intento antes del umbral",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-1.1"
+      ],
+      "tc": [],
+      "severidad": "S3",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "Desviación de una unidad respecto de la regla existente entonces. Esa regla fue posteriormente retirada.",
+      "prioridad_propuesta": "P2",
+      "justificacion_prioridad": "Prioridad retrospectiva de la regla antigua; no hay acción de restaurar ni ajustar ese umbral actual.",
+      "estado_documentado": "corregido históricamente; expectativa de bloqueo retirada después",
+      "accion": "No reintroducir el bloqueo ni usar el umbral antiguo como criterio vigente.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-11"
+        }
+      ],
+      "sintoma_fuente": "El UPDATE de intentos incrementaba el contador y luego sumaba otro uno al evaluar el límite. MariaDB bloqueaba al noveno fallo.",
+      "correccion_fuente": "Evaluar `blocked_until` antes del incremento en `auth-repository.js`, sin cambiar el límite definido.",
+      "verificacion_fuente": "SQL real antes: fallo 9 bloqueado. Después: 1–9 sin bloqueo, 10 bloqueado; prueba revertida mediante rollback.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-12",
+      "titulo": "Restablecimiento por CLI no revocaba sesiones previas",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-5.2",
+        "RF-1.2"
+      ],
+      "tc": [],
+      "severidad": "S1",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "La cookie anterior podía seguir autorizando después del cambio de contraseña.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "La recuperación de credenciales debe invalidar sesiones comprometidas.",
+      "estado_documentado": "corrección documentada; verificación integral del CLI pendiente",
+      "accion": "El helper de revocación fue verificado con SQL; falta ensayar el flujo CLI completo en un destino aislado autorizado.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-12"
+        }
+      ],
+      "sintoma_fuente": "El CLI cambiaba el hash sin invalidar sesiones existentes; una cookie previa seguía siendo válida.",
+      "correccion_fuente": "`deleteSessionsForUser()` parametrizado y llamado en la misma transacción que UPDATE y auditoría en `reset-password.js`. Se agregó la plantilla de recuperación que faltaba y su documentación de privilegios.",
+      "verificacion_fuente": "Helper de revocación ejecutado contra sesiones MariaDB dentro de una transacción y revertido; revisión del orden transaccional del CLI. No se ejecutó el cambio interactivo de contraseña ni se alteraron credenciales.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "HCV-13",
+      "titulo": "Cola de imágenes continuaba con una identidad nueva",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-4.2",
+        "RF-1.3"
+      ],
+      "tc": [],
+      "severidad": "S1",
+      "ambito_severidad": "producto en el contexto histórico",
+      "justificacion_severidad": "Solicitudes pendientes podían enviarse con la cookie de otra sesión tras cambiar de identidad.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Implica atribución y autorización incorrectas durante cargas documentales.",
+      "estado_documentado": "corregido y verificado según evidencia histórica; no reejecutado en U5",
+      "accion": "Sin nueva tarea correctiva atribuida a esta revisión; conservar regresión y alcance de la evidencia.",
+      "evidencias": [
+        {
+          "ruta": "docs/revision-general-hcv-2026-10-26.md",
+          "apartado": "Registro de fallos y correcciones",
+          "id_fuente": "HCV-13"
+        }
+      ],
+      "sintoma_fuente": "Una cola de imágenes del formulario podía continuar con la cookie de una sesión nueva después de cerrar y volver a iniciar sesión durante el primer archivo.",
+      "correccion_fuente": "Capturar la versión del formulario y detener la cola/continuaciones obsoletas; los botones se reinician con la nueva vista y un finally antiguo no altera la nueva operación. `app.js`.",
+      "verificacion_fuente": "Chrome con primer upload retenido, logout y login reales: antes intentó 2 uploads; después solo el primero ya iniciado, sin enviar el segundo.",
+      "observacion_actual": "No se presupone que el fallo siga abierto en la imagen beta actual."
+    },
+    {
+      "id": "QC-U5-PRO-01",
+      "titulo": "Otra cuenta rechazada por el bloqueo compartido del login",
+      "tipo": "producto",
+      "fecha_hallazgo_documentada": "2026-11-16",
+      "rf": [
+        "RF-1.1"
+      ],
+      "tc": [
+        "TC-015"
+      ],
+      "severidad": "S2",
+      "ambito_severidad": "producto",
+      "justificacion_severidad": "Una función esencial de acceso falló para una cuenta válida después de errores de otra. No se acreditó caída de todo el hospital ni daño clínico.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Resolver antes de usar la instalación para acceso compartido.",
+      "estado_documentado": "corregido y verificado en Docker beta para TC-015; aceptación hospitalaria pendiente",
+      "accion": "Conservar TC-015 como regresión y completar el alcance de sesiones/red cuando corresponda.",
+      "evidencias": [
+        {
+          "ruta": "reports/qc/TC-015-20261116-150951.json"
+        },
+        {
+          "ruta": "reports/qc/TC-015-20261116-151206.json"
+        },
+        {
+          "ruta": "docs/qc-login-sin-bloqueo.md"
+        }
+      ],
+      "grupo_incidente": "TC-015-bloqueo",
+      "contar_como_defecto_independiente": true
+    },
+    {
+      "id": "QC-U5-AUT-01",
+      "titulo": "Selector Usuario resolvía dos campos",
+      "tipo": "automatizacion",
+      "fecha_hallazgo_documentada": "2026-11-16",
+      "rf": [
+        "RF-1.1"
+      ],
+      "tc": [
+        "TC-015"
+      ],
+      "severidad": "S3",
+      "ambito_severidad": "automatizacion",
+      "justificacion_severidad": "La preparación del piloto fallaba antes de evaluar el comportamiento; no era un defecto de login del producto.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Impedía ejecutar el caso elegido para el trabajo.",
+      "estado_documentado": "corregido; el piloto completó posteriormente el escenario",
+      "accion": "Mantener selectores dentro de #loginForm.",
+      "evidencias": [
+        {
+          "ruta": "docs/qc/registro-ejecuciones-behave.json"
+        },
+        {
+          "ruta": "reports/qc/TC-015-20261116-143246.json"
+        }
+      ],
+      "limite_evidencia": "El detalle de strict mode procede de la terminal aportada; el JSON inicial conserva el estado error sin esa excepción completa."
+    },
+    {
+      "id": "QC-U5-AUT-02",
+      "titulo": "Espera del botón de ingreso después de autenticar",
+      "tipo": "automatizacion",
+      "fecha_hallazgo_documentada": "2026-11-16",
+      "rf": [
+        "RF-1.1"
+      ],
+      "tc": [
+        "TC-015"
+      ],
+      "severidad": "S3",
+      "ambito_severidad": "automatizacion",
+      "justificacion_severidad": "Se esperaba un control de login oculto cuando el ingreso ya había abierto la aplicación.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Producía un falso fallo y detenía el piloto.",
+      "estado_documentado": "corregido; el piloto completó posteriormente el escenario",
+      "accion": "Esperar appShell en éxito y el formulario habilitado únicamente en rechazo.",
+      "evidencias": [
+        {
+          "ruta": "docs/qc/registro-ejecuciones-behave.json"
+        },
+        {
+          "ruta": "reports/qc/TC-015-20261116-144536.json"
+        }
+      ]
+    },
+    {
+      "id": "QC-U5-ENV-01",
+      "titulo": "Docker ejecutaba una imagen anterior al retiro del bloqueo",
+      "tipo": "entorno",
+      "fecha_hallazgo_documentada": "2026-11-16",
+      "rf": [
+        "RF-1.1"
+      ],
+      "tc": [
+        "TC-015"
+      ],
+      "severidad": "S2",
+      "ambito_severidad": "entorno",
+      "justificacion_severidad": "El código de trabajo y la aplicación probada representaban comportamientos distintos.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Debía corregirse el destino antes de aceptar el retesting.",
+      "estado_documentado": "resuelto: API beta actualizada y versión registrada",
+      "accion": "Registrar imagen y contexto en cada evaluación.",
+      "evidencias": [
+        {
+          "ruta": "docs/qc-login-sin-bloqueo.md"
+        },
+        {
+          "ruta": "docs/qc/registro-ejecuciones-behave.json"
+        }
+      ],
+      "grupo_incidente": "TC-015-bloqueo",
+      "contar_como_defecto_independiente": false,
+      "nota": "Causa/contexto del mismo incidente de QC-U5-PRO-01; no contar como un segundo bloqueo independiente."
+    },
+    {
+      "id": "QC-U5-DOC-01",
+      "titulo": "Diez resultados manuales contradictorios",
+      "tipo": "documentacion",
+      "fecha_hallazgo_documentada": "2026-11-16",
+      "rf": [
+        "RF-1.1",
+        "RF-1.2"
+      ],
+      "tc": [
+        "TC-006",
+        "TC-007",
+        "TC-008",
+        "TC-009",
+        "TC-010",
+        "TC-011",
+        "TC-012",
+        "TC-013",
+        "TC-014",
+        "TC-015"
+      ],
+      "severidad": "S3",
+      "ambito_severidad": "documentacion",
+      "justificacion_severidad": "Pass/PASS convive con No ejecutado en TC-006 a TC-015; no permite acreditar el resultado manual.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Resolver antes de usar esos estados como conclusión de la defensa o de aceptación.",
+      "estado_documentado": "por conciliar con el autor o evidencia verificable",
+      "accion": "Conservar el original; registrar la confirmación real y separar las ejecuciones automáticas.",
+      "evidencias": [
+        {
+          "ruta": "reports/qc/unidades-1-2/conciliacion-manual.json"
+        },
+        {
+          "ruta": "docs/qc-unidades-1-2-aplicacion.md"
+        }
+      ]
+    },
+    {
+      "id": "QC-U5-DOC-02",
+      "titulo": "Lista de actores de HU-01 incompleta frente a los perfiles actuales",
+      "tipo": "documentacion",
+      "fecha_hallazgo_documentada": "2026-11-16",
+      "rf": [
+        "RF-1.1"
+      ],
+      "tc": [],
+      "severidad": "S3",
+      "ambito_severidad": "documentacion",
+      "justificacion_severidad": "La enumeración documental no refleja todos los perfiles actuales; no demuestra una prohibición funcional.",
+      "prioridad_propuesta": "P2",
+      "justificacion_prioridad": "Actualizar la fuente antes de ampliar criterios por perfil.",
+      "estado_documentado": "ajuste editorial pendiente",
+      "accion": "Revisar HU-01 preservando permisos y reglas vigentes.",
+      "evidencias": [
+        {
+          "ruta": "reports/qc/unidades-1-2/fuentes-documentales.json"
+        },
+        {
+          "ruta": "docs/qc-unidades-1-2-aplicacion.md"
+        }
+      ]
+    },
+    {
+      "id": "QC-U5-DIS-01",
+      "titulo": "TC-126/127 pueden interferir por el usuario recortado",
+      "tipo": "diseno",
+      "fecha_hallazgo_documentada": "2026-11-16",
+      "rf": [
+        "RF-5.3"
+      ],
+      "tc": [
+        "TC-126",
+        "TC-127"
+      ],
+      "severidad": "S3",
+      "ambito_severidad": "diseno",
+      "justificacion_severidad": "Un recorte de 101 a 100 letras q podría coincidir con la cuenta creada por el caso anterior. Es una condición de diseño, no un fallo de producto reproducido.",
+      "prioridad_propuesta": "P2",
+      "justificacion_prioridad": "Preparar datos independientes antes de ejecutar estas variantes.",
+      "estado_documentado": "pendiente de ajuste de preparación",
+      "accion": "Distinguir valor introducido, valor enviado y conflicto de unicidad; no borrar datos para hacer pasar el caso.",
+      "evidencias": [
+        {
+          "ruta": "docs/qc-unidad-4-diseno-pruebas.md"
+        }
+      ]
+    },
+    {
+      "id": "QC-U5-DIS-02",
+      "titulo": "Siete puntos BVA sin caso dedicado en el alcance elegido",
+      "tipo": "diseno",
+      "fecha_hallazgo_documentada": "2026-11-16",
+      "rf": [
+        "RF-2.3",
+        "RF-5.3"
+      ],
+      "tc": [],
+      "severidad": "S3",
+      "ambito_severidad": "diseno",
+      "justificacion_severidad": "Nombre 1/2, usuario 4/99 y contraseña 1023/1024/1025 carecen de un TC dedicado identificado. No significa siete fallos del sistema.",
+      "prioridad_propuesta": "P2",
+      "justificacion_prioridad": "Completar fichas antes de afirmar diseño completo de las fronteras seleccionadas.",
+      "estado_documentado": "pendiente de formalizar casos",
+      "accion": "Conservar variantes U4 hasta acordar su incorporación al banco, sin inventar resultados.",
+      "evidencias": [
+        {
+          "ruta": "docs/qc/diseno-ep-bva-hcv.json"
+        },
+        {
+          "ruta": "reports/qc/unidad4/revision-diseno.json"
+        }
+      ]
+    },
+    {
+      "id": "QC-U5-ENV-02",
+      "titulo": "Almacenamiento privado sin configuración en la API 3306/3000",
+      "tipo": "entorno",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-4.2",
+        "RF-6.1"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "entorno",
+      "justificacion_severidad": "El health devolvía 503 not_configured; impedía operaciones documentales y respaldos con archivos. Era una configuración faltante detectada por el guard.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Restablecer la configuración antes de probar documentos.",
+      "estado_documentado": "resuelto según continuación histórica: almacenamiento ready",
+      "accion": "No trasladar esa incidencia histórica a Docker beta ni asignar una carpeta vacía a referencias existentes.",
+      "evidencias": [
+        {
+          "ruta": "docs/prueba-carga-respaldo-3306-2026-10-26.md"
+        }
+      ]
+    },
+    {
+      "id": "QC-U5-ENV-03",
+      "titulo": "Credenciales de prueba no disponibles al iniciar el recorrido 3306",
+      "tipo": "entorno",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-1.1"
+      ],
+      "tc": [],
+      "severidad": "S3",
+      "ambito_severidad": "entorno",
+      "justificacion_severidad": "Impedía preparar el acceso autenticado; el rechazo del diagnóstico SQL no demostraba fallo de la cuenta de la API.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Era necesario disponer de una cuenta autorizada para continuar.",
+      "estado_documentado": "resuelto según continuación con pruebas autenticadas",
+      "accion": "Usar credenciales facilitadas por canales autorizados; no eludir el login con SQL.",
+      "evidencias": [
+        {
+          "ruta": "docs/prueba-carga-respaldo-3306-2026-10-26.md"
+        }
+      ]
+    },
+    {
+      "id": "QC-U5-ENV-04",
+      "titulo": "Preparación SQL de respaldos pendiente en la instalación 3306",
+      "tipo": "entorno",
+      "fecha_hallazgo_documentada": "2026-10-26",
+      "rf": [
+        "RF-6.1"
+      ],
+      "tc": [],
+      "severidad": "S2",
+      "ambito_severidad": "entorno",
+      "justificacion_severidad": "No se podía completar el flujo de respaldo hasta autorizar su esquema y privilegios.",
+      "prioridad_propuesta": "P1",
+      "justificacion_prioridad": "Resolver la preparación antes de evaluar el respaldo completo.",
+      "estado_documentado": "resuelto históricamente con autorización y respaldo final comprobado",
+      "accion": "Las referencias históricas a 007 de respaldos corresponden al contenido hoy numerado 008; no reaplicar SQL.",
+      "evidencias": [
+        {
+          "ruta": "docs/prueba-carga-respaldo-3306-2026-10-26.md"
+        },
+        {
+          "ruta": "docs/evidencias/habilitacion-007-3306.json"
+        }
+      ]
+    }
+  ],
+  "smoke_actual": {
+    "ruta": "reports/qc/unidad5/SMOKE-20261116-205907-761026.json",
+    "sha256": "6546115ea9aa8a3e3f64a5b43cda40249d260a95f7fece197c62eae49aa0d6df",
+    "estado": "aprobado",
+    "comprobaciones": 10,
+    "duracion_segundos": 2.31062,
+    "contexto_estable": true,
+    "limpieza_sesion_confirmada": true
+  },
+  "bibliografia": {
+    "archivo": "C:\\Users\\Hered\\Downloads\\unidad5_ejecucion_pruebas (2).html",
+    "sha256": "21fb285d335c2f9eefe27a1259d3f9ad1e333f0b13ac9dbcbe4045afa44cfba0",
+    "niveles_consultados": "S1 Crítica / S2 Alta / S3 Media / S4 Baja; P1 Alta / P2 Media / P3 Baja"
+  }
+}

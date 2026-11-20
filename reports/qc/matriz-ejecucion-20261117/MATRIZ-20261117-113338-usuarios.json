@@ -1,0 +1,183 @@
+{
+  "inicio": "2026-11-17T14:33:38.977974+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "usuarios",
+  "entorno": {
+    "api_imagen_inicio": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb|2026-11-17T14:22:46.617135344Z"
+  },
+  "resultados": [
+    {
+      "caso": "TC-139",
+      "objetivo": "Cambiar contraseña y revocar dos sesiones de esa cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:33:39.023251+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/25/password",
+          "esperado": [
+            204
+          ],
+          "obtenido": 204
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/25/password: HTTP 204; esperado [204]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 401; esperado [401]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.404
+    },
+    {
+      "caso": "TC-141",
+      "objetivo": "Cambiar contraseña de una cuenta propia sintética",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:33:39.436853+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/26/password",
+          "esperado": [
+            204
+          ],
+          "obtenido": 204
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/26/password: HTTP 204; esperado [204]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 401; esperado [401]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.325
+    },
+    {
+      "caso": "TC-143",
+      "objetivo": "Impedir autodesactivación y pérdida del rol administrador",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:33:39.770656+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/1",
+          "esperado": [
+            409
+          ],
+          "obtenido": 409,
+          "codigo_error": "SELF_ADMIN_PROTECTION"
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/1",
+          "esperado": [
+            409
+          ],
+          "obtenido": 409,
+          "codigo_error": "SELF_ADMIN_PROTECTION"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/1: HTTP 409; esperado [409]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/1: HTTP 409; esperado [409]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.021
+    }
+  ]
+}

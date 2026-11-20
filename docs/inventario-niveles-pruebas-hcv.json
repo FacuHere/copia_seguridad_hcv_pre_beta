@@ -1,0 +1,395 @@
+{
+  "version": 1,
+  "fecha_revision": "2026-11-16",
+  "fundamento": "Unidad 3, apartados 3.1 a 3.4; entorno y criterios en 2.3 y 2.4.",
+  "alcance": "Clasificación lógica de archivos existentes. No representa proporciones de la pirámide, cobertura de código ni aprobación de toda la suite.",
+  "niveles": {
+    "unitaria": "Unidad/componente lógico con fronteras externas controladas; sin HTTP real, motor SQL ni filesystem documental en la acción bajo prueba.",
+    "integracion_parcial": "Dos o más componentes o una dependencia real (HTTP, navegador o filesystem), conservando otras fronteras sustituidas.",
+    "integracion_real": "Interacción backend con MariaDB real, condicionada a un entorno confirmado. No equivale a E2E del usuario.",
+    "sistema": "Comportamiento del sistema desplegado observado mediante recorridos completos.",
+    "aceptacion_usuario": "Validación de necesidades por usuarios representativos; sin evidencia de UAT ejecutada.",
+    "estatica": "Inspección automatizada del artefacto fuente; complementaria a los cuatro niveles dinámicos."
+  },
+  "artefactos": [
+    {
+      "archivo": "test/age.test.js",
+      "niveles": [
+        "unitaria"
+      ],
+      "justificacion": "Función age aislada en una VM, con fecha controlada. La lectura del archivo prepara la función; no es una consulta clínica ni una prueba de navegador.",
+      "ejemplos": [
+        "6 comprobaciones de edad con fechas sintéticas."
+      ],
+      "sha256_fuente": "8e4193a5bfbf1365bbb988cbe374f5a9a1e1aa366903d67791dba3543e3925fe"
+    },
+    {
+      "archivo": "test/auth.test.js",
+      "niveles": [
+        "unitaria",
+        "integracion_parcial"
+      ],
+      "justificacion": "Archivo mixto: los dos primeros casos recorren HTTP, rutas, controlador y servicio con repositorios sustituidos; los dos últimos llaman directamente al servicio con dobles.",
+      "ejemplos": [
+        "HTTP: doce fallos y acceso válido de la misma cuenta y de otra.",
+        "HTTP: errores de cuentas distintas y acceso posterior.",
+        "Servicio: validación de formato sin solicitar conexión.",
+        "Servicio: fallo de auditoría y rollback simulado."
+      ],
+      "sha256_fuente": "f68b3ab303b457f8f47f52588ce2eeb19bfeeddec150b506466a3e0dba11d5d3"
+    },
+    {
+      "archivo": "test/backup-recovery.test.js",
+      "niveles": [
+        "integracion_parcial"
+      ],
+      "justificacion": "Servicio de recuperación y filesystem temporal reales, repositorio y conexión sustituidos. No demuestra COMMIT o rollback en un motor MariaDB.",
+      "ejemplos": [
+        "Recuperación y limpieza de archivos tras un COMMIT representado por dobles."
+      ],
+      "sha256_fuente": "a288b20adaa9416a58326928ccd7d158ae7c2d516027498e69266516b06033bf"
+    },
+    {
+      "archivo": "test/backup-restore-validation.test.js",
+      "niveles": [
+        "unitaria"
+      ],
+      "justificacion": "Validadores de rutas, identidades y relaciones sobre objetos sintéticos, sin HTTP, filesystem de documentos ni SQL.",
+      "ejemplos": [
+        "Rechazar ../ y relaciones con pacientes ausentes."
+      ],
+      "sha256_fuente": "563a9367984aad559934cfb533385d698ca2f36b1cee18bde652f49ec7a4420b"
+    },
+    {
+      "archivo": "test/backups-frontend.test.js",
+      "niveles": [
+        "unitaria"
+      ],
+      "justificacion": "Pruebas del componente JavaScript en VM, con DOM, carpetas y API sustituidos. Unidad lógica: módulo de respaldos; no es E2E.",
+      "ejemplos": [
+        "Lotes UTF-8, cancelación y cambio de sesión con entorno controlado."
+      ],
+      "sha256_fuente": "8475f9c764227a0804cbdc4712693f5b5df13f716cee8c199a405d70ed02aaf6"
+    },
+    {
+      "archivo": "test/document-http-integration.test.js",
+      "niveles": [
+        "integracion_parcial"
+      ],
+      "justificacion": "HTTP, middleware, servicios y archivos temporales reales; MemoryMariaDb es un fake en memoria que no ejecuta SQL real.",
+      "ejemplos": [
+        "Carga y descarga preservan bytes y hash; permisos HTTP."
+      ],
+      "sha256_fuente": "ed9e424a6210b0587e2199d2ee1d79fd2e32faacdaf254f425a2bcaa44e6b62b"
+    },
+    {
+      "archivo": "test/document-operations.test.js",
+      "niveles": [
+        "unitaria",
+        "integracion_parcial"
+      ],
+      "justificacion": "Principalmente journal y filesystem temporal con un fake de persistencia. Incluye guardas de componente que se detienen antes de modificar archivos.",
+      "ejemplos": [
+        "Guarda: recuperación bloqueada impide preparar un movimiento.",
+        "Integración: eliminación física anterior a metadatos representados por el fake."
+      ],
+      "sha256_fuente": "45c7990b8867780c39021f4d9954204a4c52f1507372666d347e7555dffa4737"
+    },
+    {
+      "archivo": "test/document-route-contract.test.js",
+      "niveles": [
+        "estatica"
+      ],
+      "justificacion": "Lee fuentes y aplica expresiones regulares. No ejecuta rutas ni verifica el contrato de un servidor desplegado.",
+      "ejemplos": [
+        "Presencia de middleware y consultas esperadas en el texto del código."
+      ],
+      "sha256_fuente": "4d20346d085973a50ad323fd989b84970fc2633a0830ecdd2ab5faa8e90c78bb"
+    },
+    {
+      "archivo": "test/document-storage.test.js",
+      "niveles": [
+        "unitaria",
+        "integracion_parcial"
+      ],
+      "justificacion": "Los dos primeros casos validan configuración y claves; los restantes usan streams y archivos temporales reales. El enlace simbólico puede omitirse por permisos del equipo.",
+      "ejemplos": [
+        "Unidad: clave relativa y configuración.",
+        "Integración: carga multipart, bytes, SHA-256 y filesystem."
+      ],
+      "sha256_fuente": "6c0a65559091bba6181652f384e5eb627659e32f34cd2e2e6f4340ea723a6b4a"
+    },
+    {
+      "archivo": "test/documents-frontend.test.js",
+      "niveles": [
+        "estatica"
+      ],
+      "justificacion": "Comprueba patrones en el texto del frontend, sin ejecutar el DOM ni abrir un navegador.",
+      "ejemplos": [
+        "Referencia a endpoints autenticados y controles de carga."
+      ],
+      "sha256_fuente": "9b2ba6e1ed8ff5a8cf0c979ab53f14286f78162383327917148cd27da1e7c15d"
+    },
+    {
+      "archivo": "test/environment.test.js",
+      "niveles": [
+        "unitaria"
+      ],
+      "justificacion": "Componente de configuración: puertos, host y rechazo temprano de root sin crear un pool ni abrir conexiones.",
+      "ejemplos": [
+        "Rechazar puertos incompletos o fuera de rango."
+      ],
+      "sha256_fuente": "b26b39ec19567bbf1f14bed40a53ffb6381c9eb33718aeacfa500afe55fa4490"
+    },
+    {
+      "archivo": "test/mariadb.integration.test.js",
+      "niveles": [
+        "integracion_real"
+      ],
+      "justificacion": "HTTP, servicios, repositorios, MariaDB y archivos temporales. Optativa; exige confirmar explícitamente la instancia y revierte datos sintéticos. Su existencia no prueba ejecución en Docker.",
+      "ejemplos": [
+        "Flujo de pacientes, estudios y documentos con SQL real."
+      ],
+      "sha256_fuente": "d70ef5588bb7e7366074b8fbccb4754c5cd7d988548f543a92e49e061d4493f3"
+    },
+    {
+      "archivo": "test/patient-storage-rename-http.test.js",
+      "niveles": [
+        "integracion_parcial"
+      ],
+      "justificacion": "HTTP y componentes backend con pool sustituido; no modifica pacientes ni documentos del entorno beta.",
+      "ejemplos": [
+        "Cambio de etiquetas con documentos y almacenamiento no configurado."
+      ],
+      "sha256_fuente": "8d08cbdad9566de1100faca2a91af2e91597af618bb6517216585c9b3207c8b6"
+    },
+    {
+      "archivo": "test/patients-frontend.test.js",
+      "niveles": [
+        "estatica"
+      ],
+      "justificacion": "Lee HTML/JavaScript y busca patrones. No verifica interacción de formularios mediante navegador.",
+      "ejemplos": [
+        "Campos y separación entre envío y cancelación."
+      ],
+      "sha256_fuente": "74fb8f7d540fd821fcd5ab0c9fedb1033ab75502510e28b43c21e5e46a1b695f"
+    },
+    {
+      "archivo": "test/security.test.js",
+      "niveles": [
+        "unitaria",
+        "integracion_parcial"
+      ],
+      "justificacion": "Caso de contraseñas: componente de hash y verificación. Caso RBAC: middleware y repositorio reales, con respuestas SQL sustituidas.",
+      "ejemplos": [
+        "scrypt acepta la contraseña correcta.",
+        "Permisos consultados a través de una frontera de persistencia simulada."
+      ],
+      "sha256_fuente": "f03a1382e4489af7a216e6bd8f863a3bd576e68004dc310f8186013a22972de6"
+    },
+    {
+      "archivo": "test/server-startup-storage.test.js",
+      "niveles": [
+        "integracion_parcial"
+      ],
+      "justificacion": "Arranque de la aplicación y recuperación con filesystem temporal; pool sintético. No es la instalación completa del hospital.",
+      "ejemplos": [
+        "Recuperación de una carga antes de aceptar tráfico."
+      ],
+      "sha256_fuente": "c3c41c00aa0bd2a64bba00bc852961db5b03ed33eb6a1548588fd92d281cb246"
+    },
+    {
+      "archivo": "test/storage-readiness-http.test.js",
+      "niveles": [
+        "integracion_parcial"
+      ],
+      "justificacion": "HTTP, routers y estado de almacenamiento, sin MariaDB ni un repositorio documental productivo.",
+      "ejemplos": [
+        "503 mientras la recuperación está bloqueada y disponibilidad de diagnósticos."
+      ],
+      "sha256_fuente": "b9b5b6a9d87c85dcb9561452131df3a9666363a86b79d3c2e7015dedea6d3f6c"
+    },
+    {
+      "archivo": "test/studies.test.js",
+      "niveles": [
+        "unitaria",
+        "estatica"
+      ],
+      "justificacion": "Dos casos de texto y un caso mixto: inspección de fuentes más ejecución de serializeStudy con objetos BIGINT sintéticos.",
+      "ejemplos": [
+        "Conversión de IDs a cadenas; no ejecutar la migración por leer su SQL."
+      ],
+      "sha256_fuente": "c484fe443b142907f27f03c6d5564f387a80efe3aca5004538d85e193ef7f7a7"
+    },
+    {
+      "archivo": "test/study-date-http.test.js",
+      "niveles": [
+        "integracion_parcial"
+      ],
+      "justificacion": "Ruta HTTP real y componentes backend con persistencia sustituida.",
+      "ejemplos": [
+        "Rechazo de cambio de fecha de estudio por HTTP."
+      ],
+      "sha256_fuente": "9f5e253d2ea355f43ba56fbbeb3633af9323082c54f6f30cf81e1da4d6f6a764"
+    },
+    {
+      "archivo": "test/users-mariadb.integration.test.js",
+      "niveles": [
+        "integracion_real"
+      ],
+      "justificacion": "HTTP y SQL reales con transacción exterior y datos sintéticos; optativa y condicionada a autorización/configuración. Incluye inyección controlada de un error para comprobar rollback.",
+      "ejemplos": [
+        "Unicidad real, revocación de sesiones y rollback."
+      ],
+      "sha256_fuente": "ecf5698b9aaf541d94e7dd4374c04d9899484a44d90eb60ac06f4bab6a511fe6"
+    },
+    {
+      "archivo": "test/users.test.js",
+      "niveles": [
+        "unitaria",
+        "integracion_parcial"
+      ],
+      "justificacion": "Casos de servicio/repositorio con fronteras sustituidas y un último caso HTTP con servicios sustituidos. Contiene subpruebas; un archivo no equivale a un caso.",
+      "ejemplos": [
+        "Validaciones, protección del administrador, transacciones simuladas y serialización.",
+        "Último caso: middleware y permisos sobre rutas HTTP."
+      ],
+      "sha256_fuente": "6ae93eade6ecb710cf4bcf87368760b2ab654442c80c2c9510c27c8e3e29e4b3"
+    },
+    {
+      "archivo": "test/browser/users-ui.py",
+      "niveles": [
+        "integracion_parcial"
+      ],
+      "justificacion": "Chromium real con archivos del frontend y respuestas API interceptadas. Integra la UI y el navegador, pero no Express/MariaDB desplegados.",
+      "ejemplos": [
+        "Creación/edición de usuarios con respuestas sintéticas."
+      ],
+      "sha256_fuente": "543f7a8c032c6b16bf1adec3eb9325cebc7c0549fc79b1fec47b5d7f1b8c0423"
+    },
+    {
+      "archivo": "features/autenticacion.feature",
+      "niveles": [
+        "sistema"
+      ],
+      "justificacion": "TC-015 recorre el navegador, frontend, Express y MariaDB reales del Docker beta. Se clasifica por el objetivo de sistema, no se vuelve a contar en los niveles inferiores.",
+      "ejemplos": [
+        "TC-015: otra cuenta ingresa tras doce intentos fallidos en el mismo navegador."
+      ],
+      "sha256_fuente": "ed6bf7e0b4b24aec2d999c5beb513739f5198c7e542dbe180403f0cd38535581"
+    }
+  ],
+  "soporte": [
+    {
+      "archivo": "features/environment.py",
+      "funcion": "Preparación, credenciales en memoria y aislamiento/cierre de navegador.",
+      "sha256_fuente": "7b74c6cde3a755ffae64cd1dbaecc26cbc3c181b242b23cdbedabab7c27d6bf9"
+    },
+    {
+      "archivo": "features/steps/autenticacion.py",
+      "funcion": "Implementación de TC-015; no representa casos independientes adicionales.",
+      "sha256_fuente": "fb84a7e1a9434c65c9433fd0fc0d268dac2460cf0cad15a27c6b2756fd9dcac5"
+    },
+    {
+      "archivo": "test/helpers/docx-fixture.js",
+      "funcion": "Generador de archivos sintéticos; no es un caso de aceptación.",
+      "sha256_fuente": "83a9a336073880ac920b779eba1c8307d2d36db8e9194fa22f948911f7052eac"
+    }
+  ],
+  "propuestas_no_implementadas": [
+    {
+      "ruta": "qc/api/",
+      "herramienta": "Pytest y cliente HTTP de Playwright",
+      "objetivo": "Pruebas propias en Python de contratos API e integración del backend, sin clasificarlas como unitarias de JavaScript."
+    },
+    {
+      "ruta": "features/paginas/",
+      "herramienta": "Python y Playwright",
+      "objetivo": "Acciones y selectores de interfaz reutilizables al ampliar los escenarios."
+    }
+  ],
+  "ejecuciones_referenciadas": [
+    {
+      "reporte": "reports/qc/unidad3/unitarias-20261116.txt",
+      "tipo": "unitaria",
+      "resultado": "13 aprobadas, 0 fallidas, 0 omitidas",
+      "alcance": [
+        "test/age.test.js",
+        "test/environment.test.js",
+        "test/backup-restore-validation.test.js"
+      ]
+    },
+    {
+      "reporte": "reports/qc/unidad3/autenticacion-mixta-20261116.txt",
+      "tipo": "mixta",
+      "resultado": "4 aprobadas, 0 fallidas, 0 omitidas",
+      "alcance": [
+        "test/auth.test.js"
+      ]
+    },
+    {
+      "reporte": "reports/qc/TC-015-20261116-150951.json",
+      "tipo": "sistema",
+      "resultado": "Fallido: bloqueo compartido HTTP 429 y Retry-After 899; 4 pasos aprobados, 1 fallido, 1 omitido."
+    },
+    {
+      "reporte": "reports/qc/TC-015-20261116-151206.json",
+      "tipo": "sistema",
+      "resultado": "Aprobado: 6 pasos; una ejecución de un TC, no seis casos."
+    },
+    {
+      "reporte": "reports/qc/unidades-1-2/herramientas-qc-20261116.txt",
+      "tipo": "herramientas_qc",
+      "resultado": "12 aprobadas; sin HCV ni MariaDB."
+    },
+    {
+      "reporte": "reports/qc/QC-20261116-160706-645857.json",
+      "tipo": "sistema",
+      "resultado": "TC-015 aprobado de nuevo; 6 pasos; imagen estable registrada por el ejecutor."
+    },
+    {
+      "reporte": "reports/qc/unidad5/SMOKE-20261116-205907-761026.json",
+      "tipo": "smoke_sistema_acotado",
+      "resultado": "Diez controles aprobados; acceso/consulta, salud de dependencias y contexto estable. Sin altas clínicas. No son diez TC."
+    },
+    {
+      "reporte": "reports/qc/unidad5/herramienta-smoke-20261116.txt",
+      "tipo": "herramientas_qc",
+      "resultado": "Siete comprobaciones aprobadas del ejecutor de smoke; no pruebas del backend HCV."
+    }
+  ],
+  "limitaciones": [
+    "Los archivos mixtos no se suman como si fueran exclusivamente unitarios.",
+    "La inspección de los otros archivos no equivale a haber ejecutado sus pruebas en esta revisión.",
+    "Las dos integraciones MariaDB optativas no se habilitaron en esta revisión.",
+    "No se midió cobertura de código ni se configuró CI.",
+    "No se ejecutó UAT ni se verificó una red hospitalaria."
+  ],
+  "herramientas_qc": [
+    {
+      "archivo": "scripts/qc/generar_documentacion_viva.py",
+      "funcion": "Vista HTML local, trazabilidad, integridad de evidencia y exclusión de textos arbitrarios.",
+      "sha256_fuente": "b7bbbc01e1298f110342959a0e09c55e3b80353685c79452a056322e451e01f3"
+    },
+    {
+      "archivo": "scripts/qc/ejecutar_behave.py",
+      "funcion": "Ejecuta Behave en Docker beta, registra versión al inicio/final y actualiza los reportes.",
+      "sha256_fuente": "7e0e5011918c5b42724e639a41056a111220ad02914e2efc603e340c424f3fd8"
+    },
+    {
+      "archivo": "scripts/qc/pruebas/test_documentacion_viva.py",
+      "funcion": "Doce comprobaciones de las herramientas con fixtures y dobles; no son unitarias del backend HCV.",
+      "sha256_fuente": "bf303e9b55cb8f3696cfd3d36556accdd135f0e7ac04310f5418dd21b67845ce"
+    },
+    {
+      "archivo": "scripts/qc/ejecutar_smoke.py",
+      "funcion": "Smoke de sistema acotado a acceso/consulta en Docker beta; registra contexto y evidencia sin datos clínicos.",
+      "sha256_fuente": "624ed447f55e5c7ccff7050935aa6c41b8dfaa77fb8c4d4f9f063e035336359f"
+    },
+    {
+      "archivo": "scripts/qc/pruebas/test_smoke.py",
+      "funcion": "Siete comprobaciones de destino y prevención de falsos aprobados; no son unitarias del backend HCV.",
+      "sha256_fuente": "9db444c2da186f1bde3833b90a98dd8cdffc566d7b103323b31c7ea44a06f89b"
+    }
+  ]
+}

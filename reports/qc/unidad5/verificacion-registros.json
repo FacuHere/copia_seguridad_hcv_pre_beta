@@ -1,0 +1,16 @@
+{
+  "fecha": "2026-11-16",
+  "resultado": "verificación satisfactoria",
+  "hallazgos_clasificados": 24,
+  "clasificaciones_con_justificacion": 24,
+  "tc_originales_en_rtm": 185,
+  "enlaces_locales_verificados": 72,
+  "reportes_behave_originales_sin_cambios": 5,
+  "smoke_controles_aprobados": 10,
+  "contexto_y_cierre_sesion_verificados": true,
+  "huellas_coincidentes": true,
+  "campos_de_credenciales_o_clinicos_ausentes_del_smoke": true,
+  "comprobaciones_de_herramienta_aprobadas": 7,
+  "pruebas_de_pacientes_BVA_ejecutadas": 0,
+  "nota": "El smoke es acceso/consulta; no una aprobación integral ni 10 TC nuevos."
+}

@@ -1,0 +1,22 @@
+{
+  "fecha": "2026-11-16",
+  "tipo": "verificación documental y de datos sintéticos; no prueba del producto",
+  "resultado": "comprobaciones satisfactorias",
+  "comprobaciones": {
+    "puntos_unicos": 30,
+    "puntos_vinculados_a_tc_actuales": 23,
+    "faltantes_identificados": 7,
+    "campos_con_limites_contrastados_en_openapi": 7,
+    "textos_ascii_con_longitud_verificada": 30,
+    "fichas_baoe_con_breve_hasta_15_palabras": 4,
+    "enlaces_locales_existentes": 68,
+    "casos_originales_en_word": 185,
+    "identificadores_tc_unicos_en_rtm": 185,
+    "estados_y_resultados_originales_preservados_en_los_23_tc": true,
+    "sha256_word_manual_sin_cambios": "04d362675221ea66e1c19e39ca964e638cecadbea2c03e6b4b61a2f263b6e69c",
+    "huellas_de_fuentes_coincidentes": true
+  },
+  "pruebas_nuevas_del_sistema_ejecutadas": 0,
+  "base_de_datos": "sin consultas de prueba, altas, cambios o migraciones en esta actividad",
+  "limitacion_casos_de_uso": "Comparación estructural basada en extracción verificada previa de HU-01 a HU-03; la relectura de su Word estaba bloqueada."
+}

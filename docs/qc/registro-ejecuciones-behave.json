@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "criterio": "Notas revisadas y contexto separados del resultado original. Las horas de archivos anteriores no se convierten a una zona horaria no registrada.",
+  "casos": {
+    "TC-015": {
+      "titulo": "TC-015 — Ingreso de otra cuenta después de intentos fallidos",
+      "pasos": {
+        "que existen las cuentas de prueba A y M activas": "que existen las cuentas de prueba A y M activas",
+        "que no hay una sesión iniciada en este navegador": "que no hay una sesión iniciada en este navegador",
+        "que la cuenta M acumuló 12 intentos fallidos desde este navegador": "que la cuenta M acumuló 12 intentos fallidos desde este navegador",
+        "intento ingresar inmediatamente con credenciales válidas de la cuenta A": "intento ingresar inmediatamente con credenciales válidas de la cuenta A",
+        "debo acceder a la aplicación identificado como la cuenta A": "debo acceder a la aplicación identificado como la cuenta A",
+        "no se debe exigir una espera por los intentos fallidos anteriores": "no se debe exigir una espera por los intentos fallidos anteriores"
+      }
+    }
+  },
+  "ejecuciones": [
+    {
+      "archivo": "TC-015-20261116-143246.json",
+      "fecha_cliente": null,
+      "fecha_documentada": "2026-11-16",
+      "tipo_hallazgo": "automatizacion",
+      "imagen": null,
+      "nota_revision": "Error durante la preparación. La terminal permitió identificar un selector ambiguo; el JSON original conserva el estado error sin ese detalle de excepción.",
+      "sha256_reporte": "e7d0afb4dca5193c39aa3dc8feed3f68d07df5b47c0943a5c22d353182093de2",
+      "version_estable": null
+    },
+    {
+      "archivo": "TC-015-20261116-144536.json",
+      "fecha_cliente": null,
+      "fecha_documentada": "2026-11-16",
+      "tipo_hallazgo": "automatizacion",
+      "imagen": null,
+      "nota_revision": "Espera incorrecta del botón de ingreso después de que la aplicación lo ocultara al autenticar.",
+      "sha256_reporte": "406938ff2f8e5a45ecba0ffcd35c973b80c92580bbbf0e692f2d421c806fbd1f",
+      "version_estable": null
+    },
+    {
+      "archivo": "TC-015-20261116-150951.json",
+      "fecha_cliente": null,
+      "fecha_documentada": "2026-11-16",
+      "tipo_hallazgo": "producto",
+      "imagen": "sha256:c58521b74fd11d5193d27f0e5d4382936c30951887c98104c2f662918e63d72e",
+      "nota_revision": "Bloqueo compartido reproducido: la otra cuenta recibió HTTP 429 y Retry-After de 899 segundos.",
+      "sha256_reporte": "ee83b08bec0a2a8849649c35b01a136e434b96854d22be616d1384da77dcd75d",
+      "version_estable": null
+    },
+    {
+      "archivo": "TC-015-20261116-151206.json",
+      "fecha_cliente": null,
+      "fecha_documentada": "2026-11-16",
+      "tipo_hallazgo": "ninguno",
+      "imagen": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb",
+      "nota_revision": "Después de actualizar únicamente la API beta: doce rechazos 401, acceso válido 200 y seis pasos aprobados.",
+      "sha256_reporte": "84d44e95cf7b42b3d14269d0751f278ed121c0fdd57ed127b05f934f5395c6d7",
+      "version_estable": null
+    },
+    {
+      "archivo": "QC-20261116-160706-645857.json",
+      "fecha_cliente": "2026-11-16T16:07:06.645857-03:00",
+      "zona_horaria_cliente": "America/Buenos_Aires",
+      "tipo_hallazgo": "ninguno",
+      "imagen": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb",
+      "imagen_al_final": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb",
+      "version_estable": true,
+      "url_entorno": "http://127.0.0.1:3002",
+      "nota_revision": "Ejecución registrada automáticamente; una falla requiere clasificación posterior.",
+      "sha256_reporte": "1ad8da68e6e718b069b585d0cad2dbe4e644c991f23f66eeb797ffda722a6b09",
+      "huellas_pruebas": {
+        "features/autenticacion.feature": "ed6bf7e0b4b24aec2d999c5beb513739f5198c7e542dbe180403f0cd38535581",
+        "features/environment.py": "7b74c6cde3a755ffae64cd1dbaecc26cbc3c181b242b23cdbedabab7c27d6bf9",
+        "features/steps/autenticacion.py": "fb84a7e1a9434c65c9433fd0fc0d268dac2460cf0cad15a27c6b2756fd9dcac5"
+      },
+      "duracion_proceso_segundos": 3.704560099999071
+    }
+  ]
+}

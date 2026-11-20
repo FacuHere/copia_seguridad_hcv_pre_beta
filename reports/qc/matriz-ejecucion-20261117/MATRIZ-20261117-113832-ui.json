@@ -1,0 +1,2875 @@
+{
+  "inicio": "2026-11-17T14:38:32.721125+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "ui",
+  "entorno": {},
+  "resultados": [
+    {
+      "caso": "TC-001",
+      "objetivo": "Iniciar sesión y comprobar identidad visible",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:38:33.846324+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "Locator expected to contain text 'beta_admin'\nActual value: Administrador de pruebas Docker \nCall log:\n  - Expect \"to_contain_text\" locator(\"#currentUser\") with timeout 5000ms\n  - waiting for locator(\"#currentUser\")\n    14 × locator resolved to <span id=\"currentUser\" class=\"current-user\">Administrador de pruebas Docker</span>\n       - unexpected value \"Administrador de pruebas Docker\"\n\nAria snapshot:\n- text: Administrador de pruebas Docker",
+      "duracion_segundos": 5.584
+    },
+    {
+      "caso": "TC-002",
+      "objetivo": "Rechazar credenciales incorrectas con mensaje visible",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:38:39.441240+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 1.365
+    },
+    {
+      "caso": "TC-003",
+      "objetivo": "Conservar sesión e identidad después de recargar",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:38:40.813629+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "Locator expected to contain text 'beta_admin'\nActual value: Administrador de pruebas Docker \nCall log:\n  - Expect \"to_contain_text\" locator(\"#currentUser\") with timeout 5000ms\n  - waiting for locator(\"#currentUser\")\n    14 × locator resolved to <span id=\"currentUser\" class=\"current-user\">Administrador de pruebas Docker</span>\n       - unexpected value \"Administrador de pruebas Docker\"\n\nAria snapshot:\n- text: Administrador de pruebas Docker",
+      "duracion_segundos": 5.577
+    },
+    {
+      "caso": "TC-006",
+      "objetivo": "Ingresar con otra cuenta después de doce intentos fallidos",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:38:46.401612+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "Intento incorrecto rechazado sin bloqueo",
+          "cumple": true
+        },
+        {
+          "criterio": "La otra cuenta ingresa y conserva su identidad",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 2.445
+    },
+    {
+      "caso": "TC-017",
+      "objetivo": "Sesiones independientes con consulta en Chrome y Edge",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:38:48.855038+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "La sesión del otro navegador continúa autorizada",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 4.381
+    },
+    {
+      "caso": "TC-018",
+      "objetivo": "Cerrar Chrome conservando la sesión y consulta de Edge",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:38:53.246185+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "La sesión del otro navegador continúa autorizada",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 4.123
+    },
+    {
+      "caso": "TC-019",
+      "objetivo": "No recuperar ficha con Atrás después del cierre",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:38:57.378630+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "Tras cerrar sesión el acceso clínico sigue restringido",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.598
+    },
+    {
+      "caso": "TC-020",
+      "objetivo": "No conservar borradores al cambiar de sesión",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:38:58.986115+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 1.635
+    },
+    {
+      "caso": "TC-023",
+      "objetivo": "Mostrar error y permanecer sin sesión si falla la conexión de ingreso",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:00.632897+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 1.304
+    },
+    {
+      "caso": "TC-005",
+      "objetivo": "Crear paciente desde el formulario",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:01.948565+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Ficha creada desde la interfaz y persistida en MariaDB",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.691
+    },
+    {
+      "caso": "TC-050",
+      "objetivo": "Restaurar listado después de vaciar la búsqueda",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:02.651487+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.585
+    },
+    {
+      "caso": "TC-051",
+      "objetivo": "Conservar la última búsqueda al escribir rápidamente",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:03.245936+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "Solo se muestra el resultado de la última búsqueda",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "Solo se muestra el resultado de la última búsqueda",
+      "duracion_segundos": 0.618
+    },
+    {
+      "caso": "TC-052",
+      "objetivo": "Acceder desde la interfaz a más de cien pacientes",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:03.875828+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.936
+    },
+    {
+      "caso": "TC-053",
+      "objetivo": "Mantener la última ficha seleccionada al cambiar rápidamente",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:05.824750+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.041
+    },
+    {
+      "caso": "TC-055",
+      "objetivo": "Cancelar creación y edición sin persistir borradores",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:06.881135+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar el alta no crea ficha",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/3: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar edición conserva el nombre original",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.726
+    },
+    {
+      "caso": "TC-059",
+      "objetivo": "Mostrar edad coherente con una fecha sencilla",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:07.617882+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.922
+    },
+    {
+      "caso": "TC-060",
+      "objetivo": "Mantener deshabilitada la eliminación de pacientes",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:08.550944+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.625
+    },
+    {
+      "caso": "TC-065",
+      "objetivo": "Conservar fecha del estudio al recargar y consultar desde Edge",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:09.187999+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 2.42
+    },
+    {
+      "caso": "TC-069",
+      "objetivo": "Cancelar alta y edición de estudio sin persistir",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:11.617937+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar alta no crea estudio",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/2: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar edición no cambia el estudio",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.823
+    },
+    {
+      "caso": "TC-073",
+      "objetivo": "Ordenar estudios por fecha descendente",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:12.451804+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "Estudios ordenados por fecha descendente",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.641
+    },
+    {
+      "caso": "TC-074",
+      "objetivo": "Crear estudio con varias imágenes",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:13.105127+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/17/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se creó un único estudio",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/17/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se conserva el número esperado de imágenes válidas",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "Se conserva el número esperado de imágenes válidas",
+      "duracion_segundos": 0.807
+    },
+    {
+      "caso": "TC-075",
+      "objetivo": "Informar una imagen fallida sin duplicar el estudio guardado",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:13.924454+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/18/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se creó un único estudio",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/18/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se conserva el número esperado de imágenes válidas",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "Se conserva el número esperado de imágenes válidas",
+      "duracion_segundos": 0.771
+    },
+    {
+      "caso": "TC-076",
+      "objetivo": "Evitar altas duplicadas al pulsar Guardar estudio repetidamente",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:14.704932+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El doble clic crea exactamente un estudio",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.776
+    },
+    {
+      "caso": "TC-086",
+      "objetivo": "Abrir contenido PDF mediante el enlace protegido",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:15.495271+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "El enlace de visualización entrega un PDF protegido válido",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga del navegador idéntica al original",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.178
+    },
+    {
+      "caso": "TC-087",
+      "objetivo": "Mostrar imágenes admitidas con su contenido protegido",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:16.685676+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "fallido",
+      "error_tipo": "TimeoutError",
+      "observacion": "La herramienta no pudo completar el recorrido; revisar el detalle privado.",
+      "duracion_segundos": 6.018
+    },
+    {
+      "caso": "TC-088",
+      "objetivo": "Descargar documentos Word mediante los enlaces visibles",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:22.715228+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "fallido",
+      "error_tipo": "Error",
+      "observacion": "La herramienta no pudo completar el recorrido; revisar el detalle privado.",
+      "duracion_segundos": 3.579
+    },
+    {
+      "caso": "TC-089",
+      "objetivo": "Descargar DICOM sin exigir visor integrado",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:26.305672+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "Descarga del navegador idéntica al original",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.848
+    },
+    {
+      "caso": "TC-099",
+      "objetivo": "Cancelar selector de archivo sin crear documentos",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:27.162878+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/estudios/2/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/2/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar selección conserva los documentos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.746
+    },
+    {
+      "caso": "TC-103",
+      "objetivo": "Cancelar selector de reemplazo conservando el original",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:27.920813+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/estudios/2/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/2/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar selección conserva los documentos",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.725
+    },
+    {
+      "caso": "TC-106",
+      "objetivo": "Cancelar confirmación de eliminación conservando el documento",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:28.656149+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/documentos/2/download",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/documentos/2/download: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Documento conservado tras cancelar",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.709
+    },
+    {
+      "caso": "TC-109",
+      "objetivo": "Informar interrupción de carga sin mostrar éxito falso",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:29.374768+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/2/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/estudios/2/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La interfaz informa el error y no un éxito de carga",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/2/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "No se registra una carga que no llegó al servidor",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.669
+    },
+    {
+      "caso": "TC-132",
+      "objetivo": "Cancelar formularios de alta y edición de usuarios",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:30.052963+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/usuarios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar no crea una cuenta",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.686
+    },
+    {
+      "caso": "TC-134",
+      "objetivo": "Navegar más de cincuenta cuentas",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:30.748106+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 4.886
+    },
+    {
+      "caso": "TC-137",
+      "objetivo": "Cancelar desactivación sin alterar la cuenta",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:35.645524+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "La cuenta sigue activa después de cancelar",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.077
+    },
+    {
+      "caso": "TC-142",
+      "objetivo": "Cancelar confirmación de cambio de contraseña",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:36.734017+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "Cancelar conserva la contraseña anterior",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 1.084
+    },
+    {
+      "caso": "TC-146",
+      "objetivo": "Evitar altas duplicadas de usuario por doble clic",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:37.829167+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/usuarios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Un doble clic crea una única cuenta",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.733
+    },
+    {
+      "caso": "TC-179",
+      "objetivo": "Recorrer controles principales con teclado",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:38.573072+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.632
+    },
+    {
+      "caso": "TC-180",
+      "objetivo": "Operar formularios con ampliación al 200 por ciento",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:39.216914+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.672
+    },
+    {
+      "caso": "TC-181",
+      "objetivo": "Representar entradas como texto sin ejecutar HTML",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:39.899674+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "El texto no ejecuta HTML ni JavaScript",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.956
+    },
+    {
+      "caso": "TC-182",
+      "objetivo": "Mantener Reportes como control reservado sin exportación",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:40.869859+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "Locator expected to be disabled\nActual value: enabled \nCall log:\n  - Expect \"to_be_disabled\" locator(\"#exportData\") with timeout 5000ms\n  - waiting for locator(\"#exportData\")\n    14 × locator resolved to <button type=\"button\" id=\"exportData\" class=\"secondary\">Reportes</button>\n       - unexpected value \"enabled\"\n\nAria snapshot:\n- button \"Reportes\"",
+      "duracion_segundos": 5.578
+    },
+    {
+      "caso": "TC-183",
+      "objetivo": "Recuperarse de una desconexión durante la consulta",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:46.459678+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 1.217
+    },
+    {
+      "caso": "TC-184",
+      "objetivo": "Recorrido básico de pacientes y estudios en Chrome y Edge",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:39:47.686825+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 3.492
+    }
+  ]
+}

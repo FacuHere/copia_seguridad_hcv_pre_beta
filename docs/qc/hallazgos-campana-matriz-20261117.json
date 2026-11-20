@@ -1,0 +1,61 @@
+{
+  "fecha": "2026-11-17",
+  "destino": "Docker beta existente",
+  "hallazgos": [
+    {
+      "id": "QC-MAT-001",
+      "tipo": "producto",
+      "caso": "TC-097",
+      "titulo": "Archivo del tamaño máximo exacto rechazado",
+      "observado": "Un PDF de exactamente MAX_FILE_SIZE_BYTES recibía HTTP 413; el archivo de un byte menos se admitía.",
+      "correccion": "Se ajustó el límite de Busboy y se mantiene la comprobación de bytes para rechazar únicamente los excesos.",
+      "estado": "corregido y verificado en Docker beta",
+      "reporte_fallo": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+      "reporte_retesting": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113613-retest.json",
+      "archivos": [
+        "src/services/document-storage.js",
+        "test/document-storage.test.js"
+      ]
+    },
+    {
+      "id": "QC-MAT-002",
+      "tipo": "producto",
+      "caso": "TC-100",
+      "titulo": "Nombre de archivo con tilde alterado",
+      "observado": "El nombre multipart UTF-8 Informe clínico QC.pdf se almacenaba con caracteres alterados. Los bytes del contenido no eran el origen del fallo.",
+      "correccion": "Se configuró la lectura UTF-8 de los parámetros multipart.",
+      "estado": "corregido y verificado en Docker beta",
+      "reporte_fallo": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+      "reporte_retesting": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113613-retest.json",
+      "archivos": [
+        "src/services/document-storage.js",
+        "test/document-storage.test.js"
+      ]
+    },
+    {
+      "id": "QC-MAT-003",
+      "tipo": "producto",
+      "caso": "TC-068",
+      "titulo": "Cambio de tipo de estudio bloqueado por su carpeta",
+      "observado": "Una carga guardaba la carpeta con la representación textual de Date; al editar el tipo se buscaba una fecha ISO y se devolvía DOCUMENT_RENAME_SOURCE_MISMATCH.",
+      "correccion": "La consulta de carga devuelve fecha ISO. El renombrado conserva como origen una carpeta heredada cuando todos sus archivos corresponden al mismo paciente y estudio, manteniendo el journal y la verificación de integridad.",
+      "estado": "corregido y verificado en Docker beta",
+      "reporte_fallo": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113027-api.json",
+      "reporte_retesting": "reports/qc/matriz-ejecucion-20261117/MATRIZ-20261117-113613-retest.json",
+      "archivos": [
+        "src/repositories/document-repository.js",
+        "src/services/document-operations.js",
+        "test/document-operations.test.js"
+      ]
+    }
+  ],
+  "notas_del_guion": [
+    "Se corrigió /api/users a /api/usuarios. Los 404 producidos por esa ruta del guion no se atribuyen al producto.",
+    "Se ajustó el código esperado del cambio de contraseña a HTTP 204 y el tipo del identificador de usuario.",
+    "La identidad visible se comparó con displayName; username se verificó por API.",
+    "Se esperó al fin de la carga de imágenes y a la entrada de las vistas previas diferidas en pantalla.",
+    "El botón Reportes se evaluó como control reservado según el caso original; no se exigió que estuviera deshabilitado.",
+    "Se corrigió la forma de sustituir el selector para que AbortError y NotAllowedError se produjeran durante la acción del usuario.",
+    "El bootstrap requiere una cuenta SQL temporal con sus permisos específicos; la cuenta SQL normal de la API no tiene todos esos permisos."
+  ]
+}

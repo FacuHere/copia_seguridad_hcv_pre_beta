@@ -1,0 +1,92 @@
+
+> historial-clinico-visual@1.0.0 test
+> node --test --test-reporter=tap test/age.test.js test/environment.test.js test/backup-restore-validation.test.js
+
+TAP version 13
+# Subtest: age calcula la edad cuando el cumpleaños ya ocurrió este año
+ok 1 - age calcula la edad cuando el cumpleaños ya ocurrió este año
+  ---
+  duration_ms: 1.2038
+  type: 'test'
+  ...
+# Subtest: age resta un año cuando el cumpleaños todavía no ocurrió
+ok 2 - age resta un año cuando el cumpleaños todavía no ocurrió
+  ---
+  duration_ms: 0.516
+  type: 'test'
+  ...
+# Subtest: age considera cumplidos los años en el día del cumpleaños
+ok 3 - age considera cumplidos los años en el día del cumpleaños
+  ---
+  duration_ms: 1.1906
+  type: 'test'
+  ...
+# Subtest: age refleja el cambio de año alrededor del cumpleaños
+ok 4 - age refleja el cambio de año alrededor del cumpleaños
+  ---
+  duration_ms: 0.9912
+  type: 'test'
+  ...
+# Subtest: age trata el cumpleaños del 29 de febrero según la normalización de Date
+ok 5 - age trata el cumpleaños del 29 de febrero según la normalización de Date
+  ---
+  duration_ms: 0.8908
+  type: 'test'
+  ...
+# Subtest: age devuelve una cadena vacía para fechas vacías o ausentes
+ok 6 - age devuelve una cadena vacía para fechas vacías o ausentes
+  ---
+  duration_ms: 1.8928
+  type: 'test'
+  ...
+# Subtest: acepta rutas de documentos relativas y rechaza traversal o rutas fuera de la carpeta
+ok 7 - acepta rutas de documentos relativas y rechaza traversal o rutas fuera de la carpeta
+  ---
+  duration_ms: 0.5975
+  type: 'test'
+  ...
+# Subtest: valida relaciones paciente-estudio-documento antes de restaurar
+ok 8 - valida relaciones paciente-estudio-documento antes de restaurar
+  ---
+  duration_ms: 2.0204
+  type: 'test'
+  ...
+# Subtest: permite Agregar pacientes con DNI repetido y conserva sus identidades de origen distintas
+ok 9 - permite Agregar pacientes con DNI repetido y conserva sus identidades de origen distintas
+  ---
+  duration_ms: 0.149
+  type: 'test'
+  ...
+# Subtest: rechaza IDs de origen duplicados para evitar sobrescribir registros del mismo respaldo
+ok 10 - rechaza IDs de origen duplicados para evitar sobrescribir registros del mismo respaldo
+  ---
+  duration_ms: 0.1198
+  type: 'test'
+  ...
+# Subtest: readPort accepts a complete valid port and rejects partial or out-of-range values
+ok 11 - readPort accepts a complete valid port and rejects partial or out-of-range values
+  ---
+  duration_ms: 1.079
+  type: 'test'
+  ...
+# Subtest: readHost accepts loopback and LAN bind addresses and rejects malformed values
+ok 12 - readHost accepts loopback and LAN bind addresses and rejects malformed values
+  ---
+  duration_ms: 3.6526
+  type: 'test'
+  ...
+# Subtest: application database pool refuses the MariaDB root account
+ok 13 - application database pool refuses the MariaDB root account
+  ---
+  duration_ms: 0.2497
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 196.0993

@@ -1,0 +1,117 @@
+{
+  "inicio": "2026-11-17T14:55:12.464259+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "cli",
+  "entorno": {},
+  "resultados": [
+    {
+      "caso": "TC-190",
+      "objetivo": "Crear administrador inicial por CLI y rechazar un segundo bootstrap",
+      "canal": "CLI real sobre la misma base beta; usuarios y datos recuperados desde resguardo",
+      "inicio": "2026-11-17T14:55:12.946558+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El CLI real crea el administrador en la misma base temporalmente sin usuarios",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "El CLI real crea el administrador en la misma base temporalmente sin usuarios",
+      "duracion_segundos": 2.038
+    },
+    {
+      "caso": "TC-191",
+      "objetivo": "Restablecer contraseña por CLI e invalidar todas las sesiones de esa cuenta",
+      "canal": "CLI real dentro de la API beta; conexión local de recuperación temporal",
+      "inicio": "2026-11-17T14:55:14.995011+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "INVALID_LOGIN"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "El CLI real finaliza correctamente",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.729
+    }
+  ]
+}

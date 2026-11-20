@@ -1,0 +1,103 @@
+{
+  "fecha": "2026-11-16",
+  "fuente": "docs/Plan de pruebas manuales QC HCV.docx",
+  "sha256_fuente": "04d362675221ea66e1c19e39ca964e638cecadbea2c03e6b4b61a2f263b6e69c",
+  "registros": [
+    {
+      "caso": "TC-006",
+      "modalidad": "manual",
+      "estado_declarado": "Pass",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": []
+    },
+    {
+      "caso": "TC-007",
+      "modalidad": "manual",
+      "estado_declarado": "Pass",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": []
+    },
+    {
+      "caso": "TC-008",
+      "modalidad": "manual",
+      "estado_declarado": "Pass",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": []
+    },
+    {
+      "caso": "TC-009",
+      "modalidad": "manual",
+      "estado_declarado": "PASS",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": []
+    },
+    {
+      "caso": "TC-010",
+      "modalidad": "manual",
+      "estado_declarado": "PASS",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": []
+    },
+    {
+      "caso": "TC-011",
+      "modalidad": "manual",
+      "estado_declarado": "Pass",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": []
+    },
+    {
+      "caso": "TC-012",
+      "modalidad": "manual",
+      "estado_declarado": "Pass",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": []
+    },
+    {
+      "caso": "TC-013",
+      "modalidad": "manual",
+      "estado_declarado": "Pass",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": []
+    },
+    {
+      "caso": "TC-014",
+      "modalidad": "manual",
+      "estado_declarado": "Pass",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": []
+    },
+    {
+      "caso": "TC-015",
+      "modalidad": "manual",
+      "estado_declarado": "Pass",
+      "resultado_textual": "No ejecutado. Completar después de la prueba manual.",
+      "conclusion_documental": "Contradicción confirmada; ejecución manual no acreditada con estos campos.",
+      "tratamiento": "Conservar el original y solicitar evidencia/confirmación al autor antes de cambiar el resultado manual.",
+      "evidencia_behave_separada": [
+        "TC-015-20261116-143246.json",
+        "TC-015-20261116-144536.json",
+        "TC-015-20261116-150951.json",
+        "TC-015-20261116-151206.json",
+        "QC-20261116-160706-645857.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,797 @@
+{
+  "fecha": "2026-11-16",
+  "fuentes": {
+    "docs/Plan de pruebas manuales QC HCV.docx": {
+      "sha256": "04d362675221ea66e1c19e39ca964e638cecadbea2c03e6b4b61a2f263b6e69c",
+      "modo": "lectura actual"
+    },
+    "docs/Casos de uso HCV.docx": {
+      "sha256": "0f2d528d1405678de4bb8f7c0e101b77729eaf0a8ad9c7cd1f1a45f91781322d",
+      "modo": "extracción verificada anteriormente el mismo día; nueva lectura impedida por bloqueo del archivo"
+    }
+  },
+  "casos": [
+    {
+      "id": "TC-006",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Ingresar con credenciales válidas en la versión actual",
+      "RESULTADO ESPERADO": "Se abre la aplicación con el nombre correcto y la sesión continúa después de recargar.",
+      "ESTADO": "Pass",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-007",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar una contraseña incorrecta",
+      "RESULTADO ESPERADO": "Se muestra Usuario o contraseña incorrectos; no se abre la aplicación y se vacía la contraseña.",
+      "ESTADO": "Pass",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-008",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar un usuario inexistente",
+      "RESULTADO ESPERADO": "Se muestra el mismo mensaje genérico de credenciales incorrectas y no se accede.",
+      "ESTADO": "Pass",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-009",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar el ingreso con ambos campos vacíos",
+      "RESULTADO ESPERADO": "El navegador solicita completar los campos obligatorios; ninguna variante permite ingresar.",
+      "ESTADO": "PASS",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-010",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar el ingreso sin nombre de usuario",
+      "RESULTADO ESPERADO": "El navegador solicita completar los campos obligatorios; ninguna variante permite ingresar.",
+      "ESTADO": "PASS",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-011",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar el ingreso sin contraseña",
+      "RESULTADO ESPERADO": "El navegador solicita completar los campos obligatorios; ninguna variante permite ingresar.",
+      "ESTADO": "Pass",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-012",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Recortar espacios alrededor del nombre de usuario",
+      "RESULTADO ESPERADO": "El nombre de usuario se reconoce sin esos espacios y el ingreso es correcto.",
+      "ESTADO": "Pass",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-013",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Conservar exactamente los caracteres de la contraseña",
+      "RESULTADO ESPERADO": "La contraseña con el espacio extra se rechaza; la contraseña exacta permite ingresar.",
+      "ESTADO": "Pass",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-014",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Ingresar luego de doce errores de la misma cuenta",
+      "RESULTADO ESPERADO": "Cada fallo se rechaza por credenciales; el intento correcto ingresa de inmediato, sin bloqueo temporal.",
+      "ESTADO": "Pass",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-015",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Ingresar con otra cuenta desde el puesto que acumuló errores",
+      "RESULTADO ESPERADO": "Los fallos de M no impiden el acceso inmediato de A desde ese puesto.",
+      "ESTADO": "Pass",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-024",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Crear un paciente con todos sus datos",
+      "RESULTADO ESPERADO": "La ficha persiste y muestra los datos completos; no se crea un estudio automáticamente.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-025",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Crear un paciente solo con el nombre obligatorio",
+      "RESULTADO ESPERADO": "Se guarda; los datos opcionales se muestran vacíos o con su indicación de ausencia.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-026",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar un paciente sin nombre",
+      "RESULTADO ESPERADO": "No se crea el paciente; se solicita completar el nombre.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-027",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar un nombre compuesto solo por espacios",
+      "RESULTADO ESPERADO": "Se informa que el nombre es obligatorio y no se crea una ficha vacía.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-028",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Guardar nombres con tildes y apóstrofos",
+      "RESULTADO ESPERADO": "Se conservan tildes, eñes, apóstrofos y contenido de las notas, sin texto roto.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-029",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Admitir DNI repetido como registros separados",
+      "RESULTADO ESPERADO": "Las dos fichas existen y no se fusionan; sus estudios y datos se mantienen separados.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-030",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Admitir pacientes diferentes con el mismo nombre",
+      "RESULTADO ESPERADO": "Se distinguen por sus datos y no se mezclan sus fichas.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-031",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar apellido y nombre con 239 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 239 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-032",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar apellido y nombre con 240 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 240 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-033",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar apellido y nombre con 241 caracteres",
+      "RESULTADO ESPERADO": "El campo no admite más de 240 caracteres: limita la escritura o rechaza el exceso; no guarda 241 caracteres. Registrar cuál mecanismo se observó.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-034",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar dni con 31 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 31 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-035",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar dni con 32 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 32 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-036",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar dni con 33 caracteres",
+      "RESULTADO ESPERADO": "El campo no admite más de 32 caracteres: limita la escritura o rechaza el exceso; no guarda 33 caracteres. Registrar cuál mecanismo se observó.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-037",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar teléfono con 79 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 79 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-038",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar teléfono con 80 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 80 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-039",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar teléfono con 81 caracteres",
+      "RESULTADO ESPERADO": "El campo no admite más de 80 caracteres: limita la escritura o rechaza el exceso; no guarda 81 caracteres. Registrar cuál mecanismo se observó.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-040",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar dirección con 499 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 499 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-041",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar dirección con 500 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 500 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-042",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar dirección con 501 caracteres",
+      "RESULTADO ESPERADO": "El campo no admite más de 500 caracteres: limita la escritura o rechaza el exceso; no guarda 501 caracteres. Registrar cuál mecanismo se observó.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-043",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar antecedentes y observaciones con 9999 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 9999 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-044",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar antecedentes y observaciones con 10000 caracteres",
+      "RESULTADO ESPERADO": "El formulario admite y conserva los 10000 caracteres del campo.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-045",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Comprobar antecedentes y observaciones con 10001 caracteres",
+      "RESULTADO ESPERADO": "El campo no admite más de 10000 caracteres: limita la escritura o rechaza el exceso; no guarda 10001 caracteres. Registrar cuál mecanismo se observó.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-046",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Aceptar nacimiento en un día bisiesto existente",
+      "RESULTADO ESPERADO": "Se conserva 29/02/2000 sin cambio de día.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-047",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar una fecha de nacimiento inexistente",
+      "RESULTADO ESPERADO": "El control impide completar esa fecha o el guardado la rechaza; no persiste una fecha de calendario inexistente.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-120",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar un nombre de usuario duplicado",
+      "RESULTADO ESPERADO": "Se informa el conflicto y no se crea una segunda cuenta con el mismo usuario.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-121",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar un usuario sin nombre visible",
+      "RESULTADO ESPERADO": "No se crea la cuenta y se solicita el nombre visible.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-122",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar un usuario de dos caracteres",
+      "RESULTADO ESPERADO": "No se crea la cuenta porque el usuario requiere al menos tres caracteres.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-123",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar un espacio dentro del nombre de usuario",
+      "RESULTADO ESPERADO": "El formato del usuario se rechaza y no se crea la cuenta.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-124",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar arroba en el nombre de usuario",
+      "RESULTADO ESPERADO": "El formato del usuario se rechaza y no se crea la cuenta.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-125",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Aceptar un usuario de tres caracteres",
+      "RESULTADO ESPERADO": "Se crea y permite ingresar con el usuario de longitud mínima.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-126",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Aceptar un usuario de cien caracteres",
+      "RESULTADO ESPERADO": "El nombre de usuario de longitud máxima se admite sin truncarse.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-127",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Limitar un usuario de ciento un caracteres",
+      "RESULTADO ESPERADO": "No se guarda un usuario de más de 100 caracteres; el campo limita la entrada o informa su exceso.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-128",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar una contraseña de once caracteres",
+      "RESULTADO ESPERADO": "Se informa el mínimo de 12 caracteres y no se crea la cuenta.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-129",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Aceptar una contraseña de doce caracteres",
+      "RESULTADO ESPERADO": "La cuenta se crea y permite ingresar con esa contraseña.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-130",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Aceptar una contraseña de trece caracteres",
+      "RESULTADO ESPERADO": "La cuenta se crea y permite ingresar con esa contraseña.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    },
+    {
+      "id": "TC-131",
+      "campos": [
+        "IDENTIFICADOR",
+        "DESCRIPCIÓN",
+        "PRECONDICIONES",
+        "DATOS DE ENTRADA",
+        "PASOS A SEGUIR",
+        "RESULTADO ESPERADO",
+        "RESULTADO OBTENIDO",
+        "ESTADO"
+      ],
+      "DESCRIPCIÓN": "Rechazar una confirmación de contraseña distinta",
+      "RESULTADO ESPERADO": "Se muestra Las contraseñas no coinciden y no se crea la cuenta.",
+      "ESTADO": "Pendiente",
+      "RESULTADO OBTENIDO": "No ejecutado. Completar después de la prueba manual."
+    }
+  ]
+}

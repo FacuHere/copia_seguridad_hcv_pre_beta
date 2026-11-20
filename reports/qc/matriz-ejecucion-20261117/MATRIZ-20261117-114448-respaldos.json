@@ -1,0 +1,28 @@
+{
+  "inicio": "2026-11-17T14:44:48.395224+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "respaldos",
+  "entorno": {},
+  "resultados": [
+    {
+      "caso": "TC-151",
+      "objetivo": "Cancelar selección de destino sin iniciar exportación",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:49.821742+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.035
+    },
+    {
+      "caso": "TC-152",
+      "objetivo": "Informar que no se tiene permiso sobre el destino",
+      "canal": "Interfaz + API + archivos reales; selector sustituido por OPFS nativo del navegador",
+      "inicio": "2026-11-17T14:44:49.866945+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.024
+    }
+  ]
+}

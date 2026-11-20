@@ -1,0 +1,210 @@
+{
+  "inicio": "2026-11-17T14:40:42.741619+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "ui",
+  "entorno": {},
+  "resultados": [
+    {
+      "caso": "TC-001",
+      "objetivo": "Iniciar sesión y comprobar identidad visible",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:40:43.892143+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.567
+    },
+    {
+      "caso": "TC-003",
+      "objetivo": "Conservar sesión e identidad después de recargar",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:40:44.469962+00:00",
+      "http": [],
+      "comprobaciones": [],
+      "estado": "aprobado",
+      "duracion_segundos": 0.586
+    },
+    {
+      "caso": "TC-051",
+      "objetivo": "Conservar la última búsqueda al escribir rápidamente",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:40:45.065831+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "Solo se muestra el resultado de la última búsqueda",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.906
+    },
+    {
+      "caso": "TC-074",
+      "objetivo": "Crear estudio con varias imágenes",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:40:45.982012+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/20/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se creó un único estudio",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/20/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se conserva el número esperado de imágenes válidas",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.86
+    },
+    {
+      "caso": "TC-075",
+      "objetivo": "Informar una imagen fallida sin duplicar el estudio guardado",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:40:46.851895+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes/3/estudios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/estudios/21/documentos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "El aviso identifica la carga parcial",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes/3/estudios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se creó un único estudio",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/estudios/21/documentos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Se conserva el número esperado de imágenes válidas",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.754
+    },
+    {
+      "caso": "TC-087",
+      "objetivo": "Mostrar imágenes admitidas con su contenido protegido",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:40:47.615365+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "La imagen jpg se decodifica en el navegador",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "La imagen jpg se decodifica en el navegador",
+      "duracion_segundos": 0.659
+    },
+    {
+      "caso": "TC-088",
+      "objetivo": "Descargar documentos Word mediante los enlaces visibles",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:40:48.283128+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "Descarga del navegador idéntica al original",
+          "cumple": true
+        },
+        {
+          "criterio": "Descarga del navegador idéntica al original",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 11.044
+    },
+    {
+      "caso": "TC-182",
+      "objetivo": "Mantener Reportes como control reservado sin exportación",
+      "canal": "Interfaz real con Playwright y Docker",
+      "inicio": "2026-11-17T14:40:59.336664+00:00",
+      "http": [],
+      "comprobaciones": [
+        {
+          "criterio": "Reportes no descarga ni modifica datos y la consulta sigue disponible",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.646
+    }
+  ]
+}

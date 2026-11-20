@@ -1,0 +1,12 @@
+test_acepta_destino_beta_local (test_smoke.PruebasSmoke.test_acepta_destino_beta_local) ... ok
+test_contexto_cambiado_bloquea_aunque_todo_pase (test_smoke.PruebasSmoke.test_contexto_cambiado_bloquea_aunque_todo_pase) ... ok
+test_detecta_reinicio_aunque_la_imagen_sea_igual (test_smoke.PruebasSmoke.test_detecta_reinicio_aunque_la_imagen_sea_igual) ... ok
+test_no_aprueba_con_pasos_faltantes_o_no_ejecutados (test_smoke.PruebasSmoke.test_no_aprueba_con_pasos_faltantes_o_no_ejecutados) ... ok
+test_no_convierte_un_fallo_en_aprobacion (test_smoke.PruebasSmoke.test_no_convierte_un_fallo_en_aprobacion) ... ok
+test_rechaza_api_publicada_fuera_de_loopback (test_smoke.PruebasSmoke.test_rechaza_api_publicada_fuera_de_loopback) ... ok
+test_rechaza_proyecto_distinto (test_smoke.PruebasSmoke.test_rechaza_proyecto_distinto) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.000s
+
+OK

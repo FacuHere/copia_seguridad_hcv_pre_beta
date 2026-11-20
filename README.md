@@ -8,7 +8,8 @@ Aplicación web en transición desde un template local hacia una arquitectura cl
 - Configuración por `.env`; Express usa `PORT` y MariaDB usa `DB_PORT` (3306 como valor de ejemplo). Los puertos se validan completos y `HOST=0.0.0.0` está permitido para una futura escucha LAN.
 - Pool MariaDB y consulta `GET /api/health/database`.
 - Esquema SQL numerado para usuarios, servicios, pacientes, estudios, documentos, sesiones, permisos y auditoría.
-- Login/logout con cookie HTTP-only, token de sesión almacenado como hash, contraseña hasheada con `scrypt`, registro de intentos fallidos y límite técnico de intentos por IP.
+- Login/logout con cookie HTTP-only, token de sesión almacenado como hash, contraseña hasheada con `scrypt` y auditoría de intentos fallidos. Los fallos no generan bloqueos automáticos por IP ni por cuenta; se permite volver a intentar inmediatamente desde puestos o redes compartidas.
+- Casos y resultados de regresión del acceso sin bloqueo: [QC de inicio de sesión](docs/qc-login-sin-bloqueo.md), con comprobación manual hospitalaria pendiente.
 - Limpieza periódica de sesiones vencidas.
 - API JSON de pacientes y estudios con consultas parametrizadas, transacciones, auditoría de lecturas/escrituras y control optimista mediante `version`.
 - Almacenamiento privado de documentos en `FILE_STORAGE_ROOT`, separado del código y de `public/`; carga individual de PDF, JPG/JPEG, PNG, GIF, WEBP y DICOM `.dcm`, con SHA-256, visualización PDF/imágenes y descarga autorizada.
@@ -34,9 +35,8 @@ Aplicación web en transición desde un template local hacia una arquitectura cl
 - Matriz de roles/permisos, alcance de lectura y escritura por servicio, y qué datos generales del paciente puede ver cada perfil.
 - Reglas de DNI, duplicados, reasignación de estudios, eliminación, retención y corrección de registros.
 - Reglas definitivas para asociar documentos con pacientes/estudios, formatos, tamaño y conservación.
-- Política de intentos de acceso y ajuste operativo del límite inicial de 10 fallos por 15 minutos con bloqueo de 15 minutos. El límite se aplica por IP; equipos detrás de una misma dirección pueden compartir el contador.
 - Política institucional de contraseñas; el mínimo de 12 caracteres exigido por el bootstrap es un control técnico provisional.
-- Retención de direcciones IP registradas en auditoría. El contador de limitación es temporal; los eventos de auditoría no se eliminan automáticamente.
+- Retención de direcciones IP registradas en auditoría. Los eventos de auditoría no se eliminan automáticamente.
 - Requisitos de búsqueda y paginación a escala.
 
 ## Pendiente para producción
@@ -111,6 +111,52 @@ La cuenta de recuperación requiere `SELECT` y `UPDATE` en `app_users`, `DELETE`
 ## Registro de revisión y pruebas
 
 [Revisión general del 26/10/2026](docs/revision-general-hcv-2026-10-26.md): fallos encontrados, archivos corregidos, regresiones, pruebas HTTP/MariaDB y navegador, y limitaciones pendientes. Los cambios de funcionamiento deben mantener también actualizados los contratos en `docs/api-rest-hcv.md` y `docs/openapi-hcv.yaml`.
+
+### QC con Behave y Playwright
+
+La [arquitectura de pruebas de la Unidad 3](docs/qc-unidad-3-arquitectura-pruebas.md) clasifica la suite existente en unitarias, integración, sistema y UAT, separando los controles estáticos y los archivos mixtos. Incluye la pirámide conceptual, ejemplos para la defensa, criterios de entrada/salida adaptados, evidencia ejecutada y el siguiente ciclo de autenticación/sesiones. El [inventario estructurado](docs/inventario-niveles-pruebas-hcv.json) conserva las rutas actuales y distingue herramientas propuestas de implementaciones disponibles.
+
+El [registro aplicado de las unidades 1 y 2](docs/qc-unidades-1-2-aplicacion.md) contiene PHVA, costos e indicadores, revisión de requisitos, criterios de aceptación, INVEST, DoR/DoD y conciliación documental. Los resultados de Behave pueden consultarse en la [vista HTML local](reports/qc/documentacion-viva/index.html).
+
+El [diseño de la Unidad 4](docs/qc-unidad-4-diseno-pruebas.md) relaciona la plantilla con BAOE, deriva clases de equivalencia y 30 puntos de frontera para siete campos, vincula 23 con TC existentes e identifica siete pendientes de caso dedicado. Incluye fichas BAOE, datos sintéticos de longitud comprobada y la distinción entre interfaz y API. Es diseño de pruebas; su ejecución y automatización están pendientes.
+
+La [Unidad 5](docs/qc-unidad-5-ejecucion-defectos.md) incorpora un Smoke Test de acceso y consulta ejecutado en Docker beta, su evidencia y la [clasificación de hallazgos](docs/qc-unidad-5-hallazgos.md). Los controles SMK son verificaciones operativas; no agregan TC al banco manual ni sustituyen las pruebas de archivos o restauración.
+
+Procedimiento recomendado desde la raíz del proyecto: ejecutar primero el smoke y continuar con Behave únicamente si aprueba. La cuenta A debe tener acceso administrativo de pruebas para el alcance del smoke.
+
+```powershell
+.\.venv-qc\Scripts\python.exe scripts/qc/ejecutar_smoke.py
+if ($LASTEXITCODE -eq 0) {
+    .\.venv-qc\Scripts\python.exe scripts/qc/ejecutar_behave.py
+}
+```
+
+El ejecutor usa únicamente el Docker beta `hcv_docker_beta_test-api-1`: requiere que esté saludable, registra su imagen antes/después, conserva un reporte nuevo y actualiza la vista HTML. No construye imágenes, aplica migraciones ni cambia datos de configuración. Las acciones de login generan sesiones y auditoría normales. Para reconstruir solo la vista, sin consultar Docker ni ejecutar pruebas:
+
+```powershell
+.\.venv-qc\Scripts\python.exe scripts/qc/ejecutar_behave.py --solo-reportes
+```
+
+Las herramientas usan la biblioteca estándar de Python y las dependencias de pruebas ya instaladas. Sus comprobaciones aisladas se ejecutan con `.\.venv-qc\Scripts\python.exe -m unittest discover -s scripts/qc/pruebas -v`; esas pruebas verifican el manejo de evidencias y no se contabilizan como nuevas unitarias del backend HCV. Las trazas y valores arbitrarios de los JSON no se publican en el HTML; los reportes fuente se preservan con su huella. Las ejecuciones directas siguientes siguen disponibles, pero no registran automáticamente ese contexto.
+
+TC-015 está implementado en `features/autenticacion.feature`, con pasos Python en `features/steps/autenticacion.py` y preparación en `features/environment.py`. Comprueba el ingreso de otra cuenta después de doce intentos incorrectos desde el mismo navegador, en el Docker beta de `http://127.0.0.1:3002`. Requiere `.venv-qc` con Behave, Playwright y su navegador Chromium instalados.
+
+Desde la raíz del proyecto, en PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force -Path '.\reports\qc' | Out-Null
+$marcaQc = Get-Date -Format 'yyyyMMdd-HHmmss'
+$reporteQc = ".\reports\qc\TC-015-$marcaQc.json"
+.\.venv-qc\Scripts\python.exe -m behave --tags='@TC-015' --no-capture --no-color -f plain -o - -f json.pretty -o "$reporteQc"
+```
+
+La preparación solicita dos cuentas de prueba distintas, A y M, con contraseña oculta. Para una ejecución automática también acepta las variables del proceso `HCV_QC_USUARIO_A`, `HCV_QC_CONTRASENA_A`, `HCV_QC_USUARIO_M` y `HCV_QC_CONTRASENA_M`; solicita por consola los valores que no estén definidos. No lee un archivo de secretos ni requiere modificar el `.env` de la aplicación. Usar únicamente cuentas del entorno de pruebas: la ejecución genera sesiones y eventos de auditoría normales.
+
+El [registro de TC-015](docs/qc-login-sin-bloqueo.md#tc-015-con-behave-y-playwright-16112026) conserva el fallo de la imagen anterior y la aprobación después de actualizar únicamente la API beta. La [matriz de trazabilidad](docs/matriz-trazabilidad-hcv.md#continuidad-con-behave) vincula sus requisitos y evidencias. La actualización de reportes es automática al usar el ejecutor local; no configura CI remoto ni acredita aceptación hospitalaria.
+
+## Docker beta independiente
+
+[`docs/docker-beta-test.md`](docs/docker-beta-test.md) describe la preparación manual en PowerShell con `compose.beta-test.yaml`: proyecto `hcv_docker_beta_test`, nueva imagen de API, base y volúmenes propios, usuarios y respaldos integrados. Usa localhost:3002 y phpMyAdmin en localhost:8082; no publica MariaDB ni reutiliza datos del Docker anterior o de Windows. El aprovisionamiento explícito admite solo una instalación vacía y aplica 001–008; no debe repetirse sobre un volumen existente. Para este ensayo se permite repetir la contraseña entre las tres cuentas, manteniendo el mínimo de 12 caracteres. No se modifica el `.env` real. Esta configuración es para pruebas locales; no habilita todavía LAN/HTTPS ni acredita un despliegue productivo.
 
 ## Gestión de usuarios y perfiles generales
 

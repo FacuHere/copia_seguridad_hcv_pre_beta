@@ -1,0 +1,1437 @@
+{
+  "inicio": "2026-11-17T14:32:27.019092+00:00",
+  "url": "http://127.0.0.1:3002",
+  "fase": "usuarios",
+  "entorno": {
+    "api_imagen_inicio": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb|2026-11-17T14:22:46.617135344Z"
+  },
+  "resultados": [
+    {
+      "caso": "TC-116",
+      "objetivo": "Crear cuenta administrador y autenticarla",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.070394+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/logout",
+          "esperado": [
+            204
+          ],
+          "obtenido": 204
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Identidad y perfil esperados",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/logout: HTTP 204; esperado [204]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.198
+    },
+    {
+      "caso": "TC-117",
+      "objetivo": "Crear cuenta medico y autenticarla",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.277879+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/logout",
+          "esperado": [
+            204
+          ],
+          "obtenido": 204
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Identidad y perfil esperados",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/logout: HTTP 204; esperado [204]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.195
+    },
+    {
+      "caso": "TC-118",
+      "objetivo": "Crear cuenta secretario y autenticarla",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.481904+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/logout",
+          "esperado": [
+            204
+          ],
+          "obtenido": 204
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Identidad y perfil esperados",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/logout: HTTP 204; esperado [204]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.169
+    },
+    {
+      "caso": "TC-119",
+      "objetivo": "Crear cuenta visualizador y autenticarla",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.660068+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/logout",
+          "esperado": [
+            204
+          ],
+          "obtenido": 204
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Identidad y perfil esperados",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/logout: HTTP 204; esperado [204]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.171
+    },
+    {
+      "caso": "TC-120",
+      "objetivo": "Rechazar nombre de cuenta duplicado",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.841339+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            409
+          ],
+          "obtenido": 409,
+          "codigo_error": "CONFLICT"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 409; esperado [409]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.08
+    },
+    {
+      "caso": "TC-121",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.930177+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422,
+          "codigo_error": "INVALID_USER"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 422; esperado [422]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-122",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.944401+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422,
+          "codigo_error": "INVALID_USER"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 422; esperado [422]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-123",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.958297+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422,
+          "codigo_error": "INVALID_USER"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 422; esperado [422]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-124",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.972205+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422,
+          "codigo_error": "INVALID_USER"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 422; esperado [422]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-127",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:27.986583+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422,
+          "codigo_error": "INVALID_USER"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 422; esperado [422]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-128",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:28.000232+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422,
+          "codigo_error": "INVALID_PASSWORD"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 422; esperado [422]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-131",
+      "objetivo": "Rechazar entrada inválida al crear cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:28.017825+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            422
+          ],
+          "obtenido": 422,
+          "codigo_error": "PASSWORD_MISMATCH"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 422; esperado [422]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.006
+    },
+    {
+      "caso": "TC-125",
+      "objetivo": "Crear usuario de tres caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:28.036770+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.094
+    },
+    {
+      "caso": "TC-126",
+      "objetivo": "Crear usuario de cien caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:28.140709+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.081
+    },
+    {
+      "caso": "TC-129",
+      "objetivo": "Aceptar contraseña de 12 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:28.233743+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/logout",
+          "esperado": [
+            204
+          ],
+          "obtenido": 204
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Identidad y perfil esperados",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/logout: HTTP 204; esperado [204]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.165
+    },
+    {
+      "caso": "TC-130",
+      "objetivo": "Aceptar contraseña de 13 caracteres",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:28.407637+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/logout",
+          "esperado": [
+            204
+          ],
+          "obtenido": 204
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Identidad y perfil esperados",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/logout: HTTP 204; esperado [204]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.177
+    },
+    {
+      "caso": "TC-133",
+      "objetivo": "Buscar cuenta por usuario y nombre visible",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:28.594581+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/usuarios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La búsqueda encuentra el usuario preparado",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/usuarios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La búsqueda encuentra el usuario preparado",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.088
+    },
+    {
+      "caso": "TC-135",
+      "objetivo": "Editar nombre visible conservando username",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:28.692466+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/14",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/14: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "Nombre actualizado y username inmutable",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.086
+    },
+    {
+      "caso": "TC-136",
+      "objetivo": "Desactivar cuenta e invalidar su sesión",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:28.788186+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/15",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/15: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 401; esperado [401]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.206
+    },
+    {
+      "caso": "TC-138",
+      "objetivo": "Reactivar sin reactivar la sesión anterior",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:29.003787+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/16",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/16",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/16: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/16: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.266
+    },
+    {
+      "caso": "TC-139",
+      "objetivo": "Cambiar contraseña y revocar dos sesiones de esa cuenta",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:29.279551+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/17/password",
+          "esperado": [
+            200
+          ],
+          "obtenido": 204
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/17/password: HTTP 204; esperado [200]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "PUT /api/usuarios/17/password: HTTP 204; esperado [200]",
+      "duracion_segundos": 0.31
+    },
+    {
+      "caso": "TC-140",
+      "objetivo": "Mantener la sesión de otra cuenta al cambiar contraseña",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:29.600748+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "La sesión administrativa de otra cuenta sigue vigente",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.004
+    },
+    {
+      "caso": "TC-141",
+      "objetivo": "Cambiar contraseña de una cuenta propia sintética",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:29.615216+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/18/password",
+          "esperado": [
+            200
+          ],
+          "obtenido": 204
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/18/password: HTTP 204; esperado [200]",
+          "cumple": false
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "AssertionError",
+      "observacion": "PUT /api/usuarios/18/password: HTTP 204; esperado [200]",
+      "duracion_segundos": 0.253
+    },
+    {
+      "caso": "TC-143",
+      "objetivo": "Impedir autodesactivación y pérdida del rol administrador",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:29.877628+00:00",
+      "http": [
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "GET /api/auth/me: HTTP 200; esperado [200]",
+          "cumple": true
+        }
+      ],
+      "estado": "fallido",
+      "error_tipo": "TypeError",
+      "observacion": "La herramienta no pudo completar el recorrido; revisar el detalle privado.",
+      "duracion_segundos": 0.005
+    },
+    {
+      "caso": "TC-110",
+      "objetivo": "Comprobar permisos efectivos de administrador",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:29.892730+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/permisos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/permisos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/usuarios: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.194
+    },
+    {
+      "caso": "TC-111",
+      "objetivo": "Comprobar permisos efectivos de medico",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:30.097034+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/permisos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "DELETE",
+          "ruta": "/api/documentos/2",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/permisos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/usuarios: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "DELETE /api/documentos/2: HTTP 403; esperado [403]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.196
+    },
+    {
+      "caso": "TC-112",
+      "objetivo": "Comprobar permisos efectivos de secretario",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:30.302897+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/permisos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/estudios/2",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "DELETE",
+          "ruta": "/api/documentos/2",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/permisos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/usuarios: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/estudios/2: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "DELETE /api/documentos/2: HTTP 403; esperado [403]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.203
+    },
+    {
+      "caso": "TC-113",
+      "objetivo": "Comprobar permisos efectivos de visualizador",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:30.515602+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/permisos",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/respaldos/resumen-clinico",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/estudios/2",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        },
+        {
+          "metodo": "DELETE",
+          "ruta": "/api/documentos/2",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/permisos: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/pacientes: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/usuarios: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/respaldos/resumen-clinico: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/estudios/2: HTTP 403; esperado [403]",
+          "cumple": true
+        },
+        {
+          "criterio": "DELETE /api/documentos/2: HTTP 403; esperado [403]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.193
+    },
+    {
+      "caso": "TC-114",
+      "objetivo": "Cambiar perfil y revocar sesiones existentes",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:30.718277+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/23",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "GET",
+          "ruta": "/api/auth/me",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "UNAUTHENTICATED"
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/pacientes",
+          "esperado": [
+            403
+          ],
+          "obtenido": 403,
+          "codigo_error": "FORBIDDEN"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/23: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "GET /api/auth/me: HTTP 401; esperado [401]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/pacientes: HTTP 403; esperado [403]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.266
+    },
+    {
+      "caso": "TC-021",
+      "objetivo": "Rechazar login de cuenta inactiva",
+      "canal": "API real en Docker",
+      "inicio": "2026-11-17T14:32:30.995156+00:00",
+      "http": [
+        {
+          "metodo": "POST",
+          "ruta": "/api/usuarios",
+          "esperado": [
+            201
+          ],
+          "obtenido": 201
+        },
+        {
+          "metodo": "PUT",
+          "ruta": "/api/usuarios/24",
+          "esperado": [
+            200
+          ],
+          "obtenido": 200
+        },
+        {
+          "metodo": "POST",
+          "ruta": "/api/auth/login",
+          "esperado": [
+            401
+          ],
+          "obtenido": 401,
+          "codigo_error": "INVALID_LOGIN"
+        }
+      ],
+      "comprobaciones": [
+        {
+          "criterio": "POST /api/usuarios: HTTP 201; esperado [201]",
+          "cumple": true
+        },
+        {
+          "criterio": "PUT /api/usuarios/24: HTTP 200; esperado [200]",
+          "cumple": true
+        },
+        {
+          "criterio": "POST /api/auth/login: HTTP 401; esperado [401]",
+          "cumple": true
+        }
+      ],
+      "estado": "aprobado",
+      "duracion_segundos": 0.171
+    }
+  ]
+}

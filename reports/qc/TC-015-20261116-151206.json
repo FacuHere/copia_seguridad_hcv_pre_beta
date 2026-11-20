@@ -1,0 +1,116 @@
+[
+{
+  "description": [
+    "Como usuario de un puesto compartido",
+    "Quiero ingresar aunque otra persona haya cometido errores",
+    "Para continuar utilizando el sistema"
+  ],
+  "elements": [
+    {
+      "keyword": "Scenario",
+      "location": "features/autenticacion.feature:10",
+      "name": "TC-015 Ingresar con otra cuenta despu\u00e9s de intentos fallidos",
+      "status": "passed",
+      "steps": [
+        {
+          "keyword": "Given",
+          "location": "features/autenticacion.feature:11",
+          "match": {
+            "arguments": [],
+            "location": "features/steps/autenticacion.py:43"
+          },
+          "name": "que existen las cuentas de prueba A y M activas",
+          "result": {
+            "duration": 0.7612307071685791,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "features/autenticacion.feature:12",
+          "match": {
+            "arguments": [],
+            "location": "features/steps/autenticacion.py:84"
+          },
+          "name": "que no hay una sesi\u00f3n iniciada en este navegador",
+          "result": {
+            "duration": 0.015071868896484375,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "And",
+          "location": "features/autenticacion.feature:13",
+          "match": {
+            "arguments": [],
+            "location": "features/steps/autenticacion.py:101"
+          },
+          "name": "que la cuenta M acumul\u00f3 12 intentos fallidos desde este navegador",
+          "result": {
+            "duration": 1.3309459686279297,
+            "status": "passed"
+          },
+          "step_type": "given"
+        },
+        {
+          "keyword": "When",
+          "location": "features/autenticacion.feature:14",
+          "match": {
+            "arguments": [],
+            "location": "features/steps/autenticacion.py:134"
+          },
+          "name": "intento ingresar inmediatamente con credenciales v\u00e1lidas de la cuenta A",
+          "result": {
+            "duration": 0.1391615867614746,
+            "status": "passed"
+          },
+          "step_type": "when"
+        },
+        {
+          "keyword": "Then",
+          "location": "features/autenticacion.feature:15",
+          "match": {
+            "arguments": [],
+            "location": "features/steps/autenticacion.py:143"
+          },
+          "name": "debo acceder a la aplicaci\u00f3n identificado como la cuenta A",
+          "result": {
+            "duration": 0.014713287353515625,
+            "status": "passed"
+          },
+          "step_type": "then"
+        },
+        {
+          "keyword": "And",
+          "location": "features/autenticacion.feature:16",
+          "match": {
+            "arguments": [],
+            "location": "features/steps/autenticacion.py:175"
+          },
+          "name": "no se debe exigir una espera por los intentos fallidos anteriores",
+          "result": {
+            "duration": 0.0012042522430419922,
+            "status": "passed"
+          },
+          "step_type": "then"
+        }
+      ],
+      "tags": [
+        "RF-1.1",
+        "HU-01",
+        "TC-015"
+      ],
+      "type": "scenario"
+    }
+  ],
+  "keyword": "Feature",
+  "location": "features/autenticacion.feature:4",
+  "name": "Disponibilidad del inicio de sesi\u00f3n de HCV",
+  "status": "passed",
+  "tags": [
+    "RN-001"
+  ]
+}
+]

@@ -1,0 +1,152 @@
+{
+  "id": "SMOKE-20261116-205907-761026",
+  "fecha_inicio": "2026-11-16T20:59:07.761026-03:00",
+  "fecha_fin": "2026-11-16T20:59:10.042995-03:00",
+  "ejecutor": "herramienta QC local",
+  "url": "http://127.0.0.1:3002",
+  "alcance": "Acceso y consulta básica; salud de dependencias. Sin altas clínicas ni verificación funcional de archivos/restauraciones.",
+  "estado": "aprobado",
+  "autoriza_profundizar": true,
+  "pasos": [
+    {
+      "id": "SMK-01",
+      "titulo": "Entorno Docker beta identificado y saludable",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 0.062909
+    },
+    {
+      "id": "SMK-02",
+      "titulo": "Salud de MariaDB y almacenamiento",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 0.013887
+    },
+    {
+      "id": "SMK-03",
+      "titulo": "Formulario de ingreso y acceso anónimo restringido",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 0.642117
+    },
+    {
+      "id": "SMK-04",
+      "titulo": "Ingreso de la cuenta administrativa de pruebas",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 0.176666
+    },
+    {
+      "id": "SMK-05",
+      "titulo": "Identidad y sesión conservadas al recargar",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 0.562642
+    },
+    {
+      "id": "SMK-06",
+      "titulo": "Consulta del listado de pacientes",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 0.009101
+    },
+    {
+      "id": "SMK-07",
+      "titulo": "Acceso al listado administrativo de usuarios",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 0.011686
+    },
+    {
+      "id": "SMK-08",
+      "titulo": "Cierre de sesión y acceso nuevamente restringido",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 0.034884
+    },
+    {
+      "id": "SMK-09",
+      "titulo": "Ausencia de excepciones JavaScript no controladas",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 1e-06
+    },
+    {
+      "id": "SMK-10",
+      "titulo": "Contenedores e imágenes estables al finalizar",
+      "estado": "aprobado",
+      "observacion": "Criterio comprobado.",
+      "duracion_segundos": 0.05721
+    }
+  ],
+  "entorno": {
+    "inicial": {
+      "api": {
+        "imagen": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb",
+        "id": "5502c48a4e79655ae878ce2e5976348cfc90a8a48d7903d7466dc68fb3a45f2a",
+        "estado": "running",
+        "salud": "healthy",
+        "inicio": "2026-11-16T18:11:41.159673542Z",
+        "proyecto": "hcv_docker_beta_test",
+        "servicio": "api",
+        "puertos": {
+          "3000/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "3002"
+            }
+          ]
+        }
+      },
+      "db": {
+        "imagen": "sha256:6a4c4bbf0447c2247801309513fcc0dd17c3f35390368139ce419387fdd1144d",
+        "id": "80fe2dc0a477be96e70778317dc9db1b3e17d5d1606051b005c494be8a4a7496",
+        "estado": "running",
+        "salud": "healthy",
+        "inicio": "2026-11-16T16:08:02.501972852Z",
+        "proyecto": "hcv_docker_beta_test",
+        "servicio": "db",
+        "puertos": {
+          "3306/tcp": null
+        }
+      }
+    },
+    "final": {
+      "api": {
+        "imagen": "sha256:cbc73deae761e1ceacdd21a9e0a30c4330337e8f47df94340721ef5983ddc6cb",
+        "id": "5502c48a4e79655ae878ce2e5976348cfc90a8a48d7903d7466dc68fb3a45f2a",
+        "estado": "running",
+        "salud": "healthy",
+        "inicio": "2026-11-16T18:11:41.159673542Z",
+        "proyecto": "hcv_docker_beta_test",
+        "servicio": "api",
+        "puertos": {
+          "3000/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "3002"
+            }
+          ]
+        }
+      },
+      "db": {
+        "imagen": "sha256:6a4c4bbf0447c2247801309513fcc0dd17c3f35390368139ce419387fdd1144d",
+        "id": "80fe2dc0a477be96e70778317dc9db1b3e17d5d1606051b005c494be8a4a7496",
+        "estado": "running",
+        "salud": "healthy",
+        "inicio": "2026-11-16T16:08:02.501972852Z",
+        "proyecto": "hcv_docker_beta_test",
+        "servicio": "db",
+        "puertos": {
+          "3306/tcp": null
+        }
+      }
+    }
+  },
+  "contexto_estable": true,
+  "navegador": "159.0.8154.6",
+  "sistema": "Windows",
+  "limpieza_sesion_confirmada": true,
+  "duracion_segundos": 2.31062,
+  "sha256_herramienta": "624ed447f55e5c7ccff7050935aa6c41b8dfaa77fb8c4d4f9f063e035336359f"
+}
