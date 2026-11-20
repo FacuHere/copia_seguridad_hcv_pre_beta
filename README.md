@@ -118,7 +118,7 @@ La [arquitectura de pruebas de la Unidad 3](docs/qc-unidad-3-arquitectura-prueba
 
 El [registro aplicado de las unidades 1 y 2](docs/qc-unidades-1-2-aplicacion.md) contiene PHVA, costos e indicadores, revisión de requisitos, criterios de aceptación, INVEST, DoR/DoD y conciliación documental. Los resultados de Behave pueden consultarse en la [vista HTML local](reports/qc/documentacion-viva/index.html).
 
-El [diseño de la Unidad 4](docs/qc-unidad-4-diseno-pruebas.md) relaciona la plantilla con BAOE, deriva clases de equivalencia y 30 puntos de frontera para siete campos, vincula 23 con TC existentes e identifica siete pendientes de caso dedicado. Incluye fichas BAOE, datos sintéticos de longitud comprobada y la distinción entre interfaz y API. Es diseño de pruebas; su ejecución y automatización están pendientes.
+El [diseño de la Unidad 4](docs/qc-unidad-4-diseno-pruebas.md) aplica particiones de equivalencia y análisis de valores límite. En la campaña del 17/11/2026 verificamos por API 30 puntos de frontera en siete campos. La [matriz de trazabilidad](docs/matriz-trazabilidad-hcv.md) registra los casos y sus resultados.
 
 La [Unidad 5](docs/qc-unidad-5-ejecucion-defectos.md) incorpora un Smoke Test de acceso y consulta ejecutado en Docker beta, su evidencia y la [clasificación de hallazgos](docs/qc-unidad-5-hallazgos.md). Los controles SMK son verificaciones operativas; no agregan TC al banco manual ni sustituyen las pruebas de archivos o restauración.
 
